@@ -1,7 +1,7 @@
 # Trading Journal App
 
 A modern web app for tracking and analyzing your trading performance.  
-Built with **Next.js 14**, **TypeScript**, **Prisma**, and **NextAuth**, deployed on **Vercel**.
+Built with **Next.js**, **TypeScript**, **Prisma**, and **NextAuth**, deployed on **Vercel**.
 
 ## Features
 
@@ -13,7 +13,7 @@ Built with **Next.js 14**, **TypeScript**, **Prisma**, and **NextAuth**, deploye
 
 ## Tech Stack
 
-- **Framework**: Next.js 14 (App Router)
+- **Framework**: Next.js
 - **Styling**: TailwindCSS + Shadcn UI
 - **Auth**: NextAuth.js
 - **Database**: PostgreSQL (via Prisma ORM)
