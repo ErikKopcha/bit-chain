@@ -10,15 +10,15 @@ import {
   SidebarMenuItem,
 } from '@/components/ui/sidebar';
 
-export function NavMain({
-  items,
-}: {
+interface INavMain {
   items: {
     title: string;
     url: string;
     icon?: LucideIcon;
   }[];
-}) {
+}
+
+export function NavMain({ items }: INavMain) {
   return (
     <SidebarGroup>
       <SidebarGroupContent className="flex flex-col gap-2">

@@ -25,15 +25,15 @@ import {
   useSidebar,
 } from '@/components/ui/sidebar';
 
-export function NavUser({
-  user,
-}: {
+interface INavUser {
   user: {
     name: string;
     email: string;
     avatar: string;
   };
-}) {
+}
+
+export function NavUser({ user }: INavUser) {
   const { isMobile } = useSidebar();
 
   return (
