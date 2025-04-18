@@ -7,3 +7,10 @@ export const ROUTES = {
   DASHBOARD: '/dashboard',
   TRADING_JOURNAL: '/trading-journal',
 };
+
+export const AUTH_ROUTES = [
+  ROUTES.LOGIN,
+  ROUTES.REGISTER,
+  ROUTES.FORGOT_PASSWORD,
+  ROUTES.RESET_PASSWORD,
+];

@@ -6,51 +6,43 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { cn } from '@/lib/utils';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { signIn } from 'next-auth/react';
-import { useRouter, useSearchParams } from 'next/navigation';
+import { useRouter } from 'next/navigation';
 import { useForm } from 'react-hook-form';
 import { z } from 'zod';
 import { ROUTES } from '../constants';
-import { loginSchema } from '../schemas';
+import { registerSchema } from '../schemas';
 
-type LoginFormData = z.infer<typeof loginSchema>;
+type RegisterFormData = z.infer<typeof registerSchema>;
 
-export function LoginForm({ className, ...props }: React.ComponentPropsWithoutRef<'div'>) {
+export function RegisterForm({ className, ...props }: React.ComponentPropsWithoutRef<'div'>) {
   const router = useRouter();
-  const searchParams = useSearchParams();
-  const callbackUrl = searchParams.get('callbackUrl') || ROUTES.DASHBOARD;
-
   const {
     register,
     handleSubmit,
     formState: { errors, isSubmitting },
     setError,
-  } = useForm<LoginFormData>({
-    resolver: zodResolver(loginSchema),
+  } = useForm<RegisterFormData>({
+    resolver: zodResolver(registerSchema),
   });
 
-  const onSubmit = async (data: LoginFormData) => {
+  const onSubmit = async (data: RegisterFormData) => {
     try {
-      const res = await signIn('credentials', {
-        redirect: false,
-        email: data.email,
-        password: data.password,
-        callbackUrl,
+      const res = await fetch('/api/auth/register', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(data),
       });
 
-      if (res?.error) {
-        setError('root', {
-          type: 'manual',
-          message: 'Invalid email or password',
-        });
-      } else {
-        router.push(callbackUrl);
-        router.refresh();
+      if (!res.ok) {
+        const error = await res.json();
+        throw new Error(error.message);
       }
-    } catch {
+
+      router.push(ROUTES.LOGIN);
+    } catch (error) {
       setError('root', {
         type: 'manual',
-        message: 'An error occurred. Please try again.',
+        message: error instanceof Error ? error.message : 'An error occurred during registration',
       });
     }
   };
@@ -59,8 +51,8 @@ export function LoginForm({ className, ...props }: React.ComponentPropsWithoutRe
     <div className={cn('flex flex-col gap-6', className)} {...props}>
       <Card>
         <CardHeader className="text-center">
-          <CardTitle className="text-xl">Welcome</CardTitle>
-          <CardDescription>Login with your email and password</CardDescription>
+          <CardTitle className="text-xl">Create an account</CardTitle>
+          <CardDescription>Enter your details to get started</CardDescription>
         </CardHeader>
         <CardContent>
           <form onSubmit={handleSubmit(onSubmit)}>
@@ -78,15 +70,7 @@ export function LoginForm({ className, ...props }: React.ComponentPropsWithoutRe
                   {errors.email && <p className="text-sm text-red-500">{errors.email.message}</p>}
                 </div>
                 <div className="grid gap-2">
-                  <div className="flex items-center">
-                    <Label htmlFor="password">Password</Label>
-                    <a
-                      href={ROUTES.FORGOT_PASSWORD}
-                      className="ml-auto text-sm underline-offset-4 hover:underline"
-                    >
-                      Forgot password?
-                    </a>
-                  </div>
+                  <Label htmlFor="password">Password</Label>
                   <Input
                     id="password"
                     type="password"
@@ -98,18 +82,31 @@ export function LoginForm({ className, ...props }: React.ComponentPropsWithoutRe
                     <p className="text-sm text-red-500">{errors.password.message}</p>
                   )}
                 </div>
+                <div className="grid gap-2">
+                  <Label htmlFor="confirmPassword">Confirm Password</Label>
+                  <Input
+                    id="confirmPassword"
+                    type="password"
+                    placeholder="********"
+                    {...register('confirmPassword')}
+                    disabled={isSubmitting}
+                  />
+                  {errors.confirmPassword && (
+                    <p className="text-sm text-red-500">{errors.confirmPassword.message}</p>
+                  )}
+                </div>
 
                 {errors.root && <p className="text-sm text-red-500">{errors.root.message}</p>}
 
                 <Button type="submit" className="w-full" disabled={isSubmitting}>
-                  {isSubmitting ? 'Signing in...' : 'Sign in'}
+                  {isSubmitting ? 'Creating account...' : 'Create account'}
                 </Button>
               </div>
 
               <div className="text-center text-sm">
-                Don't have an account?{' '}
-                <a href={ROUTES.REGISTER} className="underline underline-offset-4">
-                  Sign up
+                Already have an account?{' '}
+                <a href={ROUTES.LOGIN} className="underline underline-offset-4">
+                  Sign in
                 </a>
               </div>
             </div>
