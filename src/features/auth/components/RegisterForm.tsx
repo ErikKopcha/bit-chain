@@ -6,6 +6,7 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { cn } from '@/lib/utils';
 import { zodResolver } from '@hookform/resolvers/zod';
+import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { useForm } from 'react-hook-form';
 import { z } from 'zod';
@@ -38,7 +39,7 @@ export function RegisterForm({ className, ...props }: React.ComponentPropsWithou
         throw new Error(error.message);
       }
 
-      router.push(ROUTES.LOGIN);
+      router.push(ROUTES.LOGIN.path);
     } catch (error) {
       setError('root', {
         type: 'manual',
@@ -105,9 +106,9 @@ export function RegisterForm({ className, ...props }: React.ComponentPropsWithou
 
               <div className="text-center text-sm">
                 Already have an account?{' '}
-                <a href={ROUTES.LOGIN} className="underline underline-offset-4">
+                <Link href={ROUTES.LOGIN.path} className="underline underline-offset-4">
                   Sign in
-                </a>
+                </Link>
               </div>
             </div>
           </form>

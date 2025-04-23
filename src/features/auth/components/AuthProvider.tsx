@@ -10,15 +10,15 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
   const pathname = usePathname();
   const router = useRouter();
-  const isAuthPage = AUTH_ROUTES.includes(pathname);
+  const isAuthPage = AUTH_ROUTES.some(route => pathname.startsWith(route.path));
 
   useEffect(() => {
     if (status === 'loading') return;
 
     if (!session && !isAuthPage) {
-      router.push(ROUTES.LOGIN);
+      router.push(ROUTES.LOGIN.path);
     } else if (session && isAuthPage) {
-      router.push(ROUTES.DASHBOARD);
+      router.push(ROUTES.DASHBOARD.path);
     }
   }, [session, status, isAuthPage, router]);
 

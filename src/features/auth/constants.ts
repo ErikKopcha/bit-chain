@@ -1,11 +1,28 @@
 export const ROUTES = {
-  HOME: '/',
-  LOGIN: '/login',
-  REGISTER: '/register',
-  FORGOT_PASSWORD: '/forgot-password',
-  RESET_PASSWORD: '/reset-password',
-  DASHBOARD: '/dashboard',
-  TRADING_JOURNAL: '/trading-journal',
+  LOGIN: {
+    path: '/login',
+    label: 'Login',
+  },
+  REGISTER: {
+    path: '/register',
+    label: 'Register',
+  },
+  FORGOT_PASSWORD: {
+    path: '/forgot-password',
+    label: 'Forgot Password',
+  },
+  RESET_PASSWORD: {
+    path: '/reset-password',
+    label: 'Reset Password',
+  },
+  DASHBOARD: {
+    path: '/dashboard',
+    label: 'Dashboard',
+  },
+  TRADING_JOURNAL: {
+    path: '/trading-journal',
+    label: 'Trading Journal',
+  },
 };
 
 export const AUTH_ROUTES = [

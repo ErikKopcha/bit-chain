@@ -7,7 +7,8 @@ import { Label } from '@/components/ui/label';
 import { cn } from '@/lib/utils';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { signIn } from 'next-auth/react';
-import { useRouter, useSearchParams } from 'next/navigation';
+import Link from 'next/link';
+import { useRouter } from 'next/navigation';
 import { useForm } from 'react-hook-form';
 import { z } from 'zod';
 import { ROUTES } from '../constants';
@@ -17,8 +18,7 @@ type LoginFormData = z.infer<typeof loginSchema>;
 
 export function LoginForm({ className, ...props }: React.ComponentPropsWithoutRef<'div'>) {
   const router = useRouter();
-  const searchParams = useSearchParams();
-  const callbackUrl = searchParams.get('callbackUrl') || ROUTES.DASHBOARD;
+  const callbackUrl = ROUTES.DASHBOARD.path;
 
   const {
     register,
@@ -32,10 +32,10 @@ export function LoginForm({ className, ...props }: React.ComponentPropsWithoutRe
   const onSubmit = async (data: LoginFormData) => {
     try {
       const res = await signIn('credentials', {
-        redirect: false,
+        redirect: true,
         email: data.email,
         password: data.password,
-        callbackUrl,
+        callbackUrl: ROUTES.DASHBOARD.path,
       });
 
       if (res?.error) {
@@ -81,7 +81,7 @@ export function LoginForm({ className, ...props }: React.ComponentPropsWithoutRe
                   <div className="flex items-center">
                     <Label htmlFor="password">Password</Label>
                     <a
-                      href={ROUTES.FORGOT_PASSWORD}
+                      href={ROUTES.FORGOT_PASSWORD.path}
                       className="ml-auto text-sm underline-offset-4 hover:underline"
                     >
                       Forgot password?
@@ -108,9 +108,9 @@ export function LoginForm({ className, ...props }: React.ComponentPropsWithoutRe
 
               <div className="text-center text-sm">
                 Don't have an account?{' '}
-                <a href={ROUTES.REGISTER} className="underline underline-offset-4">
+                <Link href={ROUTES.REGISTER.path} className="underline underline-offset-4">
                   Sign up
-                </a>
+                </Link>
               </div>
             </div>
           </form>

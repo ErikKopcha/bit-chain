@@ -2,13 +2,14 @@ import { prisma } from '@/lib/prisma';
 import { compare } from 'bcryptjs';
 import { NextAuthOptions } from 'next-auth';
 import CredentialsProvider from 'next-auth/providers/credentials';
+import { ROUTES } from '../constants';
 
 export const authOptions: NextAuthOptions = {
   session: {
     strategy: 'jwt',
   },
   pages: {
-    signIn: '/login',
+    signIn: ROUTES.LOGIN.path,
   },
   providers: [
     CredentialsProvider({
@@ -18,9 +19,7 @@ export const authOptions: NextAuthOptions = {
         password: { label: 'Password', type: 'password' },
       },
       async authorize(credentials) {
-        if (!credentials?.email || !credentials?.password) {
-          return null;
-        }
+        if (!credentials?.email || !credentials?.password) return null;
 
         const user = await prisma.user.findUnique({
           where: { email: credentials.email },
@@ -31,9 +30,7 @@ export const authOptions: NextAuthOptions = {
         }
 
         const isValid = await compare(credentials.password, user.password);
-        if (!isValid) {
-          return null;
-        }
+        if (!isValid) return null;
 
         return {
           id: user.id,
@@ -44,15 +41,11 @@ export const authOptions: NextAuthOptions = {
   ],
   callbacks: {
     async jwt({ token, user }) {
-      if (user) {
-        token.id = user.id;
-      }
+      if (user) token.id = user.id;
       return token;
     },
     async session({ session, token }) {
-      if (token && session?.user) {
-        session.user.id = token.id as string;
-      }
+      if (token && session?.user) session.user.id = token.id as string;
       return session;
     },
   },
