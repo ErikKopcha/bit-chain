@@ -20,8 +20,8 @@ export const ROUTES = {
     label: 'Dashboard',
   },
   TRADING_JOURNAL: {
-    path: '/trading-journal',
-    label: 'Trading Journal',
+    path: '/journal',
+    label: 'Journal',
   },
 };
 
