@@ -22,9 +22,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     }
   }, [session, status, isAuthPage, router]);
 
-  if (status === 'loading') {
-    return null;
-  }
+  if (status === 'loading') return null;
 
   return <>{children}</>;
 }
