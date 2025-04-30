@@ -75,23 +75,21 @@ export function PositionModal({ position, onSave, onDelete, children }: Position
 
   useEffect(() => {
     if (isOpen && position) {
-      if (position) {
-        form.reset({
-          date: position.date,
-          symbol: position.symbol,
-          side: position.side,
-          entryPrice: position.entryPrice,
-          positionSize: position.positionSize,
-          stopLoss: position.stopLoss,
-          exitPrice: position.exitPrice,
-          commission: position.commission,
-          category: position.category,
-          deposit: position.deposit,
-          leverage: position.leverage || 1,
-        });
-      } else {
-        form.reset();
-      }
+      form.reset({
+        date: position.date,
+        symbol: position.symbol,
+        side: position.side,
+        entryPrice: position.entryPrice,
+        positionSize: position.positionSize,
+        stopLoss: position.stopLoss,
+        exitPrice: position.exitPrice,
+        commission: position.commission,
+        category: position.category,
+        deposit: position.deposit,
+        leverage: position.leverage || 1,
+      });
+    } else {
+      form.reset();
     }
   }, [isOpen, position, form]);
 

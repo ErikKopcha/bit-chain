@@ -24,24 +24,36 @@ export function PositionStats({ trades }: PositionStatsProps) {
     <div className="grid grid-cols-1 md:grid-cols-5 gap-4">
       <div className="bg-white p-4 rounded-lg shadow">
         <p className="text-sm font-medium text-muted-foreground">Total Trades</p>
-        <p className="text-2xl font-bold">{stats.totalTrades}</p>
+        <p className="text-2xl font-bold truncate" title={stats.totalTrades.toString()}>
+          {stats.totalTrades}
+        </p>
       </div>
       <div className="bg-white p-4 rounded-lg shadow">
         <p className="text-sm font-medium text-muted-foreground">Win Trades</p>
-        <p className="text-2xl font-bold text-green-600">{stats.winTrades}</p>
+        <p
+          className="text-2xl font-bold text-green-600 truncate"
+          title={stats.winTrades.toString()}
+        >
+          {stats.winTrades}
+        </p>
       </div>
       <div className="bg-white p-4 rounded-lg shadow">
         <p className="text-sm font-medium text-muted-foreground">Loss Trades</p>
-        <p className="text-2xl font-bold text-red-600">{stats.lossTrades}</p>
+        <p className="text-2xl font-bold text-red-600 truncate" title={stats.lossTrades.toString()}>
+          {stats.lossTrades}
+        </p>
       </div>
       <div className="bg-white p-4 rounded-lg shadow">
         <p className="text-sm font-medium text-muted-foreground">Win Rate</p>
-        <p className="text-2xl font-bold">{stats.winRate}%</p>
+        <p className="text-2xl font-bold truncate" title={`${stats.winRate}%`}>
+          {stats.winRate}%
+        </p>
       </div>
       <div className="bg-white p-4 rounded-lg shadow">
         <p className="text-sm font-medium text-muted-foreground">Total P/L</p>
         <p
-          className={`text-2xl font-bold ${stats.totalPnl >= 0 ? 'text-green-600' : 'text-red-600'}`}
+          className={`text-2xl font-bold truncate ${stats.totalPnl >= 0 ? 'text-green-600' : 'text-red-600'}`}
+          title={formatCurrency(stats.totalPnl)}
         >
           {formatCurrency(stats.totalPnl)}
         </p>

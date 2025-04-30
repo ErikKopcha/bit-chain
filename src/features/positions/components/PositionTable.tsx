@@ -99,7 +99,7 @@ export function PositionTable({
       </Table>
 
       {trades.length > 0 && !isLoading && (
-        <div className="p-4 border-t w-full">
+        <div className="pt-4 border-t w-full">
           <DataTablePagination
             currentPage={currentPage}
             totalPages={totalPages}

@@ -124,3 +124,7 @@
 button {
   cursor: pointer !important;
 }
+
+.custom-filter-container {
+  grid-template-columns: repeat(4, minmax(160px, 1fr));
+}

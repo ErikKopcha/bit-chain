@@ -17,13 +17,6 @@ export default function PositionsContainer() {
   const searchParams = useSearchParams();
 
   const {
-    trades,
-    handleCreatePosition,
-    handleEditPosition,
-    handleDeletePosition: handleDeleteTrade,
-  } = useTradeData();
-
-  const {
     dateRange,
     sideFilter,
     categoryFilter,
@@ -33,6 +26,20 @@ export default function PositionsContainer() {
     handleCategoryFilterChange,
     handleResultFilterChange,
   } = useTradeFilters();
+
+  const {
+    filteredTrades,
+    handleCreatePosition,
+    handleEditPosition,
+    handleDeletePosition: handleDeleteTrade,
+    refetch,
+    isLoading,
+  } = useTradeData({
+    dateRange,
+    sideFilter,
+    categoryFilter,
+    resultFilter,
+  });
 
   const {
     deleteDialogOpen,
@@ -50,7 +57,7 @@ export default function PositionsContainer() {
     paginatedTrades,
     handlePageChange,
     handlePageSizeChange,
-  } = usePagination(trades, searchParams);
+  } = usePagination(filteredTrades, searchParams);
 
   const handleDeletePosition = (id: string) => {
     handleDeleteTrade(id);
@@ -76,7 +83,7 @@ export default function PositionsContainer() {
         </div>
       </div>
 
-      <PositionStats trades={trades} />
+      <PositionStats trades={filteredTrades} />
 
       <div className="rounded-md shadow">
         <div className="p-4 bg-white border-b flex flex-col md:flex-row gap-4 justify-between items-start md:items-center">
@@ -89,6 +96,7 @@ export default function PositionsContainer() {
             onCategoryFilterChange={handleCategoryFilterChange}
             resultFilter={resultFilter}
             onResultFilterChange={handleResultFilterChange}
+            onRefetch={refetch}
           />
         </div>
 
@@ -101,6 +109,7 @@ export default function PositionsContainer() {
           onPageSizeChange={handlePageSizeChange}
           onEdit={handleEditPosition}
           onDelete={onDelete}
+          isLoading={isLoading}
         />
       </div>
 

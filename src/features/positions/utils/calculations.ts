@@ -50,7 +50,7 @@ export function calculateRiskPercent({
       ? (entryPrice - stopLoss) * positionSize
       : (stopLoss - entryPrice) * positionSize;
 
-  const leveragedLoss = potentialLoss * leverage;
+  const leveragedLoss = potentialLoss;
   const percent = (leveragedLoss / deposit) * 100;
 
   return Math.round(percent * 100) / 100;

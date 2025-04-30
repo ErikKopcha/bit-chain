@@ -1,4 +1,3 @@
-import { DatePicker } from '@/components/ui/date-picker';
 import { FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
 import {
@@ -18,7 +17,7 @@ interface PositionFormFieldsProps {
 export function PositionFormFields({ form }: PositionFormFieldsProps) {
   return (
     <div className="grid grid-cols-2 gap-4">
-      <FormField
+      {/* <FormField
         control={form.control}
         name="date"
         render={({ field }) => (
@@ -35,7 +34,7 @@ export function PositionFormFields({ form }: PositionFormFieldsProps) {
             <FormMessage />
           </FormItem>
         )}
-      />
+      /> */}
 
       <FormField
         control={form.control}
@@ -66,7 +65,7 @@ export function PositionFormFields({ form }: PositionFormFieldsProps) {
               <SelectContent>
                 {TRADE_SIDES_LIST.map(side => (
                   <SelectItem key={side} value={side}>
-                    {side.charAt(0).toUpperCase() + side.slice(1)}
+                    {side.toLowerCase()}
                   </SelectItem>
                 ))}
               </SelectContent>
@@ -175,7 +174,7 @@ export function PositionFormFields({ form }: PositionFormFieldsProps) {
               <SelectContent>
                 {TRADE_CATEGORIES_LIST.map(category => (
                   <SelectItem key={category} value={category}>
-                    {category.charAt(0).toUpperCase() + category.slice(1).replace('-', ' ')}
+                    {category.toLowerCase()}
                   </SelectItem>
                 ))}
               </SelectContent>

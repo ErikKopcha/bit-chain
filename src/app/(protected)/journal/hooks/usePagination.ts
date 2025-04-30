@@ -1,6 +1,6 @@
+import { Trade } from '@/features/positions/types/position';
 import { ReadonlyURLSearchParams } from 'next/navigation';
 import { useEffect, useState } from 'react';
-import { Trade } from '../types';
 
 interface UsePaginationResult {
   currentPage: number;

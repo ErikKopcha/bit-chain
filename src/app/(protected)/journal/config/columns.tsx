@@ -72,13 +72,6 @@ export const columns: ColumnDef<Trade>[] = [
     className: 'text-right',
     cell: trade => <span className="block text-right">{formatCurrency(trade.stopLoss)}</span>,
   },
-
-  {
-    key: 'commission',
-    header: 'Commission',
-    className: 'text-center',
-    cell: trade => <span className="block text-center">{formatCurrency(trade.commission)}</span>,
-  },
   {
     key: 'positionSize',
     header: 'Size',
@@ -101,6 +94,12 @@ export const columns: ColumnDef<Trade>[] = [
       ) : (
         <span className="block text-right">N/A</span>
       ),
+  },
+  {
+    key: 'commission',
+    header: 'Commission',
+    className: 'text-center',
+    cell: trade => <span className="block text-center">{formatCurrency(trade.commission)}</span>,
   },
   {
     key: 'result',
