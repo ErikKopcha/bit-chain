@@ -1,4 +1,3 @@
-import { Trade, TRADE_CATEGORIES, TRADE_SIDES } from '@/app/(protected)/journal/types';
 import { Button } from '@/components/ui/button';
 import {
   Dialog,
@@ -9,14 +8,21 @@ import {
 } from '@/components/ui/dialog';
 import { Form } from '@/components/ui/form';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
-import { PositionFormValues, positionSchema } from '../types/position';
+import {
+  PositionFormValues,
+  positionSchema,
+  Trade,
+  TRADE_CATEGORIES,
+  TRADE_RESULTS,
+  TRADE_SIDES,
+} from '../types/position';
 import { PositionFormFields } from './PositionFormFields';
 
 interface PositionModalProps {
   position?: Trade;
-  onSave: (position: Omit<Trade, 'id' | 'pnl' | 'result' | 'riskPercent'>) => void;
+  onSave: (position: Trade) => void;
   onDelete?: () => void;
   children: React.ReactNode;
 }
@@ -26,24 +32,68 @@ export function PositionModal({ position, onSave, onDelete, children }: Position
 
   const form = useForm<PositionFormValues>({
     resolver: zodResolver(positionSchema),
-    defaultValues: position || {
-      date: new Date(),
-      symbol: '',
-      side: TRADE_SIDES.LONG,
-      category: TRADE_CATEGORIES.SOLO,
-    },
+    defaultValues: position
+      ? {
+          date: position.date,
+          symbol: position.symbol,
+          side: position.side,
+          entryPrice: position.entryPrice,
+          positionSize: position.positionSize,
+          stopLoss: position.stopLoss,
+          exitPrice: position.exitPrice,
+          commission: position.commission,
+          category: position.category,
+          deposit: position.deposit,
+          leverage: position.leverage || 1,
+        }
+      : {
+          date: new Date(),
+          symbol: '',
+          side: TRADE_SIDES.LONG,
+          category: TRADE_CATEGORIES.SOLO,
+          leverage: 1,
+        },
   });
 
   const handleSubmit = (values: PositionFormValues) => {
     onSave({
+      id: position?.id || 'new',
+      ...position,
       ...values,
       stopLoss: values.stopLoss || 0,
       exitPrice: values.exitPrice || 0,
       commission: values.commission || 0,
-      totalDeposit: values.totalDeposit || 500,
+      deposit: values.deposit,
+      leverage: values.leverage || 1,
+      riskPercent: position?.riskPercent || 0,
+      pnl: position?.pnl || 0,
+      result: position?.result || TRADE_RESULTS.PENDING,
+      investment: 0,
     });
     setIsOpen(false);
   };
+
+  useEffect(() => {
+    if (isOpen && position) {
+      if (position) {
+        form.reset({
+          date: position.date,
+          symbol: position.symbol,
+          side: position.side,
+          entryPrice: position.entryPrice,
+          positionSize: position.positionSize,
+          stopLoss: position.stopLoss,
+          exitPrice: position.exitPrice,
+          commission: position.commission,
+          category: position.category,
+          deposit: position.deposit,
+          leverage: position.leverage || 1,
+        });
+      } else {
+        form.reset();
+      }
+    }
+  }, [isOpen, position, form]);
 
   return (
     <Dialog open={isOpen} onOpenChange={setIsOpen}>

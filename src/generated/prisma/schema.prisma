@@ -23,10 +23,10 @@ model User {
 }
 
 model Trade {
-  id           String      @id @default(cuid())
+  id           String        @id @default(cuid())
   userId       String
-  user         User        @relation(fields: [userId], references: [id])
-  date         DateTime    @default(now())
+  user         User          @relation(fields: [userId], references: [id])
+  date         DateTime      @default(now())
   symbol       String
   side         TradeSide
   entryPrice   Float
@@ -39,7 +39,9 @@ model Trade {
   result       TradeResult
   leverage     Float?
   investment   Float?
-  createdAt    DateTime    @default(now())
+  createdAt    DateTime      @default(now())
+  category     TradeCategory
+  deposit      Float         @default(500)
 }
 
 enum TradeSide {
@@ -50,4 +52,14 @@ enum TradeSide {
 enum TradeResult {
   WIN
   LOSS
+  PENDING
+}
+
+enum TradeCategory {
+  solo
+  radar
+  everest
+  cryptonite_radar
+  cryptonite_everest
+  humster
 }

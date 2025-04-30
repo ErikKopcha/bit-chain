@@ -1,11 +1,11 @@
-import { calculatePnl, calculateRiskPercent } from '@/features/positions/utils/calculations';
 import {
   Trade,
   TRADE_CATEGORIES,
   TRADE_CATEGORIES_LIST,
   TRADE_RESULTS,
   TRADE_SIDES,
-} from '../types';
+} from '@/features/positions/types/position';
+import { calculatePnl, calculateRiskPercent } from '@/features/positions/utils/calculations';
 
 const CRYPTO_SYMBOLS = ['BTC', 'ETH', 'SOL', 'ADA', 'XRP', 'DOT'];
 
@@ -41,12 +41,26 @@ export const sampleTrades: Trade[] = Array.from({ length: 400 }, (_, i) => {
     stopLoss,
     exitPrice,
     commission,
-    riskPercent: calculateRiskPercent(side, entryPrice, stopLoss, positionSize, totalDeposit),
-    pnl: calculatePnl(side, entryPrice, exitPrice, positionSize, commission),
+    riskPercent: calculateRiskPercent({
+      side,
+      entryPrice,
+      stopLoss,
+      positionSize,
+      deposit: totalDeposit,
+    }),
+    pnl: calculatePnl({
+      side,
+      entryPrice,
+      exitPrice,
+      positionSize,
+      commission,
+    }),
     result,
     leverage,
     investment: Math.floor((entryPrice * (Math.floor(Math.random() * 10) + 1)) / leverage),
     category,
-    totalDeposit,
+    userId: 'sample_user',
+    createdAt: new Date(),
+    deposit: totalDeposit,
   };
 });

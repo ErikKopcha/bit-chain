@@ -41,6 +41,7 @@ model Trade {
   investment   Float?                        
   createdAt    DateTime @default(now())
   category     TradeCategory
+  deposit      Float
 }
 
 enum TradeSide {
@@ -51,13 +52,14 @@ enum TradeSide {
 enum TradeResult {
   WIN
   LOSS
+  PENDING
 }
 
 enum TradeCategory {
   solo
   radar
   everest
-  cryptonite-radar
-  cryptonite-everest
+  cryptonite_radar
+  cryptonite_everest
   humster
 }

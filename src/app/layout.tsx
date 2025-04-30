@@ -1,6 +1,7 @@
 'use client';
 
 import { AuthProvider } from '@/features/auth/components/AuthProvider';
+import { QueryProvider } from '@/providers/QueryProvider';
 import { SessionProvider } from 'next-auth/react';
 import { Geist, Geist_Mono } from 'next/font/google';
 import './globals.css';
@@ -20,7 +21,9 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
     <html lang="en">
       <body className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
         <SessionProvider>
-          <AuthProvider>{children}</AuthProvider>
+          <QueryProvider>
+            <AuthProvider>{children}</AuthProvider>
+          </QueryProvider>
         </SessionProvider>
       </body>
     </html>

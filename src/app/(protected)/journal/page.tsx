@@ -1,6 +1,6 @@
 'use client';
 
-import TablePositions from '@/features/positions/components/TablePositions';
+import TablePositions from '@/features/positions/components/PositionsContainer';
 
 export default function JournalPage() {
   return (

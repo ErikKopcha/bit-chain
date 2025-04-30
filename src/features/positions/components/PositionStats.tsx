@@ -1,5 +1,5 @@
-import { Trade } from '@/app/(protected)/journal/types';
 import { formatCurrency } from '@/app/(protected)/journal/utils/formatters';
+import { Trade, TRADE_RESULTS } from '../types/position';
 
 interface PositionStatsProps {
   trades: Trade[];
@@ -8,12 +8,15 @@ interface PositionStatsProps {
 export function PositionStats({ trades }: PositionStatsProps) {
   const stats = {
     totalTrades: trades.length,
-    winTrades: trades.filter(t => t.result === 'win').length,
-    lossTrades: trades.filter(t => t.result === 'loss').length,
+    winTrades: trades.filter(t => t.result === TRADE_RESULTS.WIN).length,
+    lossTrades: trades.filter(t => t.result === TRADE_RESULTS.LOSS).length,
     totalPnl: trades.reduce((sum, t) => sum + t.pnl, 0),
     winRate:
       trades.length > 0
-        ? ((trades.filter(t => t.result === 'win').length / trades.length) * 100).toFixed(2)
+        ? (
+            (trades.filter(t => t.result === TRADE_RESULTS.WIN).length / trades.length) *
+            100
+          ).toFixed(2)
         : '0.00',
   };
 

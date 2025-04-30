@@ -1,4 +1,4 @@
-import { TRADE_CATEGORIES } from '../types';
+import { TRADE_CATEGORIES, TRADE_RESULTS, TRADE_SIDES } from '@/features/positions/types/position';
 
 export const formatDate = (date: Date): string => {
   return date.toLocaleDateString('ua-UA', {
@@ -33,13 +33,20 @@ export const getCategoryColorClass = (category: string): string => {
 };
 
 export const getSideColorClass = (side: string): string => {
-  return side === 'long'
+  return side === TRADE_SIDES.LONG
     ? 'bg-green-100 text-green-800 border border-green-300'
     : 'bg-red-100 text-red-800 border border-red-300';
 };
 
 export const getResultColorClass = (result: string): string => {
-  return result === 'win'
-    ? 'bg-emerald-100 text-emerald-800 border border-emerald-300'
-    : 'bg-rose-100 text-rose-800 border border-rose-300';
+  switch (result) {
+    case TRADE_RESULTS.PENDING:
+      return 'bg-yellow-100 text-yellow-800 border border-yellow-300';
+    case TRADE_RESULTS.WIN:
+      return 'bg-emerald-100 text-emerald-800 border border-emerald-300';
+    case TRADE_RESULTS.LOSS:
+      return 'bg-rose-100 text-rose-800 border border-rose-300';
+    default:
+      return 'bg-gray-100 text-gray-800 border border-gray-300';
+  }
 };

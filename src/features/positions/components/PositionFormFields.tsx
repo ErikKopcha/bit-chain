@@ -1,4 +1,4 @@
-import { TRADE_CATEGORIES_LIST, TRADE_SIDES_LIST } from '@/app/(protected)/journal/types';
+import { DatePicker } from '@/components/ui/date-picker';
 import { FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
 import {
@@ -9,7 +9,7 @@ import {
   SelectValue,
 } from '@/components/ui/select';
 import { UseFormReturn } from 'react-hook-form';
-import { PositionFormValues } from '../types/position';
+import { PositionFormValues, TRADE_CATEGORIES_LIST, TRADE_SIDES_LIST } from '../types/position';
 
 interface PositionFormFieldsProps {
   form: UseFormReturn<PositionFormValues>;
@@ -18,6 +18,25 @@ interface PositionFormFieldsProps {
 export function PositionFormFields({ form }: PositionFormFieldsProps) {
   return (
     <div className="grid grid-cols-2 gap-4">
+      <FormField
+        control={form.control}
+        name="date"
+        render={({ field }) => (
+          <FormItem>
+            <FormLabel>Date</FormLabel>
+            <FormControl>
+              <DatePicker
+                mode="default"
+                date={field.value}
+                onDateChange={field.onChange}
+                placeholder="All time"
+              />
+            </FormControl>
+            <FormMessage />
+          </FormItem>
+        )}
+      />
+
       <FormField
         control={form.control}
         name="symbol"
@@ -101,6 +120,20 @@ export function PositionFormFields({ form }: PositionFormFieldsProps) {
 
       <FormField
         control={form.control}
+        name="leverage"
+        render={({ field }) => (
+          <FormItem>
+            <FormLabel>Leverage</FormLabel>
+            <FormControl>
+              <Input type="number" min="1" {...field} />
+            </FormControl>
+            <FormMessage />
+          </FormItem>
+        )}
+      />
+
+      <FormField
+        control={form.control}
         name="exitPrice"
         render={({ field }) => (
           <FormItem>
@@ -154,7 +187,7 @@ export function PositionFormFields({ form }: PositionFormFieldsProps) {
 
       <FormField
         control={form.control}
-        name="totalDeposit"
+        name="deposit"
         render={({ field }) => (
           <FormItem>
             <FormLabel>Total Deposit</FormLabel>

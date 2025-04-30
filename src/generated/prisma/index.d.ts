@@ -38,10 +38,23 @@ export type TradeSide = (typeof TradeSide)[keyof typeof TradeSide]
 
 export const TradeResult: {
   WIN: 'WIN',
-  LOSS: 'LOSS'
+  LOSS: 'LOSS',
+  PENDING: 'PENDING'
 };
 
 export type TradeResult = (typeof TradeResult)[keyof typeof TradeResult]
+
+
+export const TradeCategory: {
+  solo: 'solo',
+  radar: 'radar',
+  everest: 'everest',
+  cryptonite_radar: 'cryptonite_radar',
+  cryptonite_everest: 'cryptonite_everest',
+  humster: 'humster'
+};
+
+export type TradeCategory = (typeof TradeCategory)[keyof typeof TradeCategory]
 
 }
 
@@ -52,6 +65,10 @@ export const TradeSide: typeof $Enums.TradeSide
 export type TradeResult = $Enums.TradeResult
 
 export const TradeResult: typeof $Enums.TradeResult
+
+export type TradeCategory = $Enums.TradeCategory
+
+export const TradeCategory: typeof $Enums.TradeCategory
 
 /**
  * ##  Prisma Client ʲˢ
@@ -2098,6 +2115,7 @@ export namespace Prisma {
     pnl: number | null
     leverage: number | null
     investment: number | null
+    deposit: number | null
   }
 
   export type TradeSumAggregateOutputType = {
@@ -2110,6 +2128,7 @@ export namespace Prisma {
     pnl: number | null
     leverage: number | null
     investment: number | null
+    deposit: number | null
   }
 
   export type TradeMinAggregateOutputType = {
@@ -2129,6 +2148,8 @@ export namespace Prisma {
     leverage: number | null
     investment: number | null
     createdAt: Date | null
+    category: $Enums.TradeCategory | null
+    deposit: number | null
   }
 
   export type TradeMaxAggregateOutputType = {
@@ -2148,6 +2169,8 @@ export namespace Prisma {
     leverage: number | null
     investment: number | null
     createdAt: Date | null
+    category: $Enums.TradeCategory | null
+    deposit: number | null
   }
 
   export type TradeCountAggregateOutputType = {
@@ -2167,6 +2190,8 @@ export namespace Prisma {
     leverage: number
     investment: number
     createdAt: number
+    category: number
+    deposit: number
     _all: number
   }
 
@@ -2181,6 +2206,7 @@ export namespace Prisma {
     pnl?: true
     leverage?: true
     investment?: true
+    deposit?: true
   }
 
   export type TradeSumAggregateInputType = {
@@ -2193,6 +2219,7 @@ export namespace Prisma {
     pnl?: true
     leverage?: true
     investment?: true
+    deposit?: true
   }
 
   export type TradeMinAggregateInputType = {
@@ -2212,6 +2239,8 @@ export namespace Prisma {
     leverage?: true
     investment?: true
     createdAt?: true
+    category?: true
+    deposit?: true
   }
 
   export type TradeMaxAggregateInputType = {
@@ -2231,6 +2260,8 @@ export namespace Prisma {
     leverage?: true
     investment?: true
     createdAt?: true
+    category?: true
+    deposit?: true
   }
 
   export type TradeCountAggregateInputType = {
@@ -2250,6 +2281,8 @@ export namespace Prisma {
     leverage?: true
     investment?: true
     createdAt?: true
+    category?: true
+    deposit?: true
     _all?: true
   }
 
@@ -2356,6 +2389,8 @@ export namespace Prisma {
     leverage: number | null
     investment: number | null
     createdAt: Date
+    category: $Enums.TradeCategory
+    deposit: number
     _count: TradeCountAggregateOutputType | null
     _avg: TradeAvgAggregateOutputType | null
     _sum: TradeSumAggregateOutputType | null
@@ -2394,6 +2429,8 @@ export namespace Prisma {
     leverage?: boolean
     investment?: boolean
     createdAt?: boolean
+    category?: boolean
+    deposit?: boolean
     user?: boolean | UserDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["trade"]>
 
@@ -2414,6 +2451,8 @@ export namespace Prisma {
     leverage?: boolean
     investment?: boolean
     createdAt?: boolean
+    category?: boolean
+    deposit?: boolean
     user?: boolean | UserDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["trade"]>
 
@@ -2434,6 +2473,8 @@ export namespace Prisma {
     leverage?: boolean
     investment?: boolean
     createdAt?: boolean
+    category?: boolean
+    deposit?: boolean
     user?: boolean | UserDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["trade"]>
 
@@ -2454,9 +2495,11 @@ export namespace Prisma {
     leverage?: boolean
     investment?: boolean
     createdAt?: boolean
+    category?: boolean
+    deposit?: boolean
   }
 
-  export type TradeOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "userId" | "date" | "symbol" | "side" | "entryPrice" | "positionSize" | "stopLoss" | "exitPrice" | "commission" | "riskPercent" | "pnl" | "result" | "leverage" | "investment" | "createdAt", ExtArgs["result"]["trade"]>
+  export type TradeOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "userId" | "date" | "symbol" | "side" | "entryPrice" | "positionSize" | "stopLoss" | "exitPrice" | "commission" | "riskPercent" | "pnl" | "result" | "leverage" | "investment" | "createdAt" | "category" | "deposit", ExtArgs["result"]["trade"]>
   export type TradeInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     user?: boolean | UserDefaultArgs<ExtArgs>
   }
@@ -2489,6 +2532,8 @@ export namespace Prisma {
       leverage: number | null
       investment: number | null
       createdAt: Date
+      category: $Enums.TradeCategory
+      deposit: number
     }, ExtArgs["result"]["trade"]>
     composites: {}
   }
@@ -2929,6 +2974,8 @@ export namespace Prisma {
     readonly leverage: FieldRef<"Trade", 'Float'>
     readonly investment: FieldRef<"Trade", 'Float'>
     readonly createdAt: FieldRef<"Trade", 'DateTime'>
+    readonly category: FieldRef<"Trade", 'TradeCategory'>
+    readonly deposit: FieldRef<"Trade", 'Float'>
   }
     
 
@@ -3383,7 +3430,9 @@ export namespace Prisma {
     result: 'result',
     leverage: 'leverage',
     investment: 'investment',
-    createdAt: 'createdAt'
+    createdAt: 'createdAt',
+    category: 'category',
+    deposit: 'deposit'
   };
 
   export type TradeScalarFieldEnum = (typeof TradeScalarFieldEnum)[keyof typeof TradeScalarFieldEnum]
@@ -3489,6 +3538,20 @@ export namespace Prisma {
 
 
   /**
+   * Reference to a field of type 'TradeCategory'
+   */
+  export type EnumTradeCategoryFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'TradeCategory'>
+    
+
+
+  /**
+   * Reference to a field of type 'TradeCategory[]'
+   */
+  export type ListEnumTradeCategoryFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'TradeCategory[]'>
+    
+
+
+  /**
    * Reference to a field of type 'Int'
    */
   export type IntFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Int'>
@@ -3575,6 +3638,8 @@ export namespace Prisma {
     leverage?: FloatNullableFilter<"Trade"> | number | null
     investment?: FloatNullableFilter<"Trade"> | number | null
     createdAt?: DateTimeFilter<"Trade"> | Date | string
+    category?: EnumTradeCategoryFilter<"Trade"> | $Enums.TradeCategory
+    deposit?: FloatFilter<"Trade"> | number
     user?: XOR<UserScalarRelationFilter, UserWhereInput>
   }
 
@@ -3595,6 +3660,8 @@ export namespace Prisma {
     leverage?: SortOrderInput | SortOrder
     investment?: SortOrderInput | SortOrder
     createdAt?: SortOrder
+    category?: SortOrder
+    deposit?: SortOrder
     user?: UserOrderByWithRelationInput
   }
 
@@ -3618,6 +3685,8 @@ export namespace Prisma {
     leverage?: FloatNullableFilter<"Trade"> | number | null
     investment?: FloatNullableFilter<"Trade"> | number | null
     createdAt?: DateTimeFilter<"Trade"> | Date | string
+    category?: EnumTradeCategoryFilter<"Trade"> | $Enums.TradeCategory
+    deposit?: FloatFilter<"Trade"> | number
     user?: XOR<UserScalarRelationFilter, UserWhereInput>
   }, "id">
 
@@ -3638,6 +3707,8 @@ export namespace Prisma {
     leverage?: SortOrderInput | SortOrder
     investment?: SortOrderInput | SortOrder
     createdAt?: SortOrder
+    category?: SortOrder
+    deposit?: SortOrder
     _count?: TradeCountOrderByAggregateInput
     _avg?: TradeAvgOrderByAggregateInput
     _max?: TradeMaxOrderByAggregateInput
@@ -3665,6 +3736,8 @@ export namespace Prisma {
     leverage?: FloatNullableWithAggregatesFilter<"Trade"> | number | null
     investment?: FloatNullableWithAggregatesFilter<"Trade"> | number | null
     createdAt?: DateTimeWithAggregatesFilter<"Trade"> | Date | string
+    category?: EnumTradeCategoryWithAggregatesFilter<"Trade"> | $Enums.TradeCategory
+    deposit?: FloatWithAggregatesFilter<"Trade"> | number
   }
 
   export type UserCreateInput = {
@@ -3736,6 +3809,8 @@ export namespace Prisma {
     leverage?: number | null
     investment?: number | null
     createdAt?: Date | string
+    category: $Enums.TradeCategory
+    deposit?: number
     user: UserCreateNestedOneWithoutTradesInput
   }
 
@@ -3756,6 +3831,8 @@ export namespace Prisma {
     leverage?: number | null
     investment?: number | null
     createdAt?: Date | string
+    category: $Enums.TradeCategory
+    deposit?: number
   }
 
   export type TradeUpdateInput = {
@@ -3774,6 +3851,8 @@ export namespace Prisma {
     leverage?: NullableFloatFieldUpdateOperationsInput | number | null
     investment?: NullableFloatFieldUpdateOperationsInput | number | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    category?: EnumTradeCategoryFieldUpdateOperationsInput | $Enums.TradeCategory
+    deposit?: FloatFieldUpdateOperationsInput | number
     user?: UserUpdateOneRequiredWithoutTradesNestedInput
   }
 
@@ -3794,6 +3873,8 @@ export namespace Prisma {
     leverage?: NullableFloatFieldUpdateOperationsInput | number | null
     investment?: NullableFloatFieldUpdateOperationsInput | number | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    category?: EnumTradeCategoryFieldUpdateOperationsInput | $Enums.TradeCategory
+    deposit?: FloatFieldUpdateOperationsInput | number
   }
 
   export type TradeCreateManyInput = {
@@ -3813,6 +3894,8 @@ export namespace Prisma {
     leverage?: number | null
     investment?: number | null
     createdAt?: Date | string
+    category: $Enums.TradeCategory
+    deposit?: number
   }
 
   export type TradeUpdateManyMutationInput = {
@@ -3831,6 +3914,8 @@ export namespace Prisma {
     leverage?: NullableFloatFieldUpdateOperationsInput | number | null
     investment?: NullableFloatFieldUpdateOperationsInput | number | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    category?: EnumTradeCategoryFieldUpdateOperationsInput | $Enums.TradeCategory
+    deposit?: FloatFieldUpdateOperationsInput | number
   }
 
   export type TradeUncheckedUpdateManyInput = {
@@ -3850,6 +3935,8 @@ export namespace Prisma {
     leverage?: NullableFloatFieldUpdateOperationsInput | number | null
     investment?: NullableFloatFieldUpdateOperationsInput | number | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    category?: EnumTradeCategoryFieldUpdateOperationsInput | $Enums.TradeCategory
+    deposit?: FloatFieldUpdateOperationsInput | number
   }
 
   export type StringFilter<$PrismaModel = never> = {
@@ -3977,6 +4064,13 @@ export namespace Prisma {
     not?: NestedFloatNullableFilter<$PrismaModel> | number | null
   }
 
+  export type EnumTradeCategoryFilter<$PrismaModel = never> = {
+    equals?: $Enums.TradeCategory | EnumTradeCategoryFieldRefInput<$PrismaModel>
+    in?: $Enums.TradeCategory[] | ListEnumTradeCategoryFieldRefInput<$PrismaModel>
+    notIn?: $Enums.TradeCategory[] | ListEnumTradeCategoryFieldRefInput<$PrismaModel>
+    not?: NestedEnumTradeCategoryFilter<$PrismaModel> | $Enums.TradeCategory
+  }
+
   export type UserScalarRelationFilter = {
     is?: UserWhereInput
     isNot?: UserWhereInput
@@ -4004,6 +4098,8 @@ export namespace Prisma {
     leverage?: SortOrder
     investment?: SortOrder
     createdAt?: SortOrder
+    category?: SortOrder
+    deposit?: SortOrder
   }
 
   export type TradeAvgOrderByAggregateInput = {
@@ -4016,6 +4112,7 @@ export namespace Prisma {
     pnl?: SortOrder
     leverage?: SortOrder
     investment?: SortOrder
+    deposit?: SortOrder
   }
 
   export type TradeMaxOrderByAggregateInput = {
@@ -4035,6 +4132,8 @@ export namespace Prisma {
     leverage?: SortOrder
     investment?: SortOrder
     createdAt?: SortOrder
+    category?: SortOrder
+    deposit?: SortOrder
   }
 
   export type TradeMinOrderByAggregateInput = {
@@ -4054,6 +4153,8 @@ export namespace Prisma {
     leverage?: SortOrder
     investment?: SortOrder
     createdAt?: SortOrder
+    category?: SortOrder
+    deposit?: SortOrder
   }
 
   export type TradeSumOrderByAggregateInput = {
@@ -4066,6 +4167,7 @@ export namespace Prisma {
     pnl?: SortOrder
     leverage?: SortOrder
     investment?: SortOrder
+    deposit?: SortOrder
   }
 
   export type EnumTradeSideWithAggregatesFilter<$PrismaModel = never> = {
@@ -4118,6 +4220,16 @@ export namespace Prisma {
     _sum?: NestedFloatNullableFilter<$PrismaModel>
     _min?: NestedFloatNullableFilter<$PrismaModel>
     _max?: NestedFloatNullableFilter<$PrismaModel>
+  }
+
+  export type EnumTradeCategoryWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.TradeCategory | EnumTradeCategoryFieldRefInput<$PrismaModel>
+    in?: $Enums.TradeCategory[] | ListEnumTradeCategoryFieldRefInput<$PrismaModel>
+    notIn?: $Enums.TradeCategory[] | ListEnumTradeCategoryFieldRefInput<$PrismaModel>
+    not?: NestedEnumTradeCategoryWithAggregatesFilter<$PrismaModel> | $Enums.TradeCategory
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedEnumTradeCategoryFilter<$PrismaModel>
+    _max?: NestedEnumTradeCategoryFilter<$PrismaModel>
   }
 
   export type TradeCreateNestedManyWithoutUserInput = {
@@ -4198,6 +4310,10 @@ export namespace Prisma {
     decrement?: number
     multiply?: number
     divide?: number
+  }
+
+  export type EnumTradeCategoryFieldUpdateOperationsInput = {
+    set?: $Enums.TradeCategory
   }
 
   export type UserUpdateOneRequiredWithoutTradesNestedInput = {
@@ -4311,6 +4427,13 @@ export namespace Prisma {
     not?: NestedFloatNullableFilter<$PrismaModel> | number | null
   }
 
+  export type NestedEnumTradeCategoryFilter<$PrismaModel = never> = {
+    equals?: $Enums.TradeCategory | EnumTradeCategoryFieldRefInput<$PrismaModel>
+    in?: $Enums.TradeCategory[] | ListEnumTradeCategoryFieldRefInput<$PrismaModel>
+    notIn?: $Enums.TradeCategory[] | ListEnumTradeCategoryFieldRefInput<$PrismaModel>
+    not?: NestedEnumTradeCategoryFilter<$PrismaModel> | $Enums.TradeCategory
+  }
+
   export type NestedEnumTradeSideWithAggregatesFilter<$PrismaModel = never> = {
     equals?: $Enums.TradeSide | EnumTradeSideFieldRefInput<$PrismaModel>
     in?: $Enums.TradeSide[] | ListEnumTradeSideFieldRefInput<$PrismaModel>
@@ -4374,6 +4497,16 @@ export namespace Prisma {
     not?: NestedIntNullableFilter<$PrismaModel> | number | null
   }
 
+  export type NestedEnumTradeCategoryWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.TradeCategory | EnumTradeCategoryFieldRefInput<$PrismaModel>
+    in?: $Enums.TradeCategory[] | ListEnumTradeCategoryFieldRefInput<$PrismaModel>
+    notIn?: $Enums.TradeCategory[] | ListEnumTradeCategoryFieldRefInput<$PrismaModel>
+    not?: NestedEnumTradeCategoryWithAggregatesFilter<$PrismaModel> | $Enums.TradeCategory
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedEnumTradeCategoryFilter<$PrismaModel>
+    _max?: NestedEnumTradeCategoryFilter<$PrismaModel>
+  }
+
   export type TradeCreateWithoutUserInput = {
     id?: string
     date?: Date | string
@@ -4390,6 +4523,8 @@ export namespace Prisma {
     leverage?: number | null
     investment?: number | null
     createdAt?: Date | string
+    category: $Enums.TradeCategory
+    deposit?: number
   }
 
   export type TradeUncheckedCreateWithoutUserInput = {
@@ -4408,6 +4543,8 @@ export namespace Prisma {
     leverage?: number | null
     investment?: number | null
     createdAt?: Date | string
+    category: $Enums.TradeCategory
+    deposit?: number
   }
 
   export type TradeCreateOrConnectWithoutUserInput = {
@@ -4456,6 +4593,8 @@ export namespace Prisma {
     leverage?: FloatNullableFilter<"Trade"> | number | null
     investment?: FloatNullableFilter<"Trade"> | number | null
     createdAt?: DateTimeFilter<"Trade"> | Date | string
+    category?: EnumTradeCategoryFilter<"Trade"> | $Enums.TradeCategory
+    deposit?: FloatFilter<"Trade"> | number
   }
 
   export type UserCreateWithoutTradesInput = {
@@ -4518,6 +4657,8 @@ export namespace Prisma {
     leverage?: number | null
     investment?: number | null
     createdAt?: Date | string
+    category: $Enums.TradeCategory
+    deposit?: number
   }
 
   export type TradeUpdateWithoutUserInput = {
@@ -4536,6 +4677,8 @@ export namespace Prisma {
     leverage?: NullableFloatFieldUpdateOperationsInput | number | null
     investment?: NullableFloatFieldUpdateOperationsInput | number | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    category?: EnumTradeCategoryFieldUpdateOperationsInput | $Enums.TradeCategory
+    deposit?: FloatFieldUpdateOperationsInput | number
   }
 
   export type TradeUncheckedUpdateWithoutUserInput = {
@@ -4554,6 +4697,8 @@ export namespace Prisma {
     leverage?: NullableFloatFieldUpdateOperationsInput | number | null
     investment?: NullableFloatFieldUpdateOperationsInput | number | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    category?: EnumTradeCategoryFieldUpdateOperationsInput | $Enums.TradeCategory
+    deposit?: FloatFieldUpdateOperationsInput | number
   }
 
   export type TradeUncheckedUpdateManyWithoutUserInput = {
@@ -4572,6 +4717,8 @@ export namespace Prisma {
     leverage?: NullableFloatFieldUpdateOperationsInput | number | null
     investment?: NullableFloatFieldUpdateOperationsInput | number | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    category?: EnumTradeCategoryFieldUpdateOperationsInput | $Enums.TradeCategory
+    deposit?: FloatFieldUpdateOperationsInput | number
   }
 
 

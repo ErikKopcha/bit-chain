@@ -1,40 +1,66 @@
 'use client';
 
+import { usePagination } from '@/app/(protected)/journal/hooks/usePagination';
 import { Button } from '@/components/ui/button';
 import { PlusIcon } from 'lucide-react';
-import { usePositions } from '../hooks/usePositions';
+import { useSearchParams } from 'next/navigation';
+import { useDeleteDialog } from '../hooks/useDeleteDialog';
+import { useTradeData } from '../hooks/useTradeData';
+import { useTradeFilters } from '../hooks/useTradeFilters';
 import { DeletePositionDialog } from './DeletePositionDialog';
 import { PositionFilters } from './PositionFilters';
 import { PositionModal } from './PositionModal';
 import { PositionStats } from './PositionStats';
 import { PositionTable } from './PositionTable';
 
-export default function TablePositionsContainer() {
+export default function PositionsContainer() {
+  const searchParams = useSearchParams();
+
   const {
     trades,
-    paginatedTrades,
-    currentPage,
-    totalPages,
-    pageSize,
+    handleCreatePosition,
+    handleEditPosition,
+    handleDeletePosition: handleDeleteTrade,
+  } = useTradeData();
+
+  const {
     dateRange,
     sideFilter,
     categoryFilter,
     resultFilter,
-    deleteDialogOpen,
-    positionToDelete,
-    handlePageChange,
-    handlePageSizeChangeString,
+    setDateRange,
     handleSideFilterChange,
     handleCategoryFilterChange,
     handleResultFilterChange,
-    setDateRange,
-    handleCreatePosition,
-    handleEditPosition,
-    handleDeletePosition,
-    onDelete,
+  } = useTradeFilters();
+
+  const {
+    deleteDialogOpen,
+    positionToDelete,
     setDeleteDialogOpen,
     setPositionToDelete,
-  } = usePositions();
+    onDelete,
+    handleDeleteConfirm,
+  } = useDeleteDialog();
+
+  const {
+    currentPage,
+    pageSize,
+    totalPages,
+    paginatedTrades,
+    handlePageChange,
+    handlePageSizeChange,
+  } = usePagination(trades, searchParams);
+
+  const handleDeletePosition = (id: string) => {
+    handleDeleteTrade(id);
+    handleDeleteConfirm();
+  };
+
+  const onCloseDeleteDialog = () => {
+    setDeleteDialogOpen(false);
+    setPositionToDelete(null);
+  };
 
   return (
     <div className="flex flex-col gap-4 md:gap-6 px-4 lg:px-6">
@@ -52,7 +78,7 @@ export default function TablePositionsContainer() {
 
       <PositionStats trades={trades} />
 
-      <div className=" rounded-md shadow">
+      <div className="rounded-md shadow">
         <div className="p-4 bg-white border-b flex flex-col md:flex-row gap-4 justify-between items-start md:items-center">
           <PositionFilters
             dateRange={dateRange}
@@ -72,7 +98,7 @@ export default function TablePositionsContainer() {
           totalPages={totalPages}
           pageSize={pageSize}
           onPageChange={handlePageChange}
-          onPageSizeChange={handlePageSizeChangeString}
+          onPageSizeChange={handlePageSizeChange}
           onEdit={handleEditPosition}
           onDelete={onDelete}
         />
@@ -81,10 +107,7 @@ export default function TablePositionsContainer() {
       {positionToDelete && (
         <DeletePositionDialog
           isOpen={deleteDialogOpen}
-          onClose={() => {
-            setDeleteDialogOpen(false);
-            setPositionToDelete(null);
-          }}
+          onClose={onCloseDeleteDialog}
           onConfirm={() => handleDeletePosition(positionToDelete.id)}
           positionSymbol={positionToDelete.symbol}
         />

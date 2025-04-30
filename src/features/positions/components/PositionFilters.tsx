@@ -1,9 +1,4 @@
-import {
-  TRADE_CATEGORIES_LIST,
-  TRADE_RESULTS_LIST,
-  TRADE_SIDES_LIST,
-} from '@/app/(protected)/journal/types';
-import { DateRangePicker } from '@/components/ui/date-range-picker';
+import { DatePicker } from '@/components/ui/date-picker';
 import {
   Select,
   SelectContent,
@@ -12,6 +7,7 @@ import {
   SelectValue,
 } from '@/components/ui/select';
 import { DateRange } from 'react-day-picker';
+import { TRADE_CATEGORIES_LIST, TRADE_RESULTS_LIST, TRADE_SIDES_LIST } from '../types/position';
 
 interface PositionFiltersProps {
   dateRange: DateRange | undefined;
@@ -37,10 +33,12 @@ export function PositionFilters({
   return (
     <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4 w-full md:w-auto">
       <div className="col-span-1 md:col-span-1">
-        <DateRangePicker
+        <DatePicker
           dateRange={dateRange}
           onDateRangeChange={onDateRangeChange}
           placeholder="All time"
+          mode="range"
+          showPresets
         />
       </div>
 
@@ -52,7 +50,7 @@ export function PositionFilters({
           <SelectItem value="all">All sides</SelectItem>
           {TRADE_SIDES_LIST.map(side => (
             <SelectItem key={side} value={side}>
-              {side.charAt(0).toUpperCase() + side.slice(1)}
+              {side.toLowerCase()}
             </SelectItem>
           ))}
         </SelectContent>
@@ -66,7 +64,7 @@ export function PositionFilters({
           <SelectItem value="all">All categories</SelectItem>
           {TRADE_CATEGORIES_LIST.map(category => (
             <SelectItem key={category} value={category}>
-              {category.charAt(0).toUpperCase() + category.slice(1).replace('-', ' ')}
+              {category.toLowerCase().replace('_', ' ')}
             </SelectItem>
           ))}
         </SelectContent>
@@ -80,7 +78,7 @@ export function PositionFilters({
           <SelectItem value="all">All results</SelectItem>
           {TRADE_RESULTS_LIST.map(result => (
             <SelectItem key={result} value={result}>
-              {result.charAt(0).toUpperCase() + result.slice(1)}
+              {result.toLowerCase()}
             </SelectItem>
           ))}
         </SelectContent>

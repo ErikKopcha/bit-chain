@@ -140,7 +140,9 @@ exports.Prisma.TradeScalarFieldEnum = {
   result: 'result',
   leverage: 'leverage',
   investment: 'investment',
-  createdAt: 'createdAt'
+  createdAt: 'createdAt',
+  category: 'category',
+  deposit: 'deposit'
 };
 
 exports.Prisma.SortOrder = {
@@ -164,7 +166,17 @@ exports.TradeSide = exports.$Enums.TradeSide = {
 
 exports.TradeResult = exports.$Enums.TradeResult = {
   WIN: 'WIN',
-  LOSS: 'LOSS'
+  LOSS: 'LOSS',
+  PENDING: 'PENDING'
+};
+
+exports.TradeCategory = exports.$Enums.TradeCategory = {
+  solo: 'solo',
+  radar: 'radar',
+  everest: 'everest',
+  cryptonite_radar: 'cryptonite_radar',
+  cryptonite_everest: 'cryptonite_everest',
+  humster: 'humster'
 };
 
 exports.Prisma.ModelName = {

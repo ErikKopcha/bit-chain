@@ -1,28 +1,15 @@
-export interface Position {
-  id: string;
-  date: string;
-  symbol: string;
-  side: 'LONG' | 'SHORT';
-  entryPrice: number;
-  exitPrice?: number;
-  stopLoss?: number;
-  commission?: number;
-  size: number;
-  leverage?: number;
-  category?: string;
-  pnl?: number;
-  result?: number;
-}
+import { TRADE_CATEGORIES, TRADE_SIDES } from './types/position';
 
 export interface PositionFormValues {
   date: string;
   symbol: string;
-  side: 'LONG' | 'SHORT';
+  side: TRADE_SIDES;
   entryPrice: number;
   exitPrice?: number;
   stopLoss?: number;
   commission?: number;
-  size: number;
+  positionSize: number;
   leverage?: number;
-  category?: string;
+  category?: TRADE_CATEGORIES;
+  deposit?: number;
 }

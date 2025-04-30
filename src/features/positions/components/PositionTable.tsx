@@ -1,7 +1,7 @@
 import { columns } from '@/app/(protected)/journal/config/columns';
-import { Trade } from '@/app/(protected)/journal/types';
 import { Button } from '@/components/ui/button';
 import { DataTablePagination } from '@/components/ui/data-table/pagination';
+import { Skeleton } from '@/components/ui/skeleton';
 import {
   Table,
   TableBody,
@@ -11,6 +11,7 @@ import {
   TableRow,
 } from '@/components/ui/table';
 import { Pencil, Trash2 } from 'lucide-react';
+import { Trade } from '../types/position';
 import { PositionModal } from './PositionModal';
 
 interface PositionTableProps {
@@ -22,6 +23,7 @@ interface PositionTableProps {
   onPageSizeChange: (value: string) => void;
   onEdit: (position: Partial<Trade>) => void;
   onDelete: (trade: Trade) => () => void;
+  isLoading?: boolean;
 }
 
 export function PositionTable({
@@ -33,6 +35,7 @@ export function PositionTable({
   onPageSizeChange,
   onEdit,
   onDelete,
+  isLoading = false,
 }: PositionTableProps) {
   return (
     <div className="p-4 bg-white flex flex-col gap-4 justify-between items-start md:items-center">
@@ -48,7 +51,24 @@ export function PositionTable({
           </TableRow>
         </TableHeader>
         <TableBody>
-          {trades.length > 0 ? (
+          {isLoading ? (
+            // Skeleton loader rows
+            Array.from({ length: 5 }).map((_, index) => (
+              <TableRow key={`skeleton-${index}`}>
+                {columns.map(column => (
+                  <TableCell key={`skeleton-${index}-${column.key}`}>
+                    <Skeleton className="h-4 w-[100px]" />
+                  </TableCell>
+                ))}
+                <TableCell>
+                  <div className="flex gap-2">
+                    <Skeleton className="h-8 w-8" />
+                    <Skeleton className="h-8 w-8" />
+                  </div>
+                </TableCell>
+              </TableRow>
+            ))
+          ) : trades.length > 0 ? (
             trades.map(trade => (
               <TableRow key={trade.id}>
                 {columns.map(column => (
@@ -78,7 +98,7 @@ export function PositionTable({
         </TableBody>
       </Table>
 
-      {trades.length > 0 && (
+      {trades.length > 0 && !isLoading && (
         <div className="p-4 border-t w-full">
           <DataTablePagination
             currentPage={currentPage}

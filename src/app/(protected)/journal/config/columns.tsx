@@ -1,4 +1,5 @@
-import { ColumnDef, Trade } from '../types';
+import { ColumnDef } from '@/features/positions/types/position';
+import { Trade } from '@/generated/prisma';
 import {
   formatCurrency,
   formatDate,
@@ -28,7 +29,7 @@ export const columns: ColumnDef<Trade>[] = [
       <span
         className={`px-2 block text-center py-1 rounded-full text-xs font-medium ${getSideColorClass(trade.side)}`}
       >
-        {trade.side}
+        {trade.side.toLowerCase()}
       </span>
     ),
   },
@@ -45,6 +46,12 @@ export const columns: ColumnDef<Trade>[] = [
         {formatCurrency(trade.pnl)}
       </span>
     ),
+  },
+  {
+    key: 'riskPercent',
+    header: 'Risk %',
+    className: 'text-center',
+    cell: trade => <span className="block text-center">{trade.riskPercent}%</span>,
   },
   {
     key: 'entryPrice',
@@ -71,12 +78,6 @@ export const columns: ColumnDef<Trade>[] = [
     header: 'Commission',
     className: 'text-center',
     cell: trade => <span className="block text-center">{formatCurrency(trade.commission)}</span>,
-  },
-  {
-    key: 'riskPercent',
-    header: 'Risk %',
-    className: 'text-center',
-    cell: trade => <span className="block text-center">{trade.riskPercent}%</span>,
   },
   {
     key: 'positionSize',
@@ -109,7 +110,7 @@ export const columns: ColumnDef<Trade>[] = [
       <span
         className={`block text-center px-2 py-1 rounded-full text-xs font-medium ${getResultColorClass(trade.result)}`}
       >
-        {trade.result}
+        {trade.result.toLowerCase()}
       </span>
     ),
   },
