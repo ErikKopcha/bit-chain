@@ -21,7 +21,7 @@ interface PositionTableProps {
   pageSize: number;
   onPageChange: (page: number) => void;
   onPageSizeChange: (value: string) => void;
-  onEdit: (position: Partial<Trade>) => void;
+  onEdit: (position: Partial<Trade>) => Promise<void>;
   onDelete: (trade: Trade) => () => void;
   isLoading?: boolean;
 }

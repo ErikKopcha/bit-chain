@@ -31,7 +31,7 @@ export function StatCard({ title, value, trend, footer }: StatCardProps) {
         <CardTitle className="@[250px]/card:text-3xl text-2xl font-semibold tabular-nums truncate">
           {value}
         </CardTitle>
-        <div className="absolute right-4 top-4">
+        <div className="absolute right-4 top-0">
           <Badge variant="outline" className={`flex gap-1 rounded-lg text-xs ${trendColor}`}>
             <TrendIcon className="size-3" />
             {trend.value > 0 ? '+' : ''}

@@ -2150,6 +2150,7 @@ export namespace Prisma {
     createdAt: Date | null
     category: $Enums.TradeCategory | null
     deposit: number | null
+    isDemo: boolean | null
   }
 
   export type TradeMaxAggregateOutputType = {
@@ -2171,6 +2172,7 @@ export namespace Prisma {
     createdAt: Date | null
     category: $Enums.TradeCategory | null
     deposit: number | null
+    isDemo: boolean | null
   }
 
   export type TradeCountAggregateOutputType = {
@@ -2192,6 +2194,7 @@ export namespace Prisma {
     createdAt: number
     category: number
     deposit: number
+    isDemo: number
     _all: number
   }
 
@@ -2241,6 +2244,7 @@ export namespace Prisma {
     createdAt?: true
     category?: true
     deposit?: true
+    isDemo?: true
   }
 
   export type TradeMaxAggregateInputType = {
@@ -2262,6 +2266,7 @@ export namespace Prisma {
     createdAt?: true
     category?: true
     deposit?: true
+    isDemo?: true
   }
 
   export type TradeCountAggregateInputType = {
@@ -2283,6 +2288,7 @@ export namespace Prisma {
     createdAt?: true
     category?: true
     deposit?: true
+    isDemo?: true
     _all?: true
   }
 
@@ -2391,6 +2397,7 @@ export namespace Prisma {
     createdAt: Date
     category: $Enums.TradeCategory
     deposit: number
+    isDemo: boolean
     _count: TradeCountAggregateOutputType | null
     _avg: TradeAvgAggregateOutputType | null
     _sum: TradeSumAggregateOutputType | null
@@ -2431,6 +2438,7 @@ export namespace Prisma {
     createdAt?: boolean
     category?: boolean
     deposit?: boolean
+    isDemo?: boolean
     user?: boolean | UserDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["trade"]>
 
@@ -2453,6 +2461,7 @@ export namespace Prisma {
     createdAt?: boolean
     category?: boolean
     deposit?: boolean
+    isDemo?: boolean
     user?: boolean | UserDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["trade"]>
 
@@ -2475,6 +2484,7 @@ export namespace Prisma {
     createdAt?: boolean
     category?: boolean
     deposit?: boolean
+    isDemo?: boolean
     user?: boolean | UserDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["trade"]>
 
@@ -2497,9 +2507,10 @@ export namespace Prisma {
     createdAt?: boolean
     category?: boolean
     deposit?: boolean
+    isDemo?: boolean
   }
 
-  export type TradeOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "userId" | "date" | "symbol" | "side" | "entryPrice" | "positionSize" | "stopLoss" | "exitPrice" | "commission" | "riskPercent" | "pnl" | "result" | "leverage" | "investment" | "createdAt" | "category" | "deposit", ExtArgs["result"]["trade"]>
+  export type TradeOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "userId" | "date" | "symbol" | "side" | "entryPrice" | "positionSize" | "stopLoss" | "exitPrice" | "commission" | "riskPercent" | "pnl" | "result" | "leverage" | "investment" | "createdAt" | "category" | "deposit" | "isDemo", ExtArgs["result"]["trade"]>
   export type TradeInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     user?: boolean | UserDefaultArgs<ExtArgs>
   }
@@ -2534,6 +2545,7 @@ export namespace Prisma {
       createdAt: Date
       category: $Enums.TradeCategory
       deposit: number
+      isDemo: boolean
     }, ExtArgs["result"]["trade"]>
     composites: {}
   }
@@ -2976,6 +2988,7 @@ export namespace Prisma {
     readonly createdAt: FieldRef<"Trade", 'DateTime'>
     readonly category: FieldRef<"Trade", 'TradeCategory'>
     readonly deposit: FieldRef<"Trade", 'Float'>
+    readonly isDemo: FieldRef<"Trade", 'Boolean'>
   }
     
 
@@ -3432,7 +3445,8 @@ export namespace Prisma {
     investment: 'investment',
     createdAt: 'createdAt',
     category: 'category',
-    deposit: 'deposit'
+    deposit: 'deposit',
+    isDemo: 'isDemo'
   };
 
   export type TradeScalarFieldEnum = (typeof TradeScalarFieldEnum)[keyof typeof TradeScalarFieldEnum]
@@ -3552,6 +3566,13 @@ export namespace Prisma {
 
 
   /**
+   * Reference to a field of type 'Boolean'
+   */
+  export type BooleanFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Boolean'>
+    
+
+
+  /**
    * Reference to a field of type 'Int'
    */
   export type IntFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Int'>
@@ -3640,6 +3661,7 @@ export namespace Prisma {
     createdAt?: DateTimeFilter<"Trade"> | Date | string
     category?: EnumTradeCategoryFilter<"Trade"> | $Enums.TradeCategory
     deposit?: FloatFilter<"Trade"> | number
+    isDemo?: BoolFilter<"Trade"> | boolean
     user?: XOR<UserScalarRelationFilter, UserWhereInput>
   }
 
@@ -3662,6 +3684,7 @@ export namespace Prisma {
     createdAt?: SortOrder
     category?: SortOrder
     deposit?: SortOrder
+    isDemo?: SortOrder
     user?: UserOrderByWithRelationInput
   }
 
@@ -3687,6 +3710,7 @@ export namespace Prisma {
     createdAt?: DateTimeFilter<"Trade"> | Date | string
     category?: EnumTradeCategoryFilter<"Trade"> | $Enums.TradeCategory
     deposit?: FloatFilter<"Trade"> | number
+    isDemo?: BoolFilter<"Trade"> | boolean
     user?: XOR<UserScalarRelationFilter, UserWhereInput>
   }, "id">
 
@@ -3709,6 +3733,7 @@ export namespace Prisma {
     createdAt?: SortOrder
     category?: SortOrder
     deposit?: SortOrder
+    isDemo?: SortOrder
     _count?: TradeCountOrderByAggregateInput
     _avg?: TradeAvgOrderByAggregateInput
     _max?: TradeMaxOrderByAggregateInput
@@ -3738,6 +3763,7 @@ export namespace Prisma {
     createdAt?: DateTimeWithAggregatesFilter<"Trade"> | Date | string
     category?: EnumTradeCategoryWithAggregatesFilter<"Trade"> | $Enums.TradeCategory
     deposit?: FloatWithAggregatesFilter<"Trade"> | number
+    isDemo?: BoolWithAggregatesFilter<"Trade"> | boolean
   }
 
   export type UserCreateInput = {
@@ -3810,7 +3836,8 @@ export namespace Prisma {
     investment?: number | null
     createdAt?: Date | string
     category: $Enums.TradeCategory
-    deposit?: number
+    deposit: number
+    isDemo?: boolean
     user: UserCreateNestedOneWithoutTradesInput
   }
 
@@ -3832,7 +3859,8 @@ export namespace Prisma {
     investment?: number | null
     createdAt?: Date | string
     category: $Enums.TradeCategory
-    deposit?: number
+    deposit: number
+    isDemo?: boolean
   }
 
   export type TradeUpdateInput = {
@@ -3853,6 +3881,7 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     category?: EnumTradeCategoryFieldUpdateOperationsInput | $Enums.TradeCategory
     deposit?: FloatFieldUpdateOperationsInput | number
+    isDemo?: BoolFieldUpdateOperationsInput | boolean
     user?: UserUpdateOneRequiredWithoutTradesNestedInput
   }
 
@@ -3875,6 +3904,7 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     category?: EnumTradeCategoryFieldUpdateOperationsInput | $Enums.TradeCategory
     deposit?: FloatFieldUpdateOperationsInput | number
+    isDemo?: BoolFieldUpdateOperationsInput | boolean
   }
 
   export type TradeCreateManyInput = {
@@ -3895,7 +3925,8 @@ export namespace Prisma {
     investment?: number | null
     createdAt?: Date | string
     category: $Enums.TradeCategory
-    deposit?: number
+    deposit: number
+    isDemo?: boolean
   }
 
   export type TradeUpdateManyMutationInput = {
@@ -3916,6 +3947,7 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     category?: EnumTradeCategoryFieldUpdateOperationsInput | $Enums.TradeCategory
     deposit?: FloatFieldUpdateOperationsInput | number
+    isDemo?: BoolFieldUpdateOperationsInput | boolean
   }
 
   export type TradeUncheckedUpdateManyInput = {
@@ -3937,6 +3969,7 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     category?: EnumTradeCategoryFieldUpdateOperationsInput | $Enums.TradeCategory
     deposit?: FloatFieldUpdateOperationsInput | number
+    isDemo?: BoolFieldUpdateOperationsInput | boolean
   }
 
   export type StringFilter<$PrismaModel = never> = {
@@ -4071,6 +4104,11 @@ export namespace Prisma {
     not?: NestedEnumTradeCategoryFilter<$PrismaModel> | $Enums.TradeCategory
   }
 
+  export type BoolFilter<$PrismaModel = never> = {
+    equals?: boolean | BooleanFieldRefInput<$PrismaModel>
+    not?: NestedBoolFilter<$PrismaModel> | boolean
+  }
+
   export type UserScalarRelationFilter = {
     is?: UserWhereInput
     isNot?: UserWhereInput
@@ -4100,6 +4138,7 @@ export namespace Prisma {
     createdAt?: SortOrder
     category?: SortOrder
     deposit?: SortOrder
+    isDemo?: SortOrder
   }
 
   export type TradeAvgOrderByAggregateInput = {
@@ -4134,6 +4173,7 @@ export namespace Prisma {
     createdAt?: SortOrder
     category?: SortOrder
     deposit?: SortOrder
+    isDemo?: SortOrder
   }
 
   export type TradeMinOrderByAggregateInput = {
@@ -4155,6 +4195,7 @@ export namespace Prisma {
     createdAt?: SortOrder
     category?: SortOrder
     deposit?: SortOrder
+    isDemo?: SortOrder
   }
 
   export type TradeSumOrderByAggregateInput = {
@@ -4230,6 +4271,14 @@ export namespace Prisma {
     _count?: NestedIntFilter<$PrismaModel>
     _min?: NestedEnumTradeCategoryFilter<$PrismaModel>
     _max?: NestedEnumTradeCategoryFilter<$PrismaModel>
+  }
+
+  export type BoolWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: boolean | BooleanFieldRefInput<$PrismaModel>
+    not?: NestedBoolWithAggregatesFilter<$PrismaModel> | boolean
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedBoolFilter<$PrismaModel>
+    _max?: NestedBoolFilter<$PrismaModel>
   }
 
   export type TradeCreateNestedManyWithoutUserInput = {
@@ -4314,6 +4363,10 @@ export namespace Prisma {
 
   export type EnumTradeCategoryFieldUpdateOperationsInput = {
     set?: $Enums.TradeCategory
+  }
+
+  export type BoolFieldUpdateOperationsInput = {
+    set?: boolean
   }
 
   export type UserUpdateOneRequiredWithoutTradesNestedInput = {
@@ -4434,6 +4487,11 @@ export namespace Prisma {
     not?: NestedEnumTradeCategoryFilter<$PrismaModel> | $Enums.TradeCategory
   }
 
+  export type NestedBoolFilter<$PrismaModel = never> = {
+    equals?: boolean | BooleanFieldRefInput<$PrismaModel>
+    not?: NestedBoolFilter<$PrismaModel> | boolean
+  }
+
   export type NestedEnumTradeSideWithAggregatesFilter<$PrismaModel = never> = {
     equals?: $Enums.TradeSide | EnumTradeSideFieldRefInput<$PrismaModel>
     in?: $Enums.TradeSide[] | ListEnumTradeSideFieldRefInput<$PrismaModel>
@@ -4507,6 +4565,14 @@ export namespace Prisma {
     _max?: NestedEnumTradeCategoryFilter<$PrismaModel>
   }
 
+  export type NestedBoolWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: boolean | BooleanFieldRefInput<$PrismaModel>
+    not?: NestedBoolWithAggregatesFilter<$PrismaModel> | boolean
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedBoolFilter<$PrismaModel>
+    _max?: NestedBoolFilter<$PrismaModel>
+  }
+
   export type TradeCreateWithoutUserInput = {
     id?: string
     date?: Date | string
@@ -4524,7 +4590,8 @@ export namespace Prisma {
     investment?: number | null
     createdAt?: Date | string
     category: $Enums.TradeCategory
-    deposit?: number
+    deposit: number
+    isDemo?: boolean
   }
 
   export type TradeUncheckedCreateWithoutUserInput = {
@@ -4544,7 +4611,8 @@ export namespace Prisma {
     investment?: number | null
     createdAt?: Date | string
     category: $Enums.TradeCategory
-    deposit?: number
+    deposit: number
+    isDemo?: boolean
   }
 
   export type TradeCreateOrConnectWithoutUserInput = {
@@ -4595,6 +4663,7 @@ export namespace Prisma {
     createdAt?: DateTimeFilter<"Trade"> | Date | string
     category?: EnumTradeCategoryFilter<"Trade"> | $Enums.TradeCategory
     deposit?: FloatFilter<"Trade"> | number
+    isDemo?: BoolFilter<"Trade"> | boolean
   }
 
   export type UserCreateWithoutTradesInput = {
@@ -4658,7 +4727,8 @@ export namespace Prisma {
     investment?: number | null
     createdAt?: Date | string
     category: $Enums.TradeCategory
-    deposit?: number
+    deposit: number
+    isDemo?: boolean
   }
 
   export type TradeUpdateWithoutUserInput = {
@@ -4679,6 +4749,7 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     category?: EnumTradeCategoryFieldUpdateOperationsInput | $Enums.TradeCategory
     deposit?: FloatFieldUpdateOperationsInput | number
+    isDemo?: BoolFieldUpdateOperationsInput | boolean
   }
 
   export type TradeUncheckedUpdateWithoutUserInput = {
@@ -4699,6 +4770,7 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     category?: EnumTradeCategoryFieldUpdateOperationsInput | $Enums.TradeCategory
     deposit?: FloatFieldUpdateOperationsInput | number
+    isDemo?: BoolFieldUpdateOperationsInput | boolean
   }
 
   export type TradeUncheckedUpdateManyWithoutUserInput = {
@@ -4719,6 +4791,7 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     category?: EnumTradeCategoryFieldUpdateOperationsInput | $Enums.TradeCategory
     deposit?: FloatFieldUpdateOperationsInput | number
+    isDemo?: BoolFieldUpdateOperationsInput | boolean
   }
 
 

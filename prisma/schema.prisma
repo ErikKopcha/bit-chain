@@ -42,6 +42,7 @@ model Trade {
   createdAt    DateTime @default(now())
   category     TradeCategory
   deposit      Float
+  isDemo       Boolean  @default(false)
 }
 
 enum TradeSide {

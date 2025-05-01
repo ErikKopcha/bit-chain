@@ -30,6 +30,7 @@ import {
 import { ROUTES } from '@/features/auth/constants';
 import { signOut } from 'next-auth/react';
 import { useState } from 'react';
+import { DemoModeButton } from './DemoModeButton';
 
 interface INavUser {
   user: {
@@ -56,6 +57,9 @@ export function NavUser({ user }: INavUser) {
   return (
     <Dialog>
       <SidebarMenu>
+        <SidebarMenuItem>
+          <DemoModeButton />
+        </SidebarMenuItem>
         <SidebarMenuItem>
           <DropdownMenu>
             <DropdownMenuTrigger asChild>

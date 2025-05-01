@@ -8,6 +8,7 @@ import {
 } from '@/components/ui/dialog';
 import { Form } from '@/components/ui/form';
 import { zodResolver } from '@hookform/resolvers/zod';
+import { Loader2 } from 'lucide-react';
 import { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import {
@@ -80,7 +81,7 @@ export function PositionModal({ position, onSave, onDelete, children }: Position
         id: position?.id || '',
       });
       setIsOpen(false);
-    } catch (error) {
+    } catch {
       // Error is handled in queries
     } finally {
       setIsLoading(false);
@@ -143,7 +144,14 @@ export function PositionModal({ position, onSave, onDelete, children }: Position
                 </Button>
               )}
               <Button type="submit" disabled={isLoading}>
-                {isLoading ? 'Saving...' : 'Save'}
+                {isLoading ? (
+                  <>
+                    <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                    Saving...
+                  </>
+                ) : (
+                  'Save'
+                )}
               </Button>
             </div>
           </form>

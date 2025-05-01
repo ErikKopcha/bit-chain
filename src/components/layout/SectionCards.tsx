@@ -72,7 +72,7 @@ export function SectionCards() {
       value: formattedCategory,
       description: 'Most active trading category',
       trend: {
-        value: stats.categoriesData[0]?.trades || 0,
+        value: Number(stats.categoriesData[0]?.trades.toFixed(2)) || 0,
         label: 'Trades',
         isPositive: true,
       },
@@ -86,7 +86,7 @@ export function SectionCards() {
       value: totalTrades,
       description: 'Number of trades executed',
       trend: {
-        value: tradesChange,
+        value: Number(tradesChange.toFixed(2)),
         label: 'Trades Change',
         isPositive: tradesChange > 0,
       },

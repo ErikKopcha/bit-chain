@@ -4,9 +4,11 @@ import { usePagination } from '@/app/(protected)/journal/hooks/usePagination';
 import { Button } from '@/components/ui/button';
 import { PlusIcon } from 'lucide-react';
 import { useSearchParams } from 'next/navigation';
+import { useState } from 'react';
 import { useDeleteDialog } from '../hooks/useDeleteDialog';
 import { useTradeData } from '../hooks/useTradeData';
 import { useTradeFilters } from '../hooks/useTradeFilters';
+import { Trade } from '../types/position';
 import { DeletePositionDialog } from './DeletePositionDialog';
 import { PositionFilters } from './PositionFilters';
 import { PositionModal } from './PositionModal';
@@ -29,8 +31,8 @@ export default function PositionsContainer() {
 
   const {
     filteredTrades,
-    handleCreatePosition,
-    handleEditPosition,
+    handleCreatePosition: handleCreateTrade,
+    handleEditPosition: handleEditTrade,
     handleDeletePosition: handleDeleteTrade,
     refetch,
     isLoading,
@@ -59,14 +61,29 @@ export default function PositionsContainer() {
     handlePageSizeChange,
   } = usePagination(filteredTrades, searchParams);
 
-  const handleDeletePosition = (id: string) => {
-    handleDeleteTrade(id);
-    handleDeleteConfirm();
+  const [isDeleting, setIsDeleting] = useState(false);
+
+  const handleDeletePosition = async (id: string) => {
+    setIsDeleting(true);
+    try {
+      await handleDeleteTrade(id);
+      handleDeleteConfirm();
+    } finally {
+      setIsDeleting(false);
+    }
   };
 
   const onCloseDeleteDialog = () => {
     setDeleteDialogOpen(false);
     setPositionToDelete(null);
+  };
+
+  const handleEditPosition = async (position: Partial<Trade>) => {
+    await handleEditTrade(position);
+  };
+
+  const handleCreatePosition = async (position: Trade) => {
+    await handleCreateTrade(position);
   };
 
   return (
@@ -119,6 +136,7 @@ export default function PositionsContainer() {
           onClose={onCloseDeleteDialog}
           onConfirm={() => handleDeletePosition(positionToDelete.id)}
           positionSymbol={positionToDelete.symbol}
+          isDeleting={isDeleting}
         />
       )}
     </div>
