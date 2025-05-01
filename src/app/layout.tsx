@@ -1,5 +1,6 @@
 'use client';
 
+import { Toaster } from '@/components/ui/toaster';
 import { AuthProvider } from '@/features/auth/components/AuthProvider';
 import { QueryProvider } from '@/providers/QueryProvider';
 import { SessionProvider } from 'next-auth/react';
@@ -22,7 +23,10 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       <body className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
         <SessionProvider>
           <QueryProvider>
-            <AuthProvider>{children}</AuthProvider>
+            <AuthProvider>
+              {children}
+              <Toaster />
+            </AuthProvider>
           </QueryProvider>
         </SessionProvider>
       </body>

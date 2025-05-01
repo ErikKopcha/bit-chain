@@ -1,10 +1,5 @@
 import { authOptions } from '@/features/auth/libs/auth';
-import { TRADE_CATEGORIES, TRADE_RESULTS } from '@/features/positions/types/position';
-import {
-  calculateInvestment,
-  calculatePnl,
-  calculateRiskPercent,
-} from '@/features/positions/utils/calculations';
+import { createTradeData } from '@/features/positions/utils/trade';
 import { prisma } from '@/lib/prisma';
 import { getServerSession } from 'next-auth';
 import { NextResponse } from 'next/server';
@@ -67,52 +62,26 @@ export async function POST(request: Request) {
 
     const data = await request.json();
 
-    const trade = await prisma.trade.create({
-      data: {
-        userId: user.id,
-        date: new Date(data.date),
-        symbol: data.symbol,
-        side: data.side,
-        entryPrice: data.entryPrice,
-        positionSize: data.positionSize,
-        stopLoss: data.stopLoss || 0,
-        exitPrice: data.exitPrice || 0,
-        commission: data.commission || 0,
-        leverage: data.leverage || 0,
-        category: data.category || TRADE_CATEGORIES.SOLO,
-        deposit: data.deposit || 0,
-        investment: calculateInvestment({
-          entryPrice: data.entryPrice,
-          positionSize: data.positionSize,
-          leverage: data.leverage,
-        }),
-        pnl: calculatePnl({
-          side: data.side,
-          entryPrice: data.entryPrice,
-          exitPrice: data.exitPrice || 0,
-          positionSize: data.positionSize,
-          commission: data.commission || 0,
-          leverage: data.leverage,
-        }),
-        riskPercent: calculateRiskPercent({
-          side: data.side,
-          entryPrice: data.entryPrice,
-          stopLoss: data.stopLoss || 0,
-          positionSize: data.positionSize,
-          deposit: data.deposit || 0,
-          leverage: data.leverage,
-        }),
-        result: data.exitPrice
-          ? data.pnl && data.pnl > 0
-            ? TRADE_RESULTS.WIN
-            : TRADE_RESULTS.LOSS
-          : TRADE_RESULTS.PENDING,
-      },
-    });
+    try {
+      const tradeData = createTradeData(data);
 
-    return NextResponse.json({ trade });
+      const trade = await prisma.trade.create({
+        data: {
+          userId: user.id,
+          ...tradeData,
+        },
+      });
+
+      return NextResponse.json({ trade });
+    } catch (error) {
+      console.error('Error in trade creation process:', error);
+      if (error instanceof Error) {
+        return NextResponse.json({ error: error.message }, { status: 400 });
+      }
+      throw error;
+    }
   } catch (error) {
-    console.error('Error creating trade:', error);
+    console.error('Error in POST handler:', error);
     return NextResponse.json({ error: 'Failed to create trade' }, { status: 500 });
   }
 }

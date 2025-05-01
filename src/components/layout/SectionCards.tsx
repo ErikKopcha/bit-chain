@@ -1,91 +1,114 @@
-import { TrendingDownIcon, TrendingUpIcon } from 'lucide-react';
+'use client';
 
-import { Badge } from '@/components/ui/badge';
-import { Card, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
+import { useTradingStats } from '@/hooks/useTradingStats';
+import { StatCard } from './StatCard';
+import { StatCardSkeleton } from './StatCardSkeleton';
 
 export function SectionCards() {
+  const { stats, isLoading } = useTradingStats();
+
+  if (isLoading) {
+    return (
+      <div className="*:data-[slot=card]:shadow-xs @xl/main:grid-cols-2 @5xl/main:grid-cols-4 grid grid-cols-1 gap-4 px-4 *:data-[slot=card]:bg-gradient-to-t *:data-[slot=card]:from-primary/5 *:data-[slot=card]:to-card dark:*:data-[slot=card]:bg-card lg:px-6">
+        {Array.from({ length: 4 }).map((_, index) => (
+          <StatCardSkeleton key={index} />
+        ))}
+      </div>
+    );
+  }
+
+  if (!stats) return;
+
+  const currentWinRate =
+    stats.winLossData.find(d => d.type.toLowerCase() === 'winning')?.percentage || 0;
+  const avgWinRate = 50;
+  const winRateChange = ((currentWinRate - avgWinRate) / avgWinRate) * 100;
+
+  const totalTrades = stats.categoriesData.reduce((sum, cat) => sum + cat.trades, 0);
+  const avgTradesPerCategory = totalTrades / stats.categoriesData.length;
+  const tradesChange = ((totalTrades - avgTradesPerCategory) / avgTradesPerCategory) * 100;
+
+  const totalPnL = stats.pnlData[stats.pnlData.length - 1]?.pnl || 0;
+  const prevPnL = stats.pnlData[stats.pnlData.length - 2]?.pnl || 0;
+  const pnlChange = prevPnL ? ((totalPnL - prevPnL) / prevPnL) * 100 : 0;
+
+  const mostTradedCategory = stats.categoriesData[0]?.category || 'N/A';
+  const formattedCategory = mostTradedCategory
+    .split('_')
+    .map(word => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase())
+    .join(' ');
+
+  const cards = [
+    {
+      title: 'Total PnL',
+      value: `$${totalPnL.toFixed(2)}`,
+      description: 'Profit and Loss',
+      trend: {
+        value: Number(pnlChange.toFixed(2)),
+        label: 'PnL Change',
+        isPositive: pnlChange > 0,
+      },
+      footer: {
+        title: pnlChange > 0 ? 'Growing profits' : 'Declining performance',
+        description: 'Compared to previous period',
+      },
+    },
+    {
+      title: 'Win Rate',
+      value: `${currentWinRate.toFixed(1)}%`,
+      description: 'Percentage of winning trades',
+      trend: {
+        value: Number(winRateChange.toFixed(2)),
+        label: 'Win Rate Change',
+        isPositive: winRateChange > 0,
+      },
+      footer: {
+        title: winRateChange > 0 ? 'Above average performance' : 'Below average performance',
+        description: 'Compared to 50% baseline',
+      },
+    },
+    {
+      title: 'Most Traded',
+      value: formattedCategory,
+      description: 'Most active trading category',
+      trend: {
+        value: stats.categoriesData[0]?.trades || 0,
+        label: 'Trades',
+        isPositive: true,
+      },
+      footer: {
+        title: 'Leading category',
+        description: 'Based on trade volume',
+      },
+    },
+    {
+      title: 'Total Trades',
+      value: totalTrades,
+      description: 'Number of trades executed',
+      trend: {
+        value: tradesChange,
+        label: 'Trades Change',
+        isPositive: tradesChange > 0,
+      },
+      footer: {
+        title: tradesChange > 0 ? 'Active trading' : 'Reduced activity',
+        description: 'Compared to category average',
+      },
+    },
+  ];
+
   return (
     <div className="*:data-[slot=card]:shadow-xs @xl/main:grid-cols-2 @5xl/main:grid-cols-4 grid grid-cols-1 gap-4 px-4 *:data-[slot=card]:bg-gradient-to-t *:data-[slot=card]:from-primary/5 *:data-[slot=card]:to-card dark:*:data-[slot=card]:bg-card lg:px-6">
-      <Card className="@container/card">
-        <CardHeader className="relative">
-          <CardDescription>Total Revenue</CardDescription>
-          <CardTitle className="@[250px]/card:text-3xl text-2xl font-semibold tabular-nums">
-            $1,250.00
-          </CardTitle>
-          <div className="absolute right-4 top-4">
-            <Badge variant="outline" className="flex gap-1 rounded-lg text-xs">
-              <TrendingUpIcon className="size-3" />
-              +12.5%
-            </Badge>
-          </div>
-        </CardHeader>
-        <CardFooter className="flex-col items-start gap-1 text-sm">
-          <div className="line-clamp-1 flex gap-2 font-medium">
-            Trending up this month <TrendingUpIcon className="size-4" />
-          </div>
-          <div className="text-muted-foreground">Visitors for the last 6 months</div>
-        </CardFooter>
-      </Card>
-      <Card className="@container/card">
-        <CardHeader className="relative">
-          <CardDescription>New Customers</CardDescription>
-          <CardTitle className="@[250px]/card:text-3xl text-2xl font-semibold tabular-nums">
-            1,234
-          </CardTitle>
-          <div className="absolute right-4 top-4">
-            <Badge variant="outline" className="flex gap-1 rounded-lg text-xs">
-              <TrendingDownIcon className="size-3" />
-              -20%
-            </Badge>
-          </div>
-        </CardHeader>
-        <CardFooter className="flex-col items-start gap-1 text-sm">
-          <div className="line-clamp-1 flex gap-2 font-medium">
-            Down 20% this period <TrendingDownIcon className="size-4" />
-          </div>
-          <div className="text-muted-foreground">Acquisition needs attention</div>
-        </CardFooter>
-      </Card>
-      <Card className="@container/card">
-        <CardHeader className="relative">
-          <CardDescription>Active Accounts</CardDescription>
-          <CardTitle className="@[250px]/card:text-3xl text-2xl font-semibold tabular-nums">
-            45,678
-          </CardTitle>
-          <div className="absolute right-4 top-4">
-            <Badge variant="outline" className="flex gap-1 rounded-lg text-xs">
-              <TrendingUpIcon className="size-3" />
-              +12.5%
-            </Badge>
-          </div>
-        </CardHeader>
-        <CardFooter className="flex-col items-start gap-1 text-sm">
-          <div className="line-clamp-1 flex gap-2 font-medium">
-            Strong user retention <TrendingUpIcon className="size-4" />
-          </div>
-          <div className="text-muted-foreground">Engagement exceed targets</div>
-        </CardFooter>
-      </Card>
-      <Card className="@container/card">
-        <CardHeader className="relative">
-          <CardDescription>Growth Rate</CardDescription>
-          <CardTitle className="@[250px]/card:text-3xl text-2xl font-semibold tabular-nums">
-            4.5%
-          </CardTitle>
-          <div className="absolute right-4 top-4">
-            <Badge variant="outline" className="flex gap-1 rounded-lg text-xs">
-              <TrendingUpIcon className="size-3" />
-              +4.5%
-            </Badge>
-          </div>
-        </CardHeader>
-        <CardFooter className="flex-col items-start gap-1 text-sm">
-          <div className="line-clamp-1 flex gap-2 font-medium">
-            Steady performance <TrendingUpIcon className="size-4" />
-          </div>
-          <div className="text-muted-foreground">Meets growth projections</div>
-        </CardFooter>
-      </Card>
+      {cards.map((card, index) => (
+        <StatCard
+          key={index}
+          title={card.title}
+          value={card.value}
+          description={card.description}
+          trend={card.trend}
+          footer={card.footer}
+        />
+      ))}
     </div>
   );
 }

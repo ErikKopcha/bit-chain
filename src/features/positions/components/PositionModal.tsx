@@ -22,13 +22,14 @@ import { PositionFormFields } from './PositionFormFields';
 
 interface PositionModalProps {
   position?: Trade;
-  onSave: (position: Trade) => void;
-  onDelete?: () => void;
+  onSave: (position: Trade) => Promise<void>;
+  onDelete?: () => Promise<void>;
   children: React.ReactNode;
 }
 
 export function PositionModal({ position, onSave, onDelete, children }: PositionModalProps) {
   const [isOpen, setIsOpen] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
 
   const form = useForm<PositionFormValues>({
     resolver: zodResolver(positionSchema),
@@ -39,9 +40,9 @@ export function PositionModal({ position, onSave, onDelete, children }: Position
           side: position.side,
           entryPrice: position.entryPrice,
           positionSize: position.positionSize,
-          stopLoss: position.stopLoss,
-          exitPrice: position.exitPrice,
-          commission: position.commission,
+          stopLoss: position.stopLoss || 0,
+          exitPrice: position.exitPrice || 0,
+          commission: position.commission || 0,
           category: position.category,
           deposit: position.deposit,
           leverage: position.leverage || 1,
@@ -50,27 +51,54 @@ export function PositionModal({ position, onSave, onDelete, children }: Position
           date: new Date(),
           symbol: '',
           side: TRADE_SIDES.LONG,
+          entryPrice: 0,
+          positionSize: 0,
+          stopLoss: 0,
+          exitPrice: 0,
+          commission: 0,
           category: TRADE_CATEGORIES.SOLO,
+          deposit: 0,
           leverage: 1,
         },
   });
 
-  const handleSubmit = (values: PositionFormValues) => {
-    onSave({
-      id: position?.id || 'new',
-      ...position,
-      ...values,
-      stopLoss: values.stopLoss || 0,
-      exitPrice: values.exitPrice || 0,
-      commission: values.commission || 0,
-      deposit: values.deposit,
-      leverage: values.leverage || 1,
-      riskPercent: position?.riskPercent || 0,
-      pnl: position?.pnl || 0,
-      result: position?.result || TRADE_RESULTS.PENDING,
-      investment: 0,
-    });
-    setIsOpen(false);
+  const handleSubmit = async (values: PositionFormValues) => {
+    try {
+      setIsLoading(true);
+      await onSave({
+        ...position,
+        ...values,
+        stopLoss: values.stopLoss || 0,
+        exitPrice: values.exitPrice || 0,
+        commission: values.commission || 0,
+        deposit: values.deposit,
+        leverage: values.leverage || 1,
+        riskPercent: position?.riskPercent || 0,
+        pnl: position?.pnl || 0,
+        result: position?.result || TRADE_RESULTS.PENDING,
+        investment: 0,
+        id: position?.id || '',
+      });
+      setIsOpen(false);
+    } catch (error) {
+      // Error is handled in queries
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  const handleDelete = async () => {
+    if (!onDelete) return;
+
+    try {
+      setIsLoading(true);
+      await onDelete();
+      setIsOpen(false);
+    } catch {
+      // Error is handled in queries
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   useEffect(() => {
@@ -105,11 +133,18 @@ export function PositionModal({ position, onSave, onDelete, children }: Position
             <PositionFormFields form={form} />
             <div className="flex justify-end gap-2">
               {position && onDelete && (
-                <Button type="button" variant="destructive" onClick={onDelete}>
+                <Button
+                  type="button"
+                  variant="destructive"
+                  onClick={handleDelete}
+                  disabled={isLoading}
+                >
                   Delete
                 </Button>
               )}
-              <Button type="submit">Save</Button>
+              <Button type="submit" disabled={isLoading}>
+                {isLoading ? 'Saving...' : 'Save'}
+              </Button>
             </div>
           </form>
         </Form>

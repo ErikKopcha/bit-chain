@@ -1,3 +1,4 @@
+import axiosInstance from '@/lib/axios';
 import { Trade, TRADE_CATEGORIES, TRADE_RESULTS, TRADE_SIDES } from '../types/position';
 
 function mapTradeToPosition(trade: Record<string, unknown>): Trade {
@@ -22,54 +23,20 @@ function mapTradeToPosition(trade: Record<string, unknown>): Trade {
 }
 
 export async function getPositionsByUserId(): Promise<Trade[]> {
-  const response = await fetch('/api/trades');
-  if (!response.ok) {
-    throw new Error('Failed to fetch trades');
-  }
-  const data = await response.json();
+  const { data } = await axiosInstance.get('/trades');
   return data.trades.map(mapTradeToPosition);
 }
 
 export async function createPosition(data: Omit<Trade, 'id'>): Promise<Trade> {
-  const response = await fetch('/api/trades', {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-    },
-    body: JSON.stringify(data),
-  });
-
-  if (!response.ok) {
-    throw new Error('Failed to create trade');
-  }
-
-  const result = await response.json();
-  return mapTradeToPosition(result.trade);
+  const { data: response } = await axiosInstance.post('/trades', data);
+  return mapTradeToPosition(response.trade);
 }
 
 export async function updatePosition(id: string, data: Partial<Trade>): Promise<Trade> {
-  const response = await fetch(`/api/trades/${id}`, {
-    method: 'PUT',
-    headers: {
-      'Content-Type': 'application/json',
-    },
-    body: JSON.stringify(data),
-  });
-
-  if (!response.ok) {
-    throw new Error('Failed to update trade');
-  }
-
-  const result = await response.json();
-  return mapTradeToPosition(result.trade);
+  const { data: response } = await axiosInstance.put(`/trades/${id}`, data);
+  return mapTradeToPosition(response.trade);
 }
 
 export async function deletePosition(id: string): Promise<void> {
-  const response = await fetch(`/api/trades/${id}`, {
-    method: 'DELETE',
-  });
-
-  if (!response.ok) {
-    throw new Error('Failed to delete trade');
-  }
+  await axiosInstance.delete(`/trades/${id}`);
 }
