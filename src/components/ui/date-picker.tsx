@@ -33,22 +33,33 @@ export function DatePicker({
   mode = 'single',
 }: DatePickerProps) {
   const [isOpen, setIsOpen] = useState(false);
+  const [selectedRange, setSelectedRange] = useState<DateRange | undefined>(dateRange);
+  const [selectedDate, setSelectedDate] = useState<Date | undefined>(date);
+
+  // Update local state when props change
+  useEffect(() => {
+    setSelectedRange(dateRange);
+  }, [dateRange]);
+
+  useEffect(() => {
+    setSelectedDate(date);
+  }, [date]);
 
   // Format date display text
   const formatDateDisplay = () => {
     if (mode === 'range') {
-      if (dateRange?.from && dateRange?.to) {
-        return `${format(dateRange.from, 'dd.MM.yyyy')} - ${format(dateRange.to, 'dd.MM.yyyy')}`;
+      if (selectedRange?.from && selectedRange?.to) {
+        return `${format(selectedRange.from, 'dd.MM.yyyy')} - ${format(selectedRange.to, 'dd.MM.yyyy')}`;
       }
-      if (dateRange?.from) {
-        return `From ${format(dateRange.from, 'dd.MM.yyyy')}`;
+      if (selectedRange?.from) {
+        return `From ${format(selectedRange.from, 'dd.MM.yyyy')}`;
       }
-      if (dateRange?.to) {
-        return `Until ${format(dateRange.to, 'dd.MM.yyyy')}`;
+      if (selectedRange?.to) {
+        return `Until ${format(selectedRange.to, 'dd.MM.yyyy')}`;
       }
     } else {
-      if (date) {
-        return format(date, 'dd.MM.yyyy');
+      if (selectedDate) {
+        return format(selectedDate, 'dd.MM.yyyy');
       }
     }
     return placeholder;
@@ -58,11 +69,14 @@ export function DatePicker({
   const handleCurrentMonth = () => {
     const today = new Date();
     if (mode === 'range' && onDateRangeChange) {
-      onDateRangeChange({
+      const range = {
         from: startOfMonth(today),
         to: endOfMonth(today),
-      });
+      };
+      setSelectedRange(range);
+      onDateRangeChange(range);
     } else if (mode === 'single' && onDateChange) {
+      setSelectedDate(today);
       onDateChange(today);
     }
   };
@@ -71,11 +85,14 @@ export function DatePicker({
     const today = new Date();
     const prevMonth = subMonths(today, 1);
     if (mode === 'range' && onDateRangeChange) {
-      onDateRangeChange({
+      const range = {
         from: startOfMonth(prevMonth),
         to: endOfMonth(prevMonth),
-      });
+      };
+      setSelectedRange(range);
+      onDateRangeChange(range);
     } else if (mode === 'single' && onDateChange) {
+      setSelectedDate(prevMonth);
       onDateChange(prevMonth);
     }
   };
@@ -83,19 +100,24 @@ export function DatePicker({
   const handleCurrentYear = () => {
     const today = new Date();
     if (mode === 'range' && onDateRangeChange) {
-      onDateRangeChange({
+      const range = {
         from: startOfYear(today),
         to: today,
-      });
+      };
+      setSelectedRange(range);
+      onDateRangeChange(range);
     } else if (mode === 'single' && onDateChange) {
+      setSelectedDate(today);
       onDateChange(today);
     }
   };
 
   const handleAllTime = () => {
     if (mode === 'range' && onDateRangeChange) {
+      setSelectedRange(undefined);
       onDateRangeChange(undefined);
     } else if (mode === 'single' && onDateChange) {
+      setSelectedDate(undefined);
       onDateChange(undefined);
     }
   };
@@ -103,71 +125,55 @@ export function DatePicker({
   const handleLastWeek = () => {
     const today = new Date();
     if (mode === 'range' && onDateRangeChange) {
-      onDateRangeChange({
+      const range = {
         from: addDays(today, -7),
         to: today,
-      });
+      };
+      setSelectedRange(range);
+      onDateRangeChange(range);
     } else if (mode === 'single' && onDateChange) {
+      setSelectedDate(addDays(today, -7));
       onDateChange(addDays(today, -7));
     }
   };
 
-  // Close popover when date is selected
-  useEffect(() => {
-    if (mode === 'range' && dateRange?.from && dateRange?.to) {
-      const timer = setTimeout(() => {
-        setIsOpen(false);
-      }, 500);
-      return () => clearTimeout(timer);
-    } else if (mode === 'single' && date) {
-      const timer = setTimeout(() => {
-        setIsOpen(false);
-      }, 500);
-      return () => clearTimeout(timer);
-    }
-  }, [date, dateRange, mode]);
-
+  // Handle day selection
   const handleSelect = (selected: Date | DateRange | undefined) => {
     if (mode === 'range' && onDateRangeChange) {
-      onDateRangeChange(selected as DateRange);
+      const rangeValue = selected as DateRange;
+      setSelectedRange(rangeValue);
+      onDateRangeChange(rangeValue);
+
+      // Don't close the popover until a full range is selected
+      if (rangeValue?.from && rangeValue?.to) {
+        setTimeout(() => setIsOpen(false), 300);
+      }
     } else if (mode === 'single' && onDateChange) {
-      onDateChange(selected as Date);
+      const dateValue = selected as Date;
+      setSelectedDate(dateValue);
+      onDateChange(dateValue);
+      setTimeout(() => setIsOpen(false), 300);
     }
   };
-
-  const calendarProps =
-    mode === 'range'
-      ? {
-          mode: 'range' as const,
-          selected: dateRange,
-          onSelect: handleSelect,
-          initialFocus: true,
-          numberOfMonths: 2,
-          className: 'rounded border',
-        }
-      : {
-          mode: 'single' as const,
-          selected: date,
-          onSelect: handleSelect,
-          initialFocus: true,
-          numberOfMonths: 2,
-          className: 'rounded border',
-        };
 
   return (
     <Popover open={isOpen} onOpenChange={setIsOpen}>
       <PopoverTrigger asChild>
         <Button
           variant="outline"
-          className={cn('w-full justify-start text-left text-xs', className)}
+          className={cn(
+            'h-9 w-full justify-start text-left text-xs border-input dark:bg-input/30 bg-transparent shadow-xs transition-[color,box-shadow] px-3 py-1',
+            'focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px]',
+            className,
+          )}
         >
-          <CalendarIcon className="mr-2 h-3 w-3" />
+          <CalendarIcon className="mr-2 h-3 w-3 opacity-70" />
           {formatDateDisplay()}
         </Button>
       </PopoverTrigger>
-      <PopoverContent className="w-auto p-0" align={align}>
+      <PopoverContent className="w-auto p-0 z-50" align={align}>
         {showPresets && (
-          <div className="p-3 border-b">
+          <div className="p-3 border-b dark:border-border/50">
             <div className="grid grid-cols-3 gap-2 mb-2">
               <Button
                 variant="outline"
@@ -205,7 +211,24 @@ export function DatePicker({
           </div>
         )}
         <div className="p-3">
-          <Calendar {...calendarProps} />
+          {/* TODO: fix types */}
+          {mode === 'range' ? (
+            <Calendar
+              mode="range"
+              selected={selectedRange}
+              onSelect={value => handleSelect(value)}
+              numberOfMonths={2}
+              className="rounded dark:border-border/50 border"
+            />
+          ) : (
+            <Calendar
+              mode="single"
+              selected={selectedDate}
+              onSelect={value => handleSelect(value)}
+              numberOfMonths={2}
+              className="rounded dark:border-border/50 border"
+            />
+          )}
         </div>
       </PopoverContent>
     </Popover>

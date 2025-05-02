@@ -48,7 +48,7 @@ export function PositionFilters({
         </div>
 
         <Select value={sideFilter} onValueChange={onSideFilterChange}>
-          <SelectTrigger className="w-full text-xs h-8">
+          <SelectTrigger className="w-full text-xs h-9">
             <SelectValue placeholder="Select side" />
           </SelectTrigger>
           <SelectContent>
@@ -62,7 +62,7 @@ export function PositionFilters({
         </Select>
 
         <Select value={categoryFilter} onValueChange={onCategoryFilterChange}>
-          <SelectTrigger className="w-full text-xs h-8">
+          <SelectTrigger className="w-full text-xs h-9">
             <SelectValue placeholder="Select category" />
           </SelectTrigger>
           <SelectContent>
@@ -76,7 +76,7 @@ export function PositionFilters({
         </Select>
 
         <Select value={resultFilter} onValueChange={onResultFilterChange}>
-          <SelectTrigger className="w-full text-xs h-8">
+          <SelectTrigger className="w-full text-xs h-9">
             <SelectValue placeholder="Select result" />
           </SelectTrigger>
           <SelectContent>
@@ -90,7 +90,7 @@ export function PositionFilters({
         </Select>
       </div>
       {onRefetch && (
-        <Button variant="outline" size="icon" onClick={onRefetch}>
+        <Button variant="outline" size="icon" onClick={onRefetch} className="h-9 w-9">
           <RefreshCw className="h-4 w-4" />
         </Button>
       )}

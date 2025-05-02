@@ -69,10 +69,13 @@ function calculateStats(positions: PositionTrade[]): TradingStats {
     acc.set(trade.category, (acc.get(trade.category) || 0) + 1);
     return acc;
   }, new Map<string, number>());
-  const categoriesData = Array.from(categoriesMap.entries()).map(([category, trades]) => ({
-    category,
-    trades,
-  }));
+
+  const categoriesData = Array.from(categoriesMap.entries())
+    .map(([category, trades]) => ({
+      category,
+      trades,
+    }))
+    .sort((a, b) => b.trades - a.trades);
 
   // Calculate win/loss data
   const totalTrades = trades.length;
@@ -97,6 +100,7 @@ function calculateStats(positions: PositionTrade[]): TradingStats {
     acc.set(trade.symbol, (acc.get(trade.symbol) || 0) + 1);
     return acc;
   }, new Map<string, number>());
+
   const currencyData = Array.from(currencyMap.entries())
     .map(([pair, count]) => ({
       pair,

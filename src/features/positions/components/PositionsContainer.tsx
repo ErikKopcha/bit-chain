@@ -103,7 +103,7 @@ export default function PositionsContainer() {
       <PositionStats trades={filteredTrades} />
 
       <div className="rounded-md shadow">
-        <div className="p-4 bg-white border-b flex flex-col md:flex-row gap-4 justify-between items-start md:items-center">
+        <div className="p-4 bg-card border-b flex flex-col md:flex-row gap-4 justify-between items-start md:items-center">
           <PositionFilters
             dateRange={dateRange}
             onDateRangeChange={setDateRange}

@@ -2,8 +2,6 @@ import { CategoryChart } from '@/components/layout/charts/CategoryChart';
 import { ChartAreaInteractive } from '@/components/layout/charts/ChartAreaInteractive';
 import { ChartLoader } from '@/components/layout/charts/ChartLoader';
 import { CurrencyDistributionChart } from '@/components/layout/charts/CurrencyDistributionChart';
-import { ShortLongChart } from '@/components/layout/charts/ShortLongChart';
-import { WinLossChart } from '@/components/layout/charts/WinLossChart';
 import { SectionCards } from '@/components/layout/SectionCards';
 import { Metadata } from 'next';
 
@@ -40,7 +38,7 @@ export default function Dashboard() {
       </div>
 
       {/* Short/Long and Currency Distribution */}
-      <div className="px-4 lg:px-6 grid grid-cols-1 md:grid-cols-2 gap-4">
+      {/* <div className="px-4 lg:px-6 grid grid-cols-1 md:grid-cols-2 gap-4">
         <ChartLoader>
           <ShortLongChart />
         </ChartLoader>
@@ -48,7 +46,7 @@ export default function Dashboard() {
         <ChartLoader>
           <WinLossChart />
         </ChartLoader>
-      </div>
+      </div> */}
     </div>
   );
 }

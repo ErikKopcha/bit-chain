@@ -20,19 +20,21 @@ import {
 import { ToggleGroup, ToggleGroupItem } from '@/components/ui/toggle-group';
 import { useIsMobile } from '@/hooks/useMobile';
 import { useTradingStats } from '@/hooks/useTradingStats';
+import { useTheme } from '@/providers/ThemeProvider';
 import { ChartSkeleton } from './ChartSkeleton';
-
-const chartConfig = {
-  pnl: {
-    label: 'PnL',
-    color: 'hsl(var(--chart-1))',
-  },
-} satisfies ChartConfig;
 
 export function ChartAreaInteractive() {
   const isMobile = useIsMobile();
   const [timeRange, setTimeRange] = React.useState('30d');
   const { stats, isLoading } = useTradingStats();
+  const { theme } = useTheme();
+
+  const chartConfig = {
+    pnl: {
+      label: 'PnL',
+      color: theme === 'dark' ? 'rgba(255, 255, 255, 0.85)' : 'hsl(var(--chart-1))',
+    },
+  } satisfies ChartConfig;
 
   React.useEffect(() => {
     if (isMobile) {
@@ -116,11 +118,15 @@ export function ChartAreaInteractive() {
                 <stop offset="95%" stopColor="var(--color-pnl)" stopOpacity={0.1} />
               </linearGradient>
             </defs>
-            <CartesianGrid vertical={false} />
+            <CartesianGrid
+              vertical={false}
+              stroke={theme === 'dark' ? 'rgba(255, 255, 255, 0.2)' : 'rgba(0, 0, 0, 0.1)'}
+            />
             <XAxis
               dataKey="date"
               tickLine={false}
               axisLine={false}
+              tick={{ fill: theme === 'dark' ? 'rgba(255, 255, 255, 0.9)' : 'rgba(0, 0, 0, 0.8)' }}
               tickMargin={8}
               minTickGap={32}
               tickFormatter={value => {
@@ -145,7 +151,13 @@ export function ChartAreaInteractive() {
                 />
               }
             />
-            <Area dataKey="pnl" type="natural" fill="url(#fillPnl)" stroke="var(--color-pnl)" />
+            <Area
+              dataKey="pnl"
+              type="natural"
+              fill="url(#fillPnl)"
+              stroke="var(--color-pnl)"
+              strokeWidth={theme === 'dark' ? 2.5 : 1.5}
+            />
           </AreaChart>
         </ChartContainer>
       </CardContent>

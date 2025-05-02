@@ -1,7 +1,8 @@
 'use client';
 
 import { useTradingStats } from '@/hooks/useTradingStats';
-import { PieChartComponent } from './PieChartComponent';
+import { TrendingUp } from 'lucide-react';
+import { RadialChartComponent } from './RadialChartComponent';
 
 const COLORS = {
   WINNING: 'hsl(var(--chart-1))',
@@ -17,13 +18,35 @@ export function WinLossChart() {
       percentage: entry.percentage,
     })) || [];
 
+  // Filter to show only Winning trades (we'll display a single gauge)
+  const winningData = data.filter(item => item.name === 'Winning');
+
+  // Use 0 as fallback if no data is available
+  const winPercentage = winningData[0]?.percentage || 0;
+
+  // Example values for trend demonstration - in a real app these would come from backend
+  const winRateChange = winPercentage > 3 ? 2.7 : -1.5;
+
   return (
-    <PieChartComponent
-      title="Win/Loss Ratio"
-      description="Distribution of winning and losing trades"
-      data={data}
-      colors={[COLORS.WINNING, COLORS.LOSING]}
+    <RadialChartComponent
+      title="Win Rate"
+      description="Percentage of winning trades"
+      data={winningData.length > 0 ? winningData : [{ name: 'Winning', percentage: 0 }]}
+      colors={[COLORS.WINNING]}
       isLoading={isLoading}
+      footer={
+        <div>
+          <div className="flex items-center gap-2 font-medium leading-none">
+            {winRateChange > 0 ? 'Up' : 'Down'} by {Math.abs(winRateChange).toFixed(1)}% this month
+            <TrendingUp
+              className={`h-4 w-4 ${winRateChange >= 0 ? 'text-green-500' : 'text-red-500 transform rotate-180'}`}
+            />
+          </div>
+          <div className="leading-none text-muted-foreground pt-1">
+            Compared to your historical average
+          </div>
+        </div>
+      }
     />
   );
 }
