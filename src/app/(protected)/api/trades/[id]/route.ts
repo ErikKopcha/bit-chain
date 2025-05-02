@@ -32,8 +32,10 @@ export async function PUT(request: Request) {
 }
 
 // DELETE /api/trades/[id]
-export async function DELETE(request: Request, { params }: { params: { id: string } }) {
+export async function DELETE(_: Request, { params }: { params: Promise<{ id: string }> }) {
   try {
+    const { id } = await params;
+
     const session = await getServerSession(authOptions);
     if (!session) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
 
@@ -44,7 +46,7 @@ export async function DELETE(request: Request, { params }: { params: { id: strin
     if (!user) return NextResponse.json({ error: 'User not found' }, { status: 404 });
 
     const trade = await prisma.trade.findUnique({
-      where: { id: params.id },
+      where: { id },
     });
 
     if (!trade) {
@@ -57,7 +59,7 @@ export async function DELETE(request: Request, { params }: { params: { id: strin
 
     await prisma.trade.delete({
       where: {
-        id: params.id,
+        id,
         userId: user.id,
       },
     });
