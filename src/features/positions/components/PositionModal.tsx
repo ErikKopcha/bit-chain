@@ -52,13 +52,7 @@ export function PositionModal({ position, onSave, onDelete, children }: Position
           date: new Date(),
           symbol: '',
           side: TRADE_SIDES.LONG,
-          entryPrice: 0,
-          positionSize: 0,
-          stopLoss: 0,
-          exitPrice: 0,
-          commission: 0,
           category: TRADE_CATEGORIES.SOLO,
-          deposit: 0,
           leverage: 1,
         },
   });
