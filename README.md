@@ -24,8 +24,8 @@ Built with **Next.js**, **TypeScript**, **Prisma**, and **NextAuth**, deployed o
 ### 1. Clone the repo
 
 ```bash
-git clone https://github.com/your-username/trading-journal.git
-cd trading-journal
+git clone https://github.com/your-username/chain-log.git
+cd chain-log
 ```
 
 ### 2. Install dependencies
