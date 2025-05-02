@@ -32,7 +32,7 @@ export async function PUT(request: Request) {
 }
 
 // DELETE /api/trades/[id]
-export async function DELETE(request: Request) {
+export async function DELETE(request: Request, { params }: { params: { id: string } }) {
   try {
     const session = await getServerSession(authOptions);
     if (!session) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
@@ -43,15 +43,32 @@ export async function DELETE(request: Request) {
     const user = await prisma.user.findUnique({ where: { email: userEmail } });
     if (!user) return NextResponse.json({ error: 'User not found' }, { status: 404 });
 
-    const data = await request.json();
+    const trade = await prisma.trade.findUnique({
+      where: { id: params.id },
+    });
+
+    if (!trade) {
+      return NextResponse.json({ error: 'Trade not found' }, { status: 404 });
+    }
+
+    if (trade.userId !== user.id) {
+      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+    }
 
     await prisma.trade.delete({
-      where: { id: data.id },
+      where: {
+        id: params.id,
+        userId: user.id,
+      },
     });
 
     return NextResponse.json({ success: true });
   } catch (error) {
-    console.error('Error deleting trade:', error);
+    console.error('Error deleting trade:', {
+      error,
+      message: error instanceof Error ? error.message : 'Unknown error',
+      stack: error instanceof Error ? error.stack : undefined,
+    });
     return NextResponse.json({ error: 'Failed to delete trade' }, { status: 500 });
   }
 }
