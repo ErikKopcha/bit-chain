@@ -57,9 +57,12 @@ function Calendar({
         ...classNames,
       }}
       components={{
+        // lint-disable-next-line react/display-name
+        // @ts-expect-error // Custom component signature mismatch
         IconLeft: ({ className, ...props }) => (
           <ChevronLeft className={cn('size-4', className)} {...props} />
         ),
+        // @ts-expect-error // Custom component signature mismatch
         IconRight: ({ className, ...props }) => (
           <ChevronRight className={cn('size-4', className)} {...props} />
         ),

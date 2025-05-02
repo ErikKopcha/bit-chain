@@ -18,7 +18,7 @@ export interface DatePickerProps {
   className?: string;
   showPresets?: boolean;
   placeholder?: string;
-  mode?: 'default' | 'range';
+  mode?: 'single' | 'range';
 }
 
 export function DatePicker({
@@ -30,7 +30,7 @@ export function DatePicker({
   className,
   showPresets = false,
   placeholder = 'Select date',
-  mode = 'default',
+  mode = 'single',
 }: DatePickerProps) {
   const [isOpen, setIsOpen] = useState(false);
 
@@ -62,7 +62,7 @@ export function DatePicker({
         from: startOfMonth(today),
         to: endOfMonth(today),
       });
-    } else if (mode === 'default' && onDateChange) {
+    } else if (mode === 'single' && onDateChange) {
       onDateChange(today);
     }
   };
@@ -75,7 +75,7 @@ export function DatePicker({
         from: startOfMonth(prevMonth),
         to: endOfMonth(prevMonth),
       });
-    } else if (mode === 'default' && onDateChange) {
+    } else if (mode === 'single' && onDateChange) {
       onDateChange(prevMonth);
     }
   };
@@ -87,7 +87,7 @@ export function DatePicker({
         from: startOfYear(today),
         to: today,
       });
-    } else if (mode === 'default' && onDateChange) {
+    } else if (mode === 'single' && onDateChange) {
       onDateChange(today);
     }
   };
@@ -95,7 +95,7 @@ export function DatePicker({
   const handleAllTime = () => {
     if (mode === 'range' && onDateRangeChange) {
       onDateRangeChange(undefined);
-    } else if (mode === 'default' && onDateChange) {
+    } else if (mode === 'single' && onDateChange) {
       onDateChange(undefined);
     }
   };
@@ -107,7 +107,7 @@ export function DatePicker({
         from: addDays(today, -7),
         to: today,
       });
-    } else if (mode === 'default' && onDateChange) {
+    } else if (mode === 'single' && onDateChange) {
       onDateChange(addDays(today, -7));
     }
   };
@@ -119,7 +119,7 @@ export function DatePicker({
         setIsOpen(false);
       }, 500);
       return () => clearTimeout(timer);
-    } else if (mode === 'default' && date) {
+    } else if (mode === 'single' && date) {
       const timer = setTimeout(() => {
         setIsOpen(false);
       }, 500);
@@ -130,7 +130,7 @@ export function DatePicker({
   const handleSelect = (selected: Date | DateRange | undefined) => {
     if (mode === 'range' && onDateRangeChange) {
       onDateRangeChange(selected as DateRange);
-    } else if (mode === 'default' && onDateChange) {
+    } else if (mode === 'single' && onDateChange) {
       onDateChange(selected as Date);
     }
   };
@@ -146,7 +146,7 @@ export function DatePicker({
           className: 'rounded border',
         }
       : {
-          mode: 'default' as const,
+          mode: 'single' as const,
           selected: date,
           onSelect: handleSelect,
           initialFocus: true,
