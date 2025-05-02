@@ -4,7 +4,7 @@ import { prisma } from '@/lib/prisma';
 import { getServerSession } from 'next-auth';
 import { NextResponse } from 'next/server';
 
-export async function PUT(request: Request, { params }: { params: { id: string } }) {
+export async function PUT(request: Request, context: { params: { id: string } }) {
   try {
     const session = await getServerSession(authOptions);
 
@@ -30,7 +30,7 @@ export async function PUT(request: Request, { params }: { params: { id: string }
     const tradeData = createTradeData(data);
 
     const trade = await prisma.trade.update({
-      where: { id: params.id },
+      where: { id: context.params.id },
       data: {
         userId: user.id,
         ...tradeData,
