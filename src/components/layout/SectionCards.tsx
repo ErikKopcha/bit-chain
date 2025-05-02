@@ -26,7 +26,7 @@ export function SectionCards() {
 
   const totalTrades = stats.categoriesData.reduce((sum, cat) => sum + cat.trades, 0);
   const avgTradesPerCategory = totalTrades / stats.categoriesData.length;
-  const tradesChange = ((totalTrades - avgTradesPerCategory) / avgTradesPerCategory) * 100;
+  const tradesChange = ((totalTrades - avgTradesPerCategory) / avgTradesPerCategory) * 100 || 0;
 
   const totalPnL = stats.pnlData[stats.pnlData.length - 1]?.pnl || 0;
   const prevPnL = stats.pnlData[stats.pnlData.length - 2]?.pnl || 0;

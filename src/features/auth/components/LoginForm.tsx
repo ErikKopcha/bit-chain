@@ -4,56 +4,13 @@ import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
+import { useLogin } from '@/hooks/useLogin';
 import { cn } from '@/lib/utils';
-import { zodResolver } from '@hookform/resolvers/zod';
-import { signIn } from 'next-auth/react';
 import Link from 'next/link';
-import { useRouter } from 'next/navigation';
-import { useForm } from 'react-hook-form';
-import { z } from 'zod';
 import { ROUTES } from '../constants';
-import { loginSchema } from '../schemas';
-
-type LoginFormData = z.infer<typeof loginSchema>;
 
 export function LoginForm({ className, ...props }: React.ComponentPropsWithoutRef<'div'>) {
-  const router = useRouter();
-  const callbackUrl = ROUTES.DASHBOARD.path;
-
-  const {
-    register,
-    handleSubmit,
-    formState: { errors, isSubmitting },
-    setError,
-  } = useForm<LoginFormData>({
-    resolver: zodResolver(loginSchema),
-  });
-
-  const onSubmit = async (data: LoginFormData) => {
-    try {
-      const res = await signIn('credentials', {
-        redirect: true,
-        email: data.email,
-        password: data.password,
-        callbackUrl: ROUTES.DASHBOARD.path,
-      });
-
-      if (res?.error) {
-        setError('root', {
-          type: 'manual',
-          message: 'Invalid email or password',
-        });
-      } else {
-        router.push(callbackUrl);
-        router.refresh();
-      }
-    } catch {
-      setError('root', {
-        type: 'manual',
-        message: 'An error occurred. Please try again.',
-      });
-    }
-  };
+  const { register, handleSubmit, errors, isSubmitting, onSubmit } = useLogin();
 
   return (
     <div className={cn('flex flex-col gap-6', className)} {...props}>

@@ -29,6 +29,17 @@ const handler = NextAuth({
   pages: {
     signIn: '/login',
   },
+  callbacks: {
+    async redirect({ baseUrl }) {
+      return baseUrl;
+    },
+    async jwt({ token }) {
+      return token;
+    },
+    async session({ session }) {
+      return session;
+    },
+  },
 });
 
 export { handler as GET, handler as POST };
