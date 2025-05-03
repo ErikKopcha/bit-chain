@@ -1,4 +1,6 @@
+import { ROUTES } from '@/features/auth/constants';
 import axios from 'axios';
+import { signOut } from 'next-auth/react';
 
 const axiosInstance = axios.create({
   baseURL: process.env.NEXT_PUBLIC_API_URL || '/api',
@@ -19,6 +21,13 @@ axiosInstance.interceptors.response.use(
   error => {
     if (error.response) {
       console.error('Response error:', error.response.data);
+
+      // Handle 401 Unauthorized errors - log the user out
+      if (error.response.status === 401) {
+        setTimeout(() => {
+          signOut({ redirect: true, callbackUrl: ROUTES.LOGIN.path });
+        }, 100);
+      }
     } else if (error.request) {
       console.error('Request error:', error.request);
     } else {
