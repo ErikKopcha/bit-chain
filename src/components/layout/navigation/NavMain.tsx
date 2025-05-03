@@ -6,11 +6,12 @@ import {
   SidebarMenu,
   SidebarMenuButton,
   SidebarMenuItem,
+  useSidebar,
 } from '@/components/ui/sidebar';
+import { useIsMobile } from '@/hooks/useMobile';
 import { LucideIcon } from 'lucide-react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { useEffect } from 'react';
 
 interface INavMain {
   items: {
@@ -22,17 +23,14 @@ interface INavMain {
 
 export function NavMain({ items }: INavMain) {
   const pathname = usePathname();
+  const { toggleSidebar } = useSidebar();
+  const isMobile = useIsMobile();
 
   const isActive = (url: string) => pathname === url;
 
-  useEffect(() => {
-    items.forEach(item => {
-      const link = document.createElement('link');
-      link.rel = 'prefetch';
-      link.href = item.url;
-      document.head.appendChild(link);
-    });
-  }, [items]);
+  const handleClick = () => {
+    if (isMobile) toggleSidebar();
+  };
 
   return (
     <SidebarGroup>
@@ -40,7 +38,12 @@ export function NavMain({ items }: INavMain) {
         <SidebarMenu>
           {items.map(item => (
             <SidebarMenuItem key={item.title}>
-              <SidebarMenuButton asChild tooltip={item.title} isActive={isActive(item.url)}>
+              <SidebarMenuButton
+                asChild
+                tooltip={item.title}
+                isActive={isActive(item.url)}
+                onClick={handleClick}
+              >
                 <Link href={item.url} prefetch>
                   {item.icon && <item.icon />}
                   <span>{item.title}</span>

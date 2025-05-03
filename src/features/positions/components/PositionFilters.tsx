@@ -35,8 +35,8 @@ export function PositionFilters({
   onRefetch,
 }: PositionFiltersProps) {
   return (
-    <div className="flex items-center justify-between w-full">
-      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4 w-full md:w-auto custom-filter-container">
+    <div className="flex items-center justify-between w-full gap-4">
+      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4 w-full md:w-auto md:custom-filter-container flex-wrap">
         <div className="col-span-1 md:col-span-1">
           <DatePicker
             dateRange={dateRange}
