@@ -24,6 +24,8 @@ interface PositionFiltersProps {
   onRefetch?: () => void;
 }
 
+const ALL = 'all';
+
 export function PositionFilters({
   dateRange,
   sideFilter,
@@ -49,7 +51,7 @@ export function PositionFilters({
         </div>
 
         <div className="min-w-150px">
-          <Select value={sideFilter} onValueChange={onSideFilterChange}>
+          <Select value={sideFilter || ALL} onValueChange={onSideFilterChange}>
             <SelectTrigger className="w-full text-xs h-9">
               <SelectValue placeholder="Select side" />
             </SelectTrigger>
@@ -65,7 +67,7 @@ export function PositionFilters({
         </div>
 
         <div className="min-w-150px">
-          <Select value={categoryFilter} onValueChange={onCategoryFilterChange}>
+          <Select value={categoryFilter || ALL} onValueChange={onCategoryFilterChange}>
             <SelectTrigger className="w-full text-xs h-9">
               <SelectValue placeholder="Select category" />
             </SelectTrigger>
@@ -81,7 +83,7 @@ export function PositionFilters({
         </div>
 
         <div className="min-w-150px">
-          <Select value={resultFilter} onValueChange={onResultFilterChange}>
+          <Select value={resultFilter || ALL} onValueChange={onResultFilterChange}>
             <SelectTrigger className="w-full text-xs h-9">
               <SelectValue placeholder="Select result" />
             </SelectTrigger>
