@@ -1,4 +1,4 @@
-# Chain Log App
+# BitChain App
 
 A modern web app for tracking and analyzing your trading performance.  
 Built with **Next.js**, **TypeScript**, **Prisma**, and **NextAuth**, deployed on **Vercel**.

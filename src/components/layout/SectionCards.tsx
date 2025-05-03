@@ -1,5 +1,6 @@
 'use client';
 
+import { formatCurrency } from '@/app/(protected)/journal/utils/formatters';
 import { useTradingStats } from '@/hooks/useTradingStats';
 import { StatCard } from './StatCard';
 import { StatCardSkeleton } from './StatCardSkeleton';
@@ -41,7 +42,7 @@ export function SectionCards() {
   const cards = [
     {
       title: 'Total PnL',
-      value: `$${totalPnL.toFixed(2)}`,
+      value: formatCurrency(totalPnL),
       description: 'Profit and Loss',
       trend: {
         value: Number(pnlChange.toFixed(2)),

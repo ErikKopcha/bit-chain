@@ -54,7 +54,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
             <SidebarMenuButton asChild className="data-[slot=sidebar-menu-button]:!p-1.5">
               <Link href={ROUTES.DASHBOARD.path}>
                 <ArrowUpCircleIcon className="h-5 w-5" />
-                <span className="text-base font-semibold">Trading Journal</span>
+                <span className="text-base font-semibold">BitChain</span>
               </Link>
             </SidebarMenuButton>
           </SidebarMenuItem>

@@ -1,7 +1,7 @@
 'use client';
 
 import * as React from 'react';
-import { Area, AreaChart, CartesianGrid, XAxis } from 'recharts';
+import { Area, AreaChart, CartesianGrid, XAxis, YAxis } from 'recharts';
 
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import {
@@ -10,22 +10,17 @@ import {
   ChartTooltip,
   ChartTooltipContent,
 } from '@/components/ui/chart';
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from '@/components/ui/select';
-import { ToggleGroup, ToggleGroupItem } from '@/components/ui/toggle-group';
+import { DatePicker } from '@/components/ui/date-picker';
 import { useIsMobile } from '@/hooks/useMobile';
 import { useTradingStats } from '@/hooks/useTradingStats';
 import { useTheme } from '@/providers/ThemeProvider';
+import { endOfDay, startOfDay, subDays } from 'date-fns';
+import { DateRange } from 'react-day-picker';
 import { ChartSkeleton } from './ChartSkeleton';
 
 export function ChartAreaInteractive() {
   const isMobile = useIsMobile();
-  const [timeRange, setTimeRange] = React.useState('30d');
+  const [dateRange, setDateRange] = React.useState<DateRange | undefined>(undefined);
   const { stats, isLoading } = useTradingStats();
   const { theme } = useTheme();
 
@@ -38,28 +33,54 @@ export function ChartAreaInteractive() {
 
   React.useEffect(() => {
     if (isMobile) {
-      setTimeRange('7d');
+      setDateRange({
+        from: subDays(new Date(), 7),
+        to: new Date(),
+      });
     }
   }, [isMobile]);
 
   const filteredData = React.useMemo(() => {
-    if (!stats?.pnlData) return [];
+    if (!stats?.pnlData || stats.pnlData.length === 0) return [];
 
-    const referenceDate = new Date();
-    let daysToSubtract = 90;
-    if (timeRange === '30d') {
-      daysToSubtract = 30;
-    } else if (timeRange === '7d') {
-      daysToSubtract = 7;
+    let dataToUse = [...stats.pnlData];
+
+    // Apply date filtering if a range is selected
+    if (dateRange?.from) {
+      const startDate = startOfDay(dateRange.from);
+      const endDate = dateRange.to ? endOfDay(dateRange.to) : new Date();
+
+      dataToUse = dataToUse.filter(item => {
+        const date = new Date(item.date);
+        return date >= startDate && date <= endDate;
+      });
     }
-    const startDate = new Date(referenceDate);
-    startDate.setDate(startDate.getDate() - daysToSubtract);
 
-    return stats.pnlData.filter(item => {
-      const date = new Date(item.date);
-      return date >= startDate;
-    });
-  }, [stats?.pnlData, timeRange]);
+    // If we have data, ensure the first entry starts with PnL at 0
+    if (dataToUse.length > 0) {
+      // Sort data by date (just to be safe)
+      dataToUse.sort((a, b) => new Date(a.date).getTime() - new Date(b.date).getTime());
+
+      // Create a new array with a zero point before the first item
+      const firstDate = new Date(dataToUse[0]?.date || new Date());
+      const zeroPnlDate = new Date(firstDate);
+      zeroPnlDate.setDate(firstDate.getDate() - 1);
+
+      return [
+        {
+          date: zeroPnlDate.toISOString(),
+          pnl: 0,
+        },
+        ...dataToUse,
+      ];
+    }
+
+    return dataToUse;
+  }, [stats?.pnlData, dateRange]);
+
+  const handleDateRangeChange = (range: DateRange | undefined) => {
+    setDateRange(range);
+  };
 
   if (isLoading) {
     return <ChartSkeleton />;
@@ -67,46 +88,23 @@ export function ChartAreaInteractive() {
 
   return (
     <Card className="@container/card">
-      <CardHeader className="relative">
-        <CardTitle>Cumulative PnL</CardTitle>
-        <CardDescription>
-          <span className="@[540px]/card:block hidden">Total profit/loss over time</span>
-          <span className="@[540px]/card:hidden">PnL over time</span>
-        </CardDescription>
-        <div className="absolute right-4 top-4">
-          <ToggleGroup
-            type="single"
-            value={timeRange}
-            onValueChange={setTimeRange}
-            variant="outline"
-            className="@[767px]/card:flex hidden"
-          >
-            <ToggleGroupItem value="90d" className="h-8 px-2.5">
-              Last 3 months
-            </ToggleGroupItem>
-            <ToggleGroupItem value="30d" className="h-8 px-2.5">
-              Last 30 days
-            </ToggleGroupItem>
-            <ToggleGroupItem value="7d" className="h-8 px-2.5">
-              Last 7 days
-            </ToggleGroupItem>
-          </ToggleGroup>
-          <Select value={timeRange} onValueChange={setTimeRange}>
-            <SelectTrigger className="@[767px]/card:hidden flex w-40" aria-label="Select a value">
-              <SelectValue placeholder="Last 3 months" />
-            </SelectTrigger>
-            <SelectContent className="rounded-xl">
-              <SelectItem value="90d" className="rounded-lg">
-                Last 3 months
-              </SelectItem>
-              <SelectItem value="30d" className="rounded-lg">
-                Last 30 days
-              </SelectItem>
-              <SelectItem value="7d" className="rounded-lg">
-                Last 7 days
-              </SelectItem>
-            </SelectContent>
-          </Select>
+      <CardHeader className="flex items-center justify-between">
+        <div>
+          <CardTitle>Cumulative PnL</CardTitle>
+          <CardDescription>
+            <span className="@[540px]/card:block hidden">Total profit/loss over time</span>
+            <span className="@[540px]/card:hidden">PnL over time</span>
+          </CardDescription>
+        </div>
+        <div>
+          <DatePicker
+            dateRange={dateRange}
+            onDateRangeChange={handleDateRangeChange}
+            mode="range"
+            showPresets
+            placeholder="All time"
+            className="w-full"
+          />
         </div>
       </CardHeader>
       <CardContent className="px-2 pt-4 sm:px-6 sm:pt-6">
@@ -137,6 +135,15 @@ export function ChartAreaInteractive() {
                 });
               }}
             />
+            <YAxis
+              domain={[0, 'auto']}
+              tickLine={false}
+              axisLine={false}
+              tick={{ fill: theme === 'dark' ? 'rgba(255, 255, 255, 0.9)' : 'rgba(0, 0, 0, 0.8)' }}
+              tickMargin={8}
+              allowDataOverflow
+              hide={isMobile}
+            />
             <ChartTooltip
               cursor={false}
               content={
@@ -157,6 +164,8 @@ export function ChartAreaInteractive() {
               fill="url(#fillPnl)"
               stroke="var(--color-pnl)"
               strokeWidth={theme === 'dark' ? 2.5 : 1.5}
+              baseValue={0}
+              connectNulls
             />
           </AreaChart>
         </ChartContainer>

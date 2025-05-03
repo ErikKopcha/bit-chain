@@ -10,7 +10,7 @@ interface StatCardProps {
   value: string | number;
   description: string;
   trend: {
-    value: number;
+    value: number | string;
     label: string;
     isPositive: boolean;
   };
@@ -34,7 +34,7 @@ export function StatCard({ title, value, trend, footer }: StatCardProps) {
         <div className="absolute right-4 top-0">
           <Badge variant="outline" className={`flex gap-1 rounded-lg text-xs ${trendColor}`}>
             <TrendIcon className="size-3" />
-            {trend.value > 0 ? '+' : ''}
+            {Number(trend.value) > 0 ? '+' : ''}
             {trend.value}%
           </Badge>
         </div>

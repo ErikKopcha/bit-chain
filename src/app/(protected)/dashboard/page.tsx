@@ -6,7 +6,7 @@ import { SectionCards } from '@/components/layout/SectionCards';
 import { Metadata } from 'next';
 
 export const metadata: Metadata = {
-  title: 'Dashboard | Trading Journal',
+  title: 'Dashboard | BitChain',
   description: 'Your trading dashboard overview',
 };
 

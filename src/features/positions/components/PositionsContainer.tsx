@@ -102,8 +102,8 @@ export default function PositionsContainer() {
 
       <PositionStats trades={filteredTrades} />
 
-      <div className="rounded-md shadow">
-        <div className="p-4 bg-card border-b flex flex-col md:flex-row gap-4 justify-between items-start md:items-center">
+      <div className="shadow">
+        <div className="p-4 bg-card border-b flex flex-col md:flex-row gap-4 justify-between items-start md:items-center rounded-t-lg">
           <PositionFilters
             dateRange={dateRange}
             onDateRangeChange={setDateRange}
@@ -117,17 +117,19 @@ export default function PositionsContainer() {
           />
         </div>
 
-        <PositionTable
-          trades={paginatedTrades}
-          currentPage={currentPage}
-          totalPages={totalPages}
-          pageSize={pageSize}
-          onPageChange={handlePageChange}
-          onPageSizeChange={handlePageSizeChange}
-          onEdit={handleEditPosition}
-          onDelete={onDelete}
-          isLoading={isLoading}
-        />
+        <div className="bg-card rounded-b-lg overflow-hidden">
+          <PositionTable
+            trades={paginatedTrades}
+            currentPage={currentPage}
+            totalPages={totalPages}
+            pageSize={pageSize}
+            onPageChange={handlePageChange}
+            onPageSizeChange={handlePageSizeChange}
+            onEdit={handleEditPosition}
+            onDelete={onDelete}
+            isLoading={isLoading}
+          />
+        </div>
       </div>
 
       {positionToDelete && (

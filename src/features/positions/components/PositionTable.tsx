@@ -38,7 +38,7 @@ export function PositionTable({
   isLoading = false,
 }: PositionTableProps) {
   return (
-    <div className="p-4 bg-card flex flex-col gap-4 justify-between items-start md:items-center">
+    <div className="p-4 flex flex-col gap-4 justify-between items-start md:items-center overflow-hidden">
       <Table>
         <TableHeader>
           <TableRow>
