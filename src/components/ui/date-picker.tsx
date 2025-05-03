@@ -167,8 +167,8 @@ export function DatePicker({
             className,
           )}
         >
-          <CalendarIcon className="mr-2 h-3 w-3 opacity-70" />
-          {formatDateDisplay()}
+          <CalendarIcon className="mr-2 h-3 w-3 opacity-70 flex-shrink-0" />
+          <span className="truncate">{formatDateDisplay()}</span>
         </Button>
       </PopoverTrigger>
       <PopoverContent className="w-auto p-0 z-50" align={align}>

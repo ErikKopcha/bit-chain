@@ -1,6 +1,5 @@
 'use client';
 
-import * as React from 'react';
 import { Area, AreaChart, CartesianGrid, XAxis, YAxis } from 'recharts';
 
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
@@ -13,25 +12,25 @@ import {
 import { DatePicker } from '@/components/ui/date-picker';
 import { useIsMobile } from '@/hooks/useMobile';
 import { useTradingStats } from '@/hooks/useTradingStats';
-import { useTheme } from '@/providers/ThemeProvider';
+import { THEME, useStore } from '@/store';
 import { endOfDay, startOfDay, subDays } from 'date-fns';
+import { useEffect, useMemo } from 'react';
 import { DateRange } from 'react-day-picker';
 import { ChartSkeleton } from './ChartSkeleton';
 
 export function ChartAreaInteractive() {
   const isMobile = useIsMobile();
-  const [dateRange, setDateRange] = React.useState<DateRange | undefined>(undefined);
+  const { selectedDateRange: dateRange, setSelectedDateRange: setDateRange, theme } = useStore();
   const { stats, isLoading } = useTradingStats();
-  const { theme } = useTheme();
 
   const chartConfig = {
     pnl: {
       label: 'PnL',
-      color: theme === 'dark' ? 'rgba(255, 255, 255, 0.85)' : 'hsl(var(--chart-1))',
+      color: theme === THEME.DARK ? 'rgba(255, 255, 255, 0.85)' : 'hsl(var(--chart-1))',
     },
   } satisfies ChartConfig;
 
-  React.useEffect(() => {
+  useEffect(() => {
     if (isMobile) {
       setDateRange({
         from: subDays(new Date(), 7),
@@ -40,7 +39,7 @@ export function ChartAreaInteractive() {
     }
   }, [isMobile]);
 
-  const filteredData = React.useMemo(() => {
+  const filteredData = useMemo(() => {
     if (!stats?.pnlData || stats.pnlData.length === 0) return [];
 
     let dataToUse = [...stats.pnlData];
@@ -118,13 +117,15 @@ export function ChartAreaInteractive() {
             </defs>
             <CartesianGrid
               vertical={false}
-              stroke={theme === 'dark' ? 'rgba(255, 255, 255, 0.2)' : 'rgba(0, 0, 0, 0.1)'}
+              stroke={theme === THEME.DARK ? 'rgba(255, 255, 255, 0.2)' : 'rgba(0, 0, 0, 0.1)'}
             />
             <XAxis
               dataKey="date"
               tickLine={false}
               axisLine={false}
-              tick={{ fill: theme === 'dark' ? 'rgba(255, 255, 255, 0.9)' : 'rgba(0, 0, 0, 0.8)' }}
+              tick={{
+                fill: theme === THEME.DARK ? 'rgba(255, 255, 255, 0.9)' : 'rgba(0, 0, 0, 0.8)',
+              }}
               tickMargin={8}
               minTickGap={32}
               tickFormatter={value => {
@@ -139,7 +140,9 @@ export function ChartAreaInteractive() {
               domain={[0, 'auto']}
               tickLine={false}
               axisLine={false}
-              tick={{ fill: theme === 'dark' ? 'rgba(255, 255, 255, 0.9)' : 'rgba(0, 0, 0, 0.8)' }}
+              tick={{
+                fill: theme === THEME.DARK ? 'rgba(255, 255, 255, 0.9)' : 'rgba(0, 0, 0, 0.8)',
+              }}
               tickMargin={8}
               allowDataOverflow
               hide={isMobile}
@@ -163,7 +166,7 @@ export function ChartAreaInteractive() {
               type="natural"
               fill="url(#fillPnl)"
               stroke="var(--color-pnl)"
-              strokeWidth={theme === 'dark' ? 2.5 : 1.5}
+              strokeWidth={theme === THEME.DARK ? 2.5 : 1.5}
               baseValue={0}
               connectNulls
             />

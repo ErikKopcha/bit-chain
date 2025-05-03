@@ -3,6 +3,7 @@
 import { Button } from '@/components/ui/button';
 import { cn } from '@/lib/utils';
 import { useTheme } from '@/providers/ThemeProvider';
+import { THEME } from '@/store';
 import { Moon, Sun } from 'lucide-react';
 import { useEffect, useState } from 'react';
 
@@ -29,13 +30,13 @@ export function ThemeToggle({ className }: ThemeToggleProps) {
       size="icon"
       onClick={toggleTheme}
       className={cn('relative h-9 w-9 rounded-full border hover:bg-accent', className)}
-      title={theme === 'light' ? 'Switch to dark theme' : 'Switch to light theme'}
+      title={theme === THEME.LIGHT ? 'Switch to dark theme' : 'Switch to light theme'}
     >
       <div className="relative h-5 w-5">
         <span
           className={cn(
             'absolute inset-0 rotate-0 scale-100 flex items-center justify-center',
-            theme === 'dark' && 'rotate-90 scale-0',
+            theme === THEME.DARK && 'rotate-90 scale-0',
           )}
         >
           <Sun className="h-5 w-5" />
@@ -43,7 +44,7 @@ export function ThemeToggle({ className }: ThemeToggleProps) {
         <span
           className={cn(
             'absolute inset-0 rotate-90 scale-0 flex items-center justify-center',
-            theme === 'dark' && 'rotate-0 scale-100',
+            theme === THEME.DARK && 'rotate-0 scale-100',
           )}
         >
           <Moon className="h-5 w-5" />

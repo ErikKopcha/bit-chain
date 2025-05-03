@@ -12,6 +12,7 @@ import {
 } from '@/components/ui/card';
 import { ChartConfig, ChartContainer } from '@/components/ui/chart';
 import { useTheme } from '@/providers/ThemeProvider';
+import { THEME } from '@/store';
 import { ChartSkeleton } from './ChartSkeleton';
 
 interface RadialChartData {
@@ -54,7 +55,7 @@ export function RadialChartComponent({
     {
       name: primaryData.name,
       value: displayValue,
-      fill: theme === 'dark' ? 'rgba(255, 255, 255, 0.85)' : colors[0],
+      fill: theme === THEME.DARK ? 'rgba(255, 255, 255, 0.85)' : colors[0],
     },
   ];
 
@@ -62,7 +63,7 @@ export function RadialChartComponent({
   const chartConfig = {
     [primaryData.name.toLowerCase()]: {
       label: primaryData.name,
-      color: theme === 'dark' ? 'rgba(255, 255, 255, 0.85)' : colors[0],
+      color: theme === THEME.DARK ? 'rgba(255, 255, 255, 0.85)' : colors[0],
     },
   } satisfies ChartConfig;
 
@@ -85,7 +86,7 @@ export function RadialChartComponent({
             <RadialBar
               dataKey="value"
               background
-              fill={theme === 'dark' ? 'rgba(255, 255, 255, 0.85)' : undefined}
+              fill={theme === THEME.DARK ? 'rgba(255, 255, 255, 0.85)' : undefined}
               minPointSize={5}
             />
             <PolarRadiusAxis tick={false} tickLine={false} axisLine={false}>
@@ -110,7 +111,7 @@ export function RadialChartComponent({
                           x={viewBox.cx}
                           y={(viewBox.cy || 0) + 24}
                           className={
-                            theme === 'dark'
+                            theme === THEME.DARK
                               ? 'fill-white fill-opacity-60'
                               : 'fill-muted-foreground'
                           }

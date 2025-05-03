@@ -35,7 +35,7 @@ export function LoginForm({ className, ...props }: React.ComponentPropsWithoutRe
                   {errors.email && <p className="text-sm text-red-500">{errors.email.message}</p>}
                 </div>
                 <div className="grid gap-2">
-                  <div className="flex items-center">
+                  {/* <div className="flex items-center">
                     <Label htmlFor="password">Password</Label>
                     <a
                       href={ROUTES.FORGOT_PASSWORD.path}
@@ -43,7 +43,7 @@ export function LoginForm({ className, ...props }: React.ComponentPropsWithoutRe
                     >
                       Forgot password?
                     </a>
-                  </div>
+                  </div> */}
                   <Input
                     id="password"
                     type="password"

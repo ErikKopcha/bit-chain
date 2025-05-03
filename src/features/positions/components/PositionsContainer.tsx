@@ -106,12 +106,12 @@ export default function PositionsContainer() {
         <div className="p-4 bg-card border-b flex flex-col md:flex-row gap-4 justify-between items-start md:items-center rounded-t-lg">
           <PositionFilters
             dateRange={dateRange}
-            onDateRangeChange={setDateRange}
             sideFilter={sideFilter}
-            onSideFilterChange={handleSideFilterChange}
             categoryFilter={categoryFilter}
-            onCategoryFilterChange={handleCategoryFilterChange}
             resultFilter={resultFilter}
+            onDateRangeChange={setDateRange}
+            onSideFilterChange={handleSideFilterChange}
+            onCategoryFilterChange={handleCategoryFilterChange}
             onResultFilterChange={handleResultFilterChange}
             onRefetch={refetch}
           />

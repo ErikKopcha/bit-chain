@@ -1,29 +1,32 @@
-import { useState } from 'react';
-import { DateRange } from 'react-day-picker';
+import { useStore } from '@/store';
+
+const DEFAULT_FILTERS = ['all', undefined, ''];
 
 export const useTradeFilters = () => {
-  const [dateRange, setDateRange] = useState<DateRange | undefined>();
-  const [sideFilter, setSideFilter] = useState<string | undefined>();
-  const [categoryFilter, setCategoryFilter] = useState<string | undefined>();
-  const [resultFilter, setResultFilter] = useState<string | undefined>();
+  const {
+    selectedDateRange: dateRange,
+    tradeFilters,
+    setSelectedDateRange: setDateRange,
+    setTradeFilters,
+  } = useStore();
 
   const handleSideFilterChange = (value: string) => {
-    setSideFilter(value === 'all' ? '' : value);
+    setTradeFilters({ side: DEFAULT_FILTERS.includes(value) ? undefined : value });
   };
 
   const handleCategoryFilterChange = (value: string) => {
-    setCategoryFilter(value === 'all' ? '' : value);
+    setTradeFilters({ category: DEFAULT_FILTERS.includes(value) ? undefined : value });
   };
 
   const handleResultFilterChange = (value: string) => {
-    setResultFilter(value === 'all' ? '' : value);
+    setTradeFilters({ result: DEFAULT_FILTERS.includes(value) ? undefined : value });
   };
 
   return {
     dateRange,
-    sideFilter,
-    categoryFilter,
-    resultFilter,
+    sideFilter: tradeFilters.side,
+    categoryFilter: tradeFilters.category,
+    resultFilter: tradeFilters.result,
     setDateRange,
     handleSideFilterChange,
     handleCategoryFilterChange,
