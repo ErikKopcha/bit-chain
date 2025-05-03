@@ -24,7 +24,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       <body className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
         <SessionProvider>
           <QueryProvider>
-            <ThemeProvider defaultTheme="light" storageKey="tj-theme-mode">
+            <ThemeProvider>
               <AuthProvider>
                 {children}
                 <Toaster />
