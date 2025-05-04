@@ -71,10 +71,10 @@ export function TableLoadingBar({ isLoading, className }: TableLoadingBarProps) 
 
   return (
     <div
-      className={cn('fixed top-0 left-0 z-[9999] w-full overflow-hidden', 'h-[2px]', className)}
+      className={cn('fixed top-0 left-0 w-full overflow-hidden', 'h-[2px]', className)}
       style={{
         opacity,
-        transition: 'opacity 800ms ease-in-out',
+        transition: 'opacity 1000ms ease-in-out',
       }}
     >
       <Progress indeterminate className="h-full rounded-none border-none" />
