@@ -34,9 +34,6 @@ export const useTradeData = (filters: TradeFilters = {}) => {
   useEffect(() => {
     if (reactQueryFetching) {
       setIsManualRefetching(true);
-    } else if (!reactQueryFetching && isManualRefetching) {
-      // Don't immediately hide loading indicator when query finishes
-      // Let the animation play out naturally
     }
   }, [reactQueryFetching, isManualRefetching]);
 
