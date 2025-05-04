@@ -27,15 +27,11 @@ export const useTradeData = (filters: TradeFilters = {}) => {
   const { mutateAsync: updatePosition } = useUpdatePosition();
   const { mutateAsync: deletePosition } = useDeletePosition();
 
-  // Combine React Query's isFetching with our manual refetching state
   const isFetching = reactQueryFetching || isManualRefetching;
 
-  // Also trigger the loading state whenever React Query is refetching
   useEffect(() => {
-    if (reactQueryFetching) {
-      setIsManualRefetching(true);
-    }
-  }, [reactQueryFetching, isManualRefetching]);
+    setIsManualRefetching(reactQueryFetching);
+  }, [reactQueryFetching]);
 
   const filteredTrades = useMemo(() => {
     if (!trades) return [];
@@ -84,8 +80,7 @@ export const useTradeData = (filters: TradeFilters = {}) => {
       const elapsedTime = Date.now() - startTime;
 
       // If the refetch was too fast, add a delay to ensure animation is visible
-      // Use minimum of 2000ms to coordinate with our animation timing
-      const minimumVisibleTime = 2000;
+      const minimumVisibleTime = 2600;
       if (elapsedTime < minimumVisibleTime) {
         await new Promise(resolve => setTimeout(resolve, minimumVisibleTime - elapsedTime));
       }
