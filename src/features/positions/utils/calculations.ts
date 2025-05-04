@@ -6,14 +6,13 @@ export function calculatePnl({
   exitPrice,
   positionSize,
   commission = 0,
-  leverage = 1,
+  // leverage = 1,
 }: {
   side: TRADE_SIDES;
   entryPrice: number;
   exitPrice: number;
   positionSize: number;
   commission?: number;
-  leverage: number;
 }): number {
   if (!entryPrice || !exitPrice || !positionSize) return 0;
 
@@ -22,9 +21,7 @@ export function calculatePnl({
       ? (exitPrice - entryPrice) * positionSize
       : (entryPrice - exitPrice) * positionSize;
 
-  const leveragedPnL = rawPnL * leverage;
-  const netPnL = leveragedPnL - commission;
-
+  const netPnL = rawPnL - commission;
   return Math.round(netPnL * 100) / 100;
 }
 
@@ -34,14 +31,12 @@ export function calculateRiskPercent({
   stopLoss,
   positionSize,
   deposit,
-  leverage = 1,
 }: {
   side: TRADE_SIDES;
   entryPrice: number;
   stopLoss: number;
   positionSize: number;
   deposit: number;
-  leverage: number;
 }): number {
   if (!entryPrice || !stopLoss || !positionSize || !deposit) return 0;
 

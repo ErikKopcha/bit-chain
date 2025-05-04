@@ -48,7 +48,6 @@ export function createTradeData(data: CreateTradeData): Omit<Trade, 'id'> {
     exitPrice,
     positionSize,
     commission,
-    leverage,
   });
 
   return {
@@ -75,7 +74,6 @@ export function createTradeData(data: CreateTradeData): Omit<Trade, 'id'> {
       stopLoss,
       positionSize,
       deposit,
-      leverage,
     }),
     result: exitPrice
       ? calculatedPnl > 0
