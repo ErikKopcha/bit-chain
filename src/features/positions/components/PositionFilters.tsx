@@ -22,6 +22,7 @@ interface PositionFiltersProps {
   onSideFilterChange: (value: string) => void;
   onCategoryFilterChange: (value: string) => void;
   onRefetch?: () => void;
+  isFetching?: boolean;
 }
 
 const ALL = 'all';
@@ -36,6 +37,7 @@ export function PositionFilters({
   onSideFilterChange,
   onCategoryFilterChange,
   onRefetch,
+  isFetching = false,
 }: PositionFiltersProps) {
   return (
     <div className="flex items-center justify-between w-full gap-4">
@@ -103,8 +105,14 @@ export function PositionFilters({
         </div>
       </div>
       {onRefetch && (
-        <Button variant="outline" size="icon" onClick={onRefetch} className="h-9 w-9">
-          <RefreshCw className="h-4 w-4" />
+        <Button
+          variant="outline"
+          size="icon"
+          onClick={onRefetch}
+          className="h-9 w-9"
+          disabled={isFetching}
+        >
+          <RefreshCw className={`h-4 w-4 ${isFetching ? 'animate-smooth-spin' : ''}`} />
         </Button>
       )}
     </div>

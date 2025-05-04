@@ -115,6 +115,7 @@ export default function PositionsContainer() {
             onCategoryFilterChange={handleCategoryFilterChange}
             onResultFilterChange={handleResultFilterChange}
             onRefetch={refetch}
+            isFetching={isFetching}
           />
         </div>
 

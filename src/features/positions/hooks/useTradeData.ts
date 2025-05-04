@@ -34,8 +34,11 @@ export const useTradeData = (filters: TradeFilters = {}) => {
   useEffect(() => {
     if (reactQueryFetching) {
       setIsManualRefetching(true);
+    } else if (!reactQueryFetching && isManualRefetching) {
+      // Don't immediately hide loading indicator when query finishes
+      // Let the animation play out naturally
     }
-  }, [reactQueryFetching]);
+  }, [reactQueryFetching, isManualRefetching]);
 
   const filteredTrades = useMemo(() => {
     if (!trades) return [];
@@ -74,21 +77,30 @@ export const useTradeData = (filters: TradeFilters = {}) => {
       console.log('Manual refetch started');
       setIsManualRefetching(true);
 
-      // Force a minimum loading time for better UX
+      // Get the current time to calculate overall duration
       const startTime = Date.now();
-      const result = await Promise.all([
-        reactQueryRefetch(),
-        // Add a forced delay to ensure the loading indicator is visible
-        new Promise(resolve => setTimeout(resolve, 1200)),
-      ]);
 
-      return result[0];
+      // Execute the actual refetch
+      const result = await reactQueryRefetch();
+
+      // Calculate how much time has passed
+      const elapsedTime = Date.now() - startTime;
+
+      // If the refetch was too fast, add a delay to ensure animation is visible
+      // Use minimum of 2000ms to coordinate with our animation timing
+      const minimumVisibleTime = 2000;
+      if (elapsedTime < minimumVisibleTime) {
+        await new Promise(resolve => setTimeout(resolve, minimumVisibleTime - elapsedTime));
+      }
+
+      return result;
     } finally {
       console.log('Manual refetch completed');
-      // Use a delay to ensure animation is visible
+      // The loading indicator will naturally fade out due to the TableLoadingBar component's
+      // internal timing logic, so we don't need an extra delay here
       setTimeout(() => {
         setIsManualRefetching(false);
-      }, 500);
+      }, 300);
     }
   }, [reactQueryRefetch]);
 

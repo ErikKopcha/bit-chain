@@ -10,21 +10,21 @@ interface TableLoadingBarProps {
 }
 
 export function TableLoadingBar({ isLoading, className }: TableLoadingBarProps) {
+  // Start with visible false so it doesn't show until explicitly triggered
   const [visible, setVisible] = useState(false);
   const [opacity, setOpacity] = useState(0);
   const initialRender = useRef(true);
   const loadingStartTime = useRef<number | null>(null);
-  const minLoadingDuration = 3500; // Increased for a slower, smoother animation
+  const minLoadingDuration = 2500; // Adjusted for better animation duration
 
   useEffect(() => {
     if (initialRender.current) {
       initialRender.current = false;
+      // Don't automatically show on initial render unless explicitly loading
       if (isLoading) {
         setVisible(true);
         requestAnimationFrame(() => {
-          requestAnimationFrame(() => {
-            setOpacity(1);
-          });
+          setOpacity(1);
         });
         loadingStartTime.current = Date.now();
       }
@@ -34,12 +34,10 @@ export function TableLoadingBar({ isLoading, className }: TableLoadingBarProps) 
     let timerId: NodeJS.Timeout;
 
     if (isLoading) {
-      // Show the loading bar with smooth fade in
+      // Show the loading bar with smooth fade in when refetch is triggered
       setVisible(true);
       requestAnimationFrame(() => {
-        requestAnimationFrame(() => {
-          setOpacity(1);
-        });
+        setOpacity(1);
       });
       loadingStartTime.current = Date.now();
     } else if (!isLoading && loadingStartTime.current !== null) {
@@ -56,7 +54,7 @@ export function TableLoadingBar({ isLoading, className }: TableLoadingBarProps) 
         timerId = setTimeout(() => {
           setVisible(false);
           loadingStartTime.current = null;
-        }, 800); // Increased for smoother fade-out
+        }, 1000);
       }, remainingTime);
     }
 
