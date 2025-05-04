@@ -1,4 +1,4 @@
-import { useCallback, useMemo } from 'react';
+import { useCallback, useEffect, useMemo, useState } from 'react';
 import { DateRange } from 'react-day-picker';
 import {
   useCreatePosition,
@@ -16,10 +16,26 @@ interface TradeFilters {
 }
 
 export const useTradeData = (filters: TradeFilters = {}) => {
-  const { data: trades, refetch, isLoading } = usePositions();
+  const {
+    data: trades,
+    refetch: reactQueryRefetch,
+    isLoading,
+    isFetching: reactQueryFetching,
+  } = usePositions();
+  const [isManualRefetching, setIsManualRefetching] = useState(false);
   const { mutateAsync: createPosition } = useCreatePosition();
   const { mutateAsync: updatePosition } = useUpdatePosition();
   const { mutateAsync: deletePosition } = useDeletePosition();
+
+  // Combine React Query's isFetching with our manual refetching state
+  const isFetching = reactQueryFetching || isManualRefetching;
+
+  // Also trigger the loading state whenever React Query is refetching
+  useEffect(() => {
+    if (reactQueryFetching) {
+      setIsManualRefetching(true);
+    }
+  }, [reactQueryFetching]);
 
   const filteredTrades = useMemo(() => {
     if (!trades) return [];
@@ -51,6 +67,30 @@ export const useTradeData = (filters: TradeFilters = {}) => {
       return true;
     });
   }, [trades, filters]);
+
+  // Custom refetch function that ensures loading state is visible
+  const refetch = useCallback(async () => {
+    try {
+      console.log('Manual refetch started');
+      setIsManualRefetching(true);
+
+      // Force a minimum loading time for better UX
+      const startTime = Date.now();
+      const result = await Promise.all([
+        reactQueryRefetch(),
+        // Add a forced delay to ensure the loading indicator is visible
+        new Promise(resolve => setTimeout(resolve, 1200)),
+      ]);
+
+      return result[0];
+    } finally {
+      console.log('Manual refetch completed');
+      // Use a delay to ensure animation is visible
+      setTimeout(() => {
+        setIsManualRefetching(false);
+      }, 500);
+    }
+  }, [reactQueryRefetch]);
 
   const handleCreatePosition = useCallback(
     async (position: Omit<Trade, 'id' | 'pnl' | 'result' | 'riskPercent'>) => {
@@ -85,6 +125,7 @@ export const useTradeData = (filters: TradeFilters = {}) => {
     handleEditPosition,
     handleDeletePosition,
     isLoading,
+    isFetching,
     refetch,
   };
 };

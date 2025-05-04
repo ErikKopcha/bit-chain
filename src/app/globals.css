@@ -136,3 +136,46 @@ button {
 .min-w-150px {
   min-width: 150px;
 }
+
+@keyframes indeterminate-progress {
+  0% {
+    transform: translateX(-100%);
+    background-image: linear-gradient(
+      90deg,
+      transparent,
+      oklch(0.65 0.15 280),
+      oklch(0.55 0.25 270),
+      transparent
+    );
+  }
+  50% {
+    transform: translateX(0%);
+    background-image: linear-gradient(
+      90deg, 
+      transparent,
+      oklch(0.55 0.25 270),
+      oklch(0.65 0.15 280),
+      transparent
+    );
+  }
+  100% {
+    transform: translateX(100%);
+    background-image: linear-gradient(
+      90deg, 
+      transparent,
+      oklch(0.65 0.15 280),
+      oklch(0.55 0.25 270),
+      transparent
+    );
+  }
+}
+
+.animate-indeterminate-progress {
+  animation: indeterminate-progress 3.5s cubic-bezier(0.3, 0.1, 0.3, 0.9) infinite;
+  background-color: transparent;
+  width: 100%;
+  position: absolute;
+  height: 100%;
+  will-change: transform;
+  backdrop-filter: blur(5px);
+}

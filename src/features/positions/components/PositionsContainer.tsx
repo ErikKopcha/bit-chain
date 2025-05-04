@@ -36,6 +36,7 @@ export default function PositionsContainer() {
     handleDeletePosition: handleDeleteTrade,
     refetch,
     isLoading,
+    isFetching,
   } = useTradeData({
     dateRange,
     sideFilter,
@@ -128,6 +129,7 @@ export default function PositionsContainer() {
             onEdit={handleEditPosition}
             onDelete={onDelete}
             isLoading={isLoading}
+            isFetching={isFetching}
           />
         </div>
       </div>

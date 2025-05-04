@@ -2,6 +2,7 @@
 
 import { Area, AreaChart, CartesianGrid, XAxis, YAxis } from 'recharts';
 
+import { formatCurrency } from '@/app/(protected)/journal/utils/formatters';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import {
   ChartConfig,
@@ -77,6 +78,61 @@ export function ChartAreaInteractive() {
     return dataToUse;
   }, [stats?.pnlData, dateRange]);
 
+  // Calculate min and max PnL values for domain calculation
+  const pnlValues = useMemo(() => {
+    if (!filteredData.length) return { min: 0, max: 0 };
+    const values = filteredData.map(item => item.pnl);
+    return {
+      min: Math.min(...values),
+      max: Math.max(...values),
+    };
+  }, [filteredData]);
+
+  // Calculate appropriate tick values with even intervals
+  const yAxisTicks = useMemo(() => {
+    const min = pnlValues.min < 0 ? Math.floor(pnlValues.min) : 0;
+    const max = pnlValues.max > 0 ? Math.ceil(pnlValues.max) : 10;
+
+    // Set number of ticks (5-7 is usually good for readability)
+    const tickCount = 5;
+
+    // Calculate the interval between ticks
+    const range = max - min;
+    const rawInterval = range / (tickCount - 1);
+
+    // Round the interval to a nice number
+    const magnitude = Math.pow(10, Math.floor(Math.log10(rawInterval)));
+    let interval;
+
+    if (rawInterval / magnitude < 1.5) {
+      interval = magnitude;
+    } else if (rawInterval / magnitude < 3) {
+      interval = 2 * magnitude;
+    } else if (rawInterval / magnitude < 7) {
+      interval = 5 * magnitude;
+    } else {
+      interval = 10 * magnitude;
+    }
+
+    // Generate the ticks, ensuring min and max are included
+    const ticks = [];
+    let currentTick = Math.floor(min / interval) * interval;
+
+    // Add ticks up to max
+    while (currentTick <= max) {
+      ticks.push(currentTick);
+      currentTick += interval;
+    }
+
+    // If the max value wasn't added (due to rounding), add it explicitly
+    const lastTick = ticks.length > 0 ? ticks[ticks.length - 1] : undefined;
+    if (lastTick !== undefined && lastTick < max) {
+      ticks.push(max);
+    }
+
+    return ticks;
+  }, [pnlValues]);
+
   const handleDateRangeChange = (range: DateRange | undefined) => {
     setDateRange(range);
   };
@@ -137,14 +193,38 @@ export function ChartAreaInteractive() {
               }}
             />
             <YAxis
-              domain={[0, 'auto']}
+              domain={[
+                pnlValues.min < 0 ? Math.floor(pnlValues.min) : 0,
+                pnlValues.max > 0 ? Math.ceil(pnlValues.max) : 10,
+              ]}
+              ticks={yAxisTicks}
+              tickCount={6}
+              interval="preserveEnd"
+              tickFormatter={value => {
+                // Use abbreviated currency format for tick values
+                if (Math.abs(value) < 0.01) return '0';
+
+                // Format with abbreviations
+                const absValue = Math.abs(value);
+                let formattedValue;
+
+                if (absValue >= 1000000) {
+                  formattedValue = `$${(value / 1000000).toFixed(1)}M`;
+                } else if (absValue >= 1000) {
+                  formattedValue = `$${(value / 1000).toFixed(1)}k`;
+                } else {
+                  formattedValue = formatCurrency(value);
+                }
+
+                return formattedValue;
+              }}
               tickLine={false}
               axisLine={false}
               tick={{
                 fill: theme === THEME.DARK ? 'rgba(255, 255, 255, 0.9)' : 'rgba(0, 0, 0, 0.8)',
               }}
               tickMargin={8}
-              allowDataOverflow
+              allowDataOverflow={false}
               hide={isMobile}
             />
             <ChartTooltip
@@ -167,7 +247,6 @@ export function ChartAreaInteractive() {
               fill="url(#fillPnl)"
               stroke="var(--color-pnl)"
               strokeWidth={theme === THEME.DARK ? 2.5 : 1.5}
-              baseValue={0}
               connectNulls
             />
           </AreaChart>

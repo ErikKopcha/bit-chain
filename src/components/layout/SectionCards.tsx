@@ -31,7 +31,21 @@ export function SectionCards() {
 
   const totalPnL = stats.pnlData[stats.pnlData.length - 1]?.pnl || 0;
   const prevPnL = stats.pnlData[stats.pnlData.length - 2]?.pnl || 0;
-  const pnlChange = prevPnL ? ((totalPnL - prevPnL) / prevPnL) * 100 : 0;
+
+  // Fixed PnL change calculation to handle negative values correctly
+  let pnlChange = 0;
+  if (prevPnL !== 0) {
+    // For negative to negative comparison, check if getting better or worse
+    if (prevPnL < 0 && totalPnL < 0) {
+      // If both negative, less negative is an improvement
+      pnlChange = ((Math.abs(prevPnL) - Math.abs(totalPnL)) / Math.abs(prevPnL)) * 100;
+    } else {
+      pnlChange = ((totalPnL - prevPnL) / Math.abs(prevPnL)) * 100;
+    }
+  } else if (totalPnL !== 0) {
+    // If previous was 0, calculate based on current value
+    pnlChange = totalPnL > 0 ? 100 : -100;
+  }
 
   const mostTradedCategory = stats.categoriesData[0]?.category || 'N/A';
   const formattedCategory = mostTradedCategory
