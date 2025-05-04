@@ -94,7 +94,7 @@ export function DataTablePagination({
       </Pagination>
 
       {showPageSizeChanger && (
-        <div className="flex items-center gap-2">
+        <div className="flex items-center gap-2 pr-4">
           <span className="text-xs text-muted-foreground">Rows per page</span>
           <Select value={pageSize.toString()} onValueChange={onPageSizeChange}>
             <SelectTrigger className="w-16 text-xs h-8">
