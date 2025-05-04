@@ -207,8 +207,8 @@ export function ChartAreaInteractive() {
             {yAxisDomain[0] < 0 && yAxisDomain[1] > 0 && (
               <ReferenceLine
                 y={0}
-                stroke={theme === THEME.DARK ? 'rgba(255, 255, 255, 0.6)' : 'rgba(0, 0, 0, 0.6)'}
-                strokeWidth={1.2}
+                stroke={theme === THEME.DARK ? 'rgba(255, 255, 255, 0.3)' : 'rgba(0, 0, 0, 0.2)'}
+                strokeWidth={0.8}
                 strokeDasharray="3 4"
                 ifOverflow="extendDomain"
               />
