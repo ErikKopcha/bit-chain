@@ -251,7 +251,7 @@ export function ChartAreaInteractive() {
                   formattedValue = `$${(value / 1000).toFixed(1)}k`;
                 } else {
                   // Don't add decimals for values under 1000
-                  formattedValue = `$${Math.round(value)}`;
+                  formattedValue = `$${value.toFixed(2)}`;
                 }
 
                 return formattedValue;
