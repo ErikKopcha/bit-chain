@@ -4,6 +4,7 @@ import {
   TRADE_RESULTS,
   TRADE_SIDES,
 } from '@/features/positions/types/position';
+import { calculateWinRate } from '@/features/positions/utils/calculations';
 import { format } from 'date-fns';
 
 interface Trade {
@@ -78,21 +79,18 @@ function calculateStats(positions: PositionTrade[]): TradingStats {
     .sort((a, b) => b.trades - a.trades);
 
   // Calculate win/loss data
-  const totalTrades = trades.length;
-  const winningTrades = trades.filter(trade => trade.result === TRADE_RESULTS.WIN).length;
-  const losingTrades = trades.filter(trade => trade.result === TRADE_RESULTS.LOSS).length;
-
+  const winRate = calculateWinRate(trades);
   const winLossData = [
-    { type: 'Winning', percentage: Math.round((winningTrades / totalTrades) * 100) },
-    { type: 'Losing', percentage: Math.round((losingTrades / totalTrades) * 100) },
+    { type: 'Winning', percentage: winRate },
+    { type: 'Losing', percentage: 100 - winRate },
   ];
 
   // Calculate short/long data
   const longTrades = trades.filter(trade => trade.side === TRADE_SIDES.LONG).length;
   const shortTrades = trades.filter(trade => trade.side === TRADE_SIDES.SHORT).length;
   const shortLongData = [
-    { type: 'Long', percentage: Math.round((longTrades / totalTrades) * 100) },
-    { type: 'Short', percentage: Math.round((shortTrades / totalTrades) * 100) },
+    { type: 'Long', percentage: Math.round((longTrades / trades.length) * 100) },
+    { type: 'Short', percentage: Math.round((shortTrades / trades.length) * 100) },
   ];
 
   // Calculate currency distribution
@@ -104,7 +102,7 @@ function calculateStats(positions: PositionTrade[]): TradingStats {
   const currencyData = Array.from(currencyMap.entries())
     .map(([pair, count]) => ({
       pair,
-      percentage: Math.round((count / totalTrades) * 100),
+      percentage: Math.round((count / trades.length) * 100),
     }))
     .sort((a, b) => b.percentage - a.percentage);
 

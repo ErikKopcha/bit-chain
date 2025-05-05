@@ -1,4 +1,4 @@
-import { TRADE_SIDES } from '../types/position';
+import { TRADE_RESULTS, TRADE_SIDES } from '../types/position';
 
 export function calculatePnl({
   side,
@@ -65,4 +65,12 @@ export function calculateInvestment({
   const investment = (entryPrice * positionSize) / leverage;
 
   return Math.round(investment * 100) / 100;
+}
+
+export function calculateWinRate(trades: Array<{ result: TRADE_RESULTS }>): number {
+  const completedTrades = trades.filter(t => t.result !== TRADE_RESULTS.PENDING);
+  if (completedTrades.length === 0) return 0;
+
+  const winningTrades = completedTrades.filter(t => t.result === TRADE_RESULTS.WIN).length;
+  return Math.round((winningTrades / completedTrades.length) * 100);
 }

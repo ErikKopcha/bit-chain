@@ -7,6 +7,8 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select';
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip';
+import { HelpCircle } from 'lucide-react';
 import { UseFormReturn } from 'react-hook-form';
 import { PositionFormValues, TRADE_CATEGORIES_LIST, TRADE_SIDES_LIST } from '../types/position';
 
@@ -94,7 +96,22 @@ export function PositionFormFields({ form }: PositionFormFieldsProps) {
         name="positionSize"
         render={({ field }) => (
           <FormItem>
-            <FormLabel>Position Size</FormLabel>
+            <div className="flex items-center gap-2">
+              <FormLabel>Position Size</FormLabel>
+              <TooltipProvider>
+                <Tooltip>
+                  <TooltipTrigger asChild>
+                    <HelpCircle
+                      className="h-4 w-4 text-muted-foreground cursor-help"
+                      onClick={e => e.stopPropagation()}
+                    />
+                  </TooltipTrigger>
+                  <TooltipContent>
+                    <p>Enter the amount of cryptocurrency you bought (e.g., 0.32 BTC)</p>
+                  </TooltipContent>
+                </Tooltip>
+              </TooltipProvider>
+            </div>
             <FormControl>
               <Input {...field} />
             </FormControl>
@@ -189,7 +206,25 @@ export function PositionFormFields({ form }: PositionFormFieldsProps) {
         name="deposit"
         render={({ field }) => (
           <FormItem>
-            <FormLabel>Total Deposit</FormLabel>
+            <div className="flex items-center gap-2">
+              <FormLabel>Total Deposit</FormLabel>
+              <TooltipProvider>
+                <Tooltip>
+                  <TooltipTrigger asChild>
+                    <HelpCircle
+                      className="h-4 w-4 text-muted-foreground cursor-help"
+                      onClick={e => e.stopPropagation()}
+                    />
+                  </TooltipTrigger>
+                  <TooltipContent>
+                    <p>
+                      Enter your total account deposit to calculate risk percentage relative to stop
+                      loss
+                    </p>
+                  </TooltipContent>
+                </Tooltip>
+              </TooltipProvider>
+            </div>
             <FormControl>
               <Input {...field} />
             </FormControl>

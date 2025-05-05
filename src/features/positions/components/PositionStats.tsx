@@ -1,24 +1,43 @@
 import { formatCurrency } from '@/app/(protected)/journal/utils/formatters';
 import { Trade, TRADE_RESULTS } from '../types/position';
+import { calculateWinRate } from '../utils/calculations';
 
 interface PositionStatsProps {
   trades: Trade[];
 }
 
 export function PositionStats({ trades }: PositionStatsProps) {
-  const stats = {
-    totalTrades: trades.length,
-    winTrades: trades.filter(t => t.result === TRADE_RESULTS.WIN).length,
-    lossTrades: trades.filter(t => t.result === TRADE_RESULTS.LOSS).length,
-    totalPnl: trades.reduce((sum, t) => sum + t.pnl, 0),
-    winRate:
-      trades.length > 0
-        ? (
-            (trades.filter(t => t.result === TRADE_RESULTS.WIN).length / trades.length) *
-            100
-          ).toFixed(2)
-        : '0.00',
-  };
+  const stats = trades.reduce(
+    (acc, trade) => {
+      acc.totalTrades++;
+      acc.totalPnl += trade.pnl;
+
+      if (trade.result === TRADE_RESULTS.WIN) {
+        acc.winTrades++;
+      } else if (trade.result === TRADE_RESULTS.LOSS) {
+        acc.lossTrades++;
+      }
+
+      if (trade.result !== TRADE_RESULTS.PENDING) {
+        acc.completedTrades++;
+        if (trade.result === TRADE_RESULTS.WIN) {
+          acc.completedWinTrades++;
+        }
+      }
+
+      return acc;
+    },
+    {
+      totalTrades: 0,
+      winTrades: 0,
+      lossTrades: 0,
+      totalPnl: 0,
+      completedTrades: 0,
+      completedWinTrades: 0,
+    },
+  );
+
+  const winRate = calculateWinRate(trades);
 
   return (
     <div className="grid grid-cols-1 md:grid-cols-5 gap-4">
@@ -33,8 +52,8 @@ export function PositionStats({ trades }: PositionStatsProps) {
       </div>
       <div className="bg-card p-4 rounded-lg shadow">
         <p className="text-sm font-medium text-muted-foreground">Win Rate</p>
-        <p className="text-2xl font-bold truncate" title={`${stats.winRate}%`}>
-          {stats.winRate}%
+        <p className="text-2xl font-bold truncate" title={`${winRate}%`}>
+          {winRate}%
         </p>
       </div>
       <div className="bg-card p-4 rounded-lg shadow">
