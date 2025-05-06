@@ -9,8 +9,8 @@ import {
 } from '@/components/ui/select';
 import { UseFormReturn } from 'react-hook-form';
 import { PositionFormValues, TRADE_CATEGORIES_LIST, TRADE_SIDES_LIST } from '../types/position';
+import { handleNumericInput } from '../utils/calculations';
 import { HelpTooltip } from './HelpTooltip';
-
 interface PositionFormFieldsProps {
   form: UseFormReturn<PositionFormValues>;
 }
@@ -83,7 +83,13 @@ export function PositionFormFields({ form }: PositionFormFieldsProps) {
           <FormItem>
             <FormLabel>Entry Price</FormLabel>
             <FormControl>
-              <Input {...field} />
+              <Input
+                {...field}
+                onChange={e => {
+                  handleNumericInput(e);
+                  field.onChange(e);
+                }}
+              />
             </FormControl>
             <FormMessage />
           </FormItem>
@@ -100,7 +106,13 @@ export function PositionFormFields({ form }: PositionFormFieldsProps) {
               <HelpTooltip text="Enter the amount of cryptocurrency you bought (e.g., 0.32 BTC)" />
             </div>
             <FormControl>
-              <Input {...field} />
+              <Input
+                {...field}
+                onChange={e => {
+                  handleNumericInput(e);
+                  field.onChange(e);
+                }}
+              />
             </FormControl>
             <FormMessage />
           </FormItem>
@@ -114,7 +126,13 @@ export function PositionFormFields({ form }: PositionFormFieldsProps) {
           <FormItem>
             <FormLabel>Stop Loss</FormLabel>
             <FormControl>
-              <Input {...field} />
+              <Input
+                {...field}
+                onChange={e => {
+                  handleNumericInput(e);
+                  field.onChange(e);
+                }}
+              />
             </FormControl>
             <FormMessage />
           </FormItem>
@@ -128,7 +146,13 @@ export function PositionFormFields({ form }: PositionFormFieldsProps) {
           <FormItem>
             <FormLabel>Leverage</FormLabel>
             <FormControl>
-              <Input type="number" min="1" {...field} />
+              <Input
+                {...field}
+                onChange={e => {
+                  handleNumericInput(e);
+                  field.onChange(e);
+                }}
+              />
             </FormControl>
             <FormMessage />
           </FormItem>
@@ -142,7 +166,13 @@ export function PositionFormFields({ form }: PositionFormFieldsProps) {
           <FormItem>
             <FormLabel>Exit Price</FormLabel>
             <FormControl>
-              <Input {...field} />
+              <Input
+                {...field}
+                onChange={e => {
+                  handleNumericInput(e);
+                  field.onChange(e);
+                }}
+              />
             </FormControl>
             <FormMessage />
           </FormItem>
@@ -156,7 +186,13 @@ export function PositionFormFields({ form }: PositionFormFieldsProps) {
           <FormItem>
             <FormLabel>Commission</FormLabel>
             <FormControl>
-              <Input {...field} />
+              <Input
+                {...field}
+                onChange={e => {
+                  handleNumericInput(e);
+                  field.onChange(e);
+                }}
+              />
             </FormControl>
             <FormMessage />
           </FormItem>
@@ -198,7 +234,13 @@ export function PositionFormFields({ form }: PositionFormFieldsProps) {
               <HelpTooltip text="Enter your total account deposit to calculate risk percentage relative to stop loss" />
             </div>
             <FormControl>
-              <Input {...field} />
+              <Input
+                {...field}
+                onChange={e => {
+                  handleNumericInput(e);
+                  field.onChange(e);
+                }}
+              />
             </FormControl>
             <FormMessage />
           </FormItem>
