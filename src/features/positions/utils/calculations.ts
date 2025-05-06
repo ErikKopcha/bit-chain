@@ -75,18 +75,65 @@ export function calculateWinRate(trades: Array<{ result: TRADE_RESULTS }>): numb
   return Math.round((winningTrades / completedTrades.length) * 100);
 }
 
-export const handleNumericInput = (e: React.ChangeEvent<HTMLInputElement>) => {
-  const value = e.target.value;
-  // Allow only numbers and one decimal point
-  const sanitizedValue = value.replace(/[^\d.]/g, '');
-  // Ensure only one decimal point
-  const parts = sanitizedValue.split('.');
-  if (parts.length > 2) {
-    e.target.value = parts[0] + '.' + parts.slice(1).join('');
-  } else {
-    e.target.value = sanitizedValue;
+export function handleNumericInput(e: React.ChangeEvent<HTMLInputElement>) {
+  const input = e.target;
+  const value = input.value;
+
+  // Allow only digits, the first decimal point, and proper placement of the decimal point
+  let processedValue = '';
+  let hasDecimal = false;
+
+  for (let i = 0; i < value.length; i++) {
+    const char = value.charAt(i);
+
+    // Allow digits
+    if (/\d/.test(char)) {
+      processedValue += char;
+    }
+    // Handle decimal points and commas (convert comma to decimal point)
+    else if ((char === '.' || char === ',') && !hasDecimal) {
+      processedValue += '.';
+      hasDecimal = true;
+    }
+    // Ignore other characters
   }
-};
+
+  // Update input value
+  input.value = processedValue;
+}
+
+export function formatNumberWithSpaces(value: string | number | undefined): string {
+  if (value === undefined || value === null || value === '') return '';
+
+  // Convert to string and handle both comma and dot as decimal separator
+  const stringValue = String(value).replace(/,/g, '.');
+
+  // Split into integer and decimal parts
+  const parts = stringValue.split('.');
+  const integerPart = parts[0] || '0';
+  const decimalPart = parts.length > 1 ? parts[1] : undefined;
+
+  // Format integer part with spaces as thousand separators
+  const formattedInteger = integerPart.replace(/\B(?=(\d{3})+(?!\d))/g, ' ');
+
+  // Return the formatted number
+  return decimalPart ? `${formattedInteger}.${decimalPart}` : formattedInteger;
+}
+
+export function parseFormattedNumber(formattedValue: string): number {
+  if (!formattedValue) return 0;
+
+  // Remove spaces and replace commas with dots
+  const cleanValue = formattedValue.replace(/\s/g, '').replace(/,/g, '.');
+
+  // Handle case when input ends with decimal point (e.g., "22.")
+  if (cleanValue.endsWith('.')) {
+    return parseFloat(cleanValue + '0');
+  }
+
+  // Parse to number
+  return parseFloat(cleanValue);
+}
 
 export type PositionStatus = 'OPEN' | 'CLOSED' | 'IN_PROGRESS';
 
