@@ -1,3 +1,4 @@
+import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip';
 import { ColumnDef } from '@/features/positions/types/position';
 import { Trade } from '@/generated/prisma';
 import {
@@ -124,5 +125,23 @@ export const columns: ColumnDef<Trade>[] = [
         {trade.category}
       </span>
     ),
+  },
+  {
+    key: 'comment',
+    header: 'Comment',
+    className: 'max-w-[100px]',
+    cell: trade =>
+      trade.comment ? (
+        <Tooltip>
+          <TooltipTrigger asChild>
+            <span className="block max-w-[70px] truncate cursor-pointer">{trade.comment}</span>
+          </TooltipTrigger>
+          <TooltipContent side="left">
+            <span className="whitespace-pre-line break-words max-w-xs block">{trade.comment}</span>
+          </TooltipContent>
+        </Tooltip>
+      ) : (
+        '-'
+      ),
   },
 ];

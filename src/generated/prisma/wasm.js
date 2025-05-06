@@ -143,7 +143,8 @@ exports.Prisma.TradeScalarFieldEnum = {
   createdAt: 'createdAt',
   category: 'category',
   deposit: 'deposit',
-  isDemo: 'isDemo'
+  isDemo: 'isDemo',
+  comment: 'comment'
 };
 
 exports.Prisma.SortOrder = {

@@ -47,6 +47,7 @@ export function PositionModal({ position, onSave, onDelete, children }: Position
           category: position.category,
           deposit: position.deposit,
           leverage: position.leverage || 1,
+          comment: position.comment || '',
         }
       : {
           date: new Date(),
@@ -54,6 +55,7 @@ export function PositionModal({ position, onSave, onDelete, children }: Position
           side: TRADE_SIDES.LONG,
           category: TRADE_CATEGORIES.SOLO,
           leverage: 1,
+          comment: '',
         },
   });
 
@@ -73,6 +75,7 @@ export function PositionModal({ position, onSave, onDelete, children }: Position
         result: position?.result || TRADE_RESULTS.PENDING,
         investment: 0,
         id: position?.id || '',
+        comment: values.comment || '',
       });
       setIsOpen(false);
     } catch {
@@ -110,6 +113,7 @@ export function PositionModal({ position, onSave, onDelete, children }: Position
         category: position.category,
         deposit: position.deposit,
         leverage: position.leverage || 1,
+        comment: position.comment,
       });
     } else {
       form.reset();

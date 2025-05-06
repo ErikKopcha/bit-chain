@@ -13,6 +13,7 @@ interface CreateTradeData {
   commission?: number;
   leverage?: number;
   category?: string;
+  comment?: string;
 }
 
 export function createTradeData(data: CreateTradeData): Omit<Trade, 'id'> {
@@ -28,6 +29,7 @@ export function createTradeData(data: CreateTradeData): Omit<Trade, 'id'> {
     commission = 0,
     leverage = 0,
     category = TRADE_CATEGORIES.SOLO,
+    comment = '',
   } = data;
 
   // Validate and convert side
@@ -62,6 +64,7 @@ export function createTradeData(data: CreateTradeData): Omit<Trade, 'id'> {
     commission,
     leverage,
     category: validCategory,
+    comment: comment ?? '',
     investment: calculateInvestment({
       entryPrice,
       positionSize,

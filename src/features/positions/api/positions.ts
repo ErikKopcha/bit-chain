@@ -19,6 +19,7 @@ function mapTradeToPosition(trade: Record<string, unknown>): Trade {
     deposit: (trade.deposit as number) || 0,
     riskPercent: (trade.riskPercent as number) || 0,
     investment: (trade.investment as number) || 0,
+    comment: trade.comment as string | undefined,
   };
 }
 

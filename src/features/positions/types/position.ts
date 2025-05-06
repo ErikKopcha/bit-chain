@@ -53,6 +53,7 @@ export interface Trade {
   investment: number;
   category: TRADE_CATEGORIES;
   deposit: number;
+  comment?: string;
 }
 
 export interface ColumnDef<T> {
@@ -74,6 +75,7 @@ export type PositionFormValues = {
   category: TRADE_CATEGORIES;
   deposit: number;
   leverage?: number;
+  comment?: string;
 };
 
 export const positionSchema = z.object({
@@ -102,5 +104,9 @@ export const positionSchema = z.object({
   leverage: z.preprocess(
     val => (!val ? undefined : Number(val ?? 0)),
     z.number().min(1, 'Leverage must be at least 1').optional(),
+  ),
+  comment: z.preprocess(
+    val => (val === null ? '' : val),
+    z.string().max(255, 'Comment must be less than 255 characters').optional().nullable(),
   ),
 }) as z.ZodType<PositionFormValues>;

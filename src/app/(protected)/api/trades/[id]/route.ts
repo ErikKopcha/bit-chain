@@ -5,7 +5,7 @@ import { getServerSession } from 'next-auth';
 import { NextResponse } from 'next/server';
 
 // PUT /api/trades/[id]
-export async function PUT(request: Request) {
+export async function PUT(request: Request, { params }: { params: { id: string } }) {
   try {
     const session = await getServerSession(authOptions);
     if (!session) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
@@ -20,7 +20,7 @@ export async function PUT(request: Request) {
     const tradeData = createTradeData(data);
 
     const trade = await prisma.trade.update({
-      where: { id: data.id },
+      where: { id: params.id },
       data: { userId: user.id, ...tradeData },
     });
 

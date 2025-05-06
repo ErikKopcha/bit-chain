@@ -1,5 +1,5 @@
 import { useToast } from '@/components/ui/use-toast';
-import { useMutation, useQuery } from '@tanstack/react-query';
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import {
   createPosition,
   deletePosition,
@@ -8,15 +8,25 @@ import {
 } from '../api/positions';
 import { Trade } from '../types/position';
 
-export const usePositions = () => {
-  const getPositions = async () => {
-    const positions = await getPositionsByUserId();
-    return positions;
-  };
+const QUERY_KEY = ['positions'] as const;
 
+const showToast = (
+  toast: ReturnType<typeof useToast>['toast'],
+  title: string,
+  description: string,
+  variant?: 'destructive',
+) => {
+  toast({
+    title,
+    description,
+    variant,
+  });
+};
+
+export const usePositions = () => {
   return useQuery({
-    queryKey: ['positions'],
-    queryFn: getPositions,
+    queryKey: QUERY_KEY,
+    queryFn: getPositionsByUserId,
     staleTime: 1000 * 60 * 5, // 5 minutes
     gcTime: 1000 * 60 * 30, // 30 minutes
   });
@@ -24,78 +34,56 @@ export const usePositions = () => {
 
 export const useCreatePosition = () => {
   const { toast } = useToast();
-
-  const create = async (position: Trade) => {
-    const newPosition = await createPosition(position);
-    return newPosition;
-  };
+  const queryClient = useQueryClient();
 
   return useMutation({
-    mutationFn: create,
-    onSuccess: () => {
-      toast({
-        title: 'Position created',
-        description: 'Your position has been created successfully.',
-      });
+    mutationFn: createPosition,
+    onSuccess: data => {
+      queryClient.setQueryData<Trade[]>(QUERY_KEY, old => [...(old || []), data]);
+      showToast(toast, 'Position created', 'Your position has been created successfully.');
+      return data;
     },
     onError: () => {
-      toast({
-        title: 'Error',
-        description: 'Failed to create position. Please try again.',
-        variant: 'destructive',
-      });
+      showToast(toast, 'Error', 'Failed to create position. Please try again.', 'destructive');
     },
   });
 };
 
 export const useUpdatePosition = () => {
   const { toast } = useToast();
-
-  const update = async (position: Trade) => {
-    const updatedPosition = await updatePosition(position.id, position);
-    return updatedPosition;
-  };
+  const queryClient = useQueryClient();
 
   return useMutation({
-    mutationFn: update,
-    onSuccess: () => {
-      toast({
-        title: 'Position updated',
-        description: 'Your position has been updated successfully.',
-      });
+    mutationFn: ({ id, ...data }: Trade) => updatePosition(id, data),
+    onSuccess: data => {
+      queryClient.setQueryData<Trade[]>(
+        QUERY_KEY,
+        old => old?.map(trade => (trade.id === data.id ? data : trade)) || [],
+      );
+      showToast(toast, 'Position updated', 'Your position has been updated successfully.');
+      return data;
     },
     onError: () => {
-      toast({
-        title: 'Error',
-        description: 'Failed to update position. Please try again.',
-        variant: 'destructive',
-      });
+      showToast(toast, 'Error', 'Failed to update position. Please try again.', 'destructive');
     },
   });
 };
 
 export const useDeletePosition = () => {
   const { toast } = useToast();
-
-  const onDelete = async (position: Trade) => {
-    const deletedPosition = await deletePosition(position.id);
-    return deletedPosition;
-  };
+  const queryClient = useQueryClient();
 
   return useMutation({
-    mutationFn: onDelete,
-    onSuccess: () => {
-      toast({
-        title: 'Position deleted',
-        description: 'Your position has been deleted successfully.',
-      });
+    mutationFn: ({ id }: Pick<Trade, 'id'>) => deletePosition(id),
+    onSuccess: (_, { id }) => {
+      queryClient.setQueryData<Trade[]>(
+        QUERY_KEY,
+        old => old?.filter(trade => trade.id !== id) || [],
+      );
+      showToast(toast, 'Position deleted', 'Your position has been deleted successfully.');
     },
     onError: () => {
-      toast({
-        title: 'Error',
-        description: 'Failed to delete position. Please try again.',
-        variant: 'destructive',
-      });
+      showToast(toast, 'Error', 'Failed to delete position. Please try again.', 'destructive');
     },
   });
 };

@@ -99,27 +99,24 @@ export const useTradeData = (filters: TradeFilters = {}) => {
   const handleCreatePosition = useCallback(
     async (position: Omit<Trade, 'id' | 'pnl' | 'result' | 'riskPercent'>) => {
       const newTrade = await createPosition(position as Trade);
-      await refetch();
       return newTrade;
     },
-    [createPosition, refetch],
+    [createPosition],
   );
 
   const handleEditPosition = useCallback(
     async (position: Partial<Trade>) => {
       const updatedTrade = await updatePosition(position as Trade);
-      await refetch();
       return updatedTrade;
     },
-    [updatePosition, refetch],
+    [updatePosition],
   );
 
   const handleDeletePosition = useCallback(
     async (id: string) => {
       await deletePosition({ id } as Trade);
-      await refetch();
     },
-    [deletePosition, refetch],
+    [deletePosition],
   );
 
   return {

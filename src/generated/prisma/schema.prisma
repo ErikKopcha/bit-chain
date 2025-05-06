@@ -43,6 +43,7 @@ model Trade {
   category     TradeCategory
   deposit      Float
   isDemo       Boolean       @default(false)
+  comment      String?
 }
 
 enum TradeSide {

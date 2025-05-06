@@ -7,6 +7,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select';
+import { Textarea } from '@/components/ui/textarea';
 import { useEffect, useState } from 'react';
 import { UseFormReturn } from 'react-hook-form';
 import { PositionFormValues, TRADE_CATEGORIES_LIST, TRADE_SIDES_LIST } from '../types/position';
@@ -47,7 +48,7 @@ const formatWithSpaces = (value: string): string => {
 export function PositionFormFields({ form }: PositionFormFieldsProps) {
   // Track the raw text input values before parsing to numbers
   const [rawInputs, setRawInputs] = useState<Record<string, string>>({});
-  const [isFocused, setIsFocused] = useState<Record<string, boolean>>({});
+  const [_, setIsFocused] = useState<Record<string, boolean>>({});
 
   // Set initial raw values when form values change
   useEffect(() => {
@@ -419,6 +420,25 @@ export function PositionFormFields({ form }: PositionFormFieldsProps) {
             </FormItem>
           );
         }}
+      />
+
+      <FormField
+        control={form.control}
+        name="comment"
+        render={({ field }) => (
+          <FormItem className="col-span-2">
+            <FormLabel>Comment</FormLabel>
+            <FormControl>
+              <Textarea
+                {...field}
+                placeholder="Add a comment about this trade..."
+                maxLength={255}
+                className="resize-none"
+              />
+            </FormControl>
+            <FormMessage />
+          </FormItem>
+        )}
       />
     </div>
   );
