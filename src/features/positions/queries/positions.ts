@@ -39,7 +39,7 @@ export const useCreatePosition = () => {
   return useMutation({
     mutationFn: createPosition,
     onSuccess: data => {
-      queryClient.setQueryData<Trade[]>(QUERY_KEY, old => [...(old || []), data]);
+      queryClient.setQueryData<Trade[]>(QUERY_KEY, old => [data, ...(old || [])]);
       showToast(toast, 'Position created', 'Your position has been created successfully.');
       return data;
     },

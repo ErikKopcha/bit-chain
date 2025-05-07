@@ -2,10 +2,16 @@ import { authOptions } from '@/features/auth/libs/auth';
 import { createTradeData } from '@/features/positions/utils/trade';
 import { prisma } from '@/lib/prisma';
 import { getServerSession } from 'next-auth';
-import { NextResponse } from 'next/server';
+import { NextRequest, NextResponse } from 'next/server';
+
+type Context = {
+  params: {
+    id: string;
+  };
+};
 
 // PUT /api/trades/[id]
-export async function PUT(request: Request) {
+export async function PUT(request: NextRequest, context: unknown) {
   try {
     const session = await getServerSession(authOptions);
     if (!session) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
@@ -20,7 +26,7 @@ export async function PUT(request: Request) {
     const tradeData = createTradeData(data);
 
     const trade = await prisma.trade.update({
-      where: { id: data.id },
+      where: { id: (context as Context).params.id },
       data: { userId: user.id, ...tradeData },
     });
 
@@ -32,9 +38,9 @@ export async function PUT(request: Request) {
 }
 
 // DELETE /api/trades/[id]
-export async function DELETE(_: Request, { params }: { params: Promise<{ id: string }> }) {
+export async function DELETE(_: NextRequest, context: unknown) {
   try {
-    const { id } = await params;
+    const { id } = (context as Context).params;
 
     const session = await getServerSession(authOptions);
     if (!session) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
@@ -45,24 +51,14 @@ export async function DELETE(_: Request, { params }: { params: Promise<{ id: str
     const user = await prisma.user.findUnique({ where: { email: userEmail } });
     if (!user) return NextResponse.json({ error: 'User not found' }, { status: 404 });
 
-    const trade = await prisma.trade.findUnique({
-      where: { id },
-    });
-
-    if (!trade) {
-      return NextResponse.json({ error: 'Trade not found' }, { status: 404 });
-    }
+    const trade = await prisma.trade.findUnique({ where: { id } });
+    if (!trade) return NextResponse.json({ error: 'Trade not found' }, { status: 404 });
 
     if (trade.userId !== user.id) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
 
-    await prisma.trade.delete({
-      where: {
-        id,
-        userId: user.id,
-      },
-    });
+    await prisma.trade.delete({ where: { id } });
 
     return NextResponse.json({ success: true });
   } catch (error) {
