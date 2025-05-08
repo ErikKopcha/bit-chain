@@ -22,13 +22,22 @@ interface PositionFormFieldsProps {
 const handleDecimalInput = (value: string): string => {
   // Allow only numbers, decimal points, and commas
   const cleanValue = value.replace(/[^\d.,]/g, '');
-  // Replace all commas with dots and ensure only one decimal point
+
+  // If there are multiple commas, treat all but the last one as thousand separators
   const parts = cleanValue.split(/[.,]/);
-  const integerPart = parts[0] || '';
-  if (parts.length > 1) {
-    return integerPart + '.' + parts.slice(1).join('');
+  if (parts.length > 2) {
+    // Join all parts except the last one with dots (for decimal)
+    const integerPart = parts.slice(0, -1).join('');
+    const decimalPart = parts[parts.length - 1];
+    return `${integerPart}.${decimalPart}`;
   }
-  return integerPart;
+
+  // If there's only one separator, use it as decimal point
+  if (parts.length === 2) {
+    return `${parts[0]}.${parts[1]}`;
+  }
+
+  return parts[0] || '';
 };
 
 // Format a numeric string with spaces as thousand separators, preserving decimal part
