@@ -126,9 +126,9 @@ export function CategoryModal({ children }: CategoryModalProps) {
             <p className="mt-2">Loading categories...</p>
           </div>
         ) : categories?.length ? (
-          <div className="border rounded-md overflow-hidden">
+          <div className="border rounded-md overflow-auto max-h-[350px] relative">
             <Table>
-              <TableHeader>
+              <TableHeader className="sticky top-0 bg-background z-10 shadow-sm">
                 <TableRow className="bg-muted">
                   <TableHead>Name</TableHead>
                   <TableHead className="w-[120px] text-right">Actions</TableHead>
