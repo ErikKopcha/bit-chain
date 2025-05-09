@@ -1,0 +1,30 @@
+import { useStore } from '@/store';
+import { useEffect } from 'react';
+
+/**
+ * Hook to synchronize sidebar state between UI component and store
+ * @param isOpen Current open state of the sidebar component
+ * @param setOpen Function to set the open state in the sidebar component
+ */
+export function useSidebarSync(isOpen: boolean, setOpen: (open: boolean) => void) {
+  const { isNavigationOpen, setNavigationOpen } = useStore();
+
+  // Sync from store to component on initial load
+  useEffect(() => {
+    if (isOpen !== isNavigationOpen) {
+      setOpen(isNavigationOpen);
+    }
+  }, []);
+
+  // Update store when component state changes
+  useEffect(() => {
+    if (isOpen !== isNavigationOpen) {
+      setNavigationOpen(isOpen);
+    }
+  }, [isOpen, isNavigationOpen, setNavigationOpen]);
+
+  return {
+    storeIsOpen: isNavigationOpen,
+    setStoreIsOpen: setNavigationOpen,
+  };
+}

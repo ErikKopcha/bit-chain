@@ -29,6 +29,7 @@ interface State {
   // Actions
   setTheme: (theme: THEME) => void;
   toggleNavigation: () => void;
+  setNavigationOpen: (isOpen: boolean) => void;
   setSelectedDateRange: (dateRange?: DateRange) => void;
   setTradeFilters: (filters: Partial<State['tradeFilters']>) => void;
   resetTradeFilters: () => void;
@@ -44,6 +45,7 @@ export const useStore = create<State>()(
       // Actions
       setTheme: theme => set({ theme }),
       toggleNavigation: () => set(state => ({ isNavigationOpen: !state.isNavigationOpen })),
+      setNavigationOpen: isOpen => set({ isNavigationOpen: isOpen }),
       setSelectedDateRange: dateRange => set({ selectedDateRange: dateRange }),
       setTradeFilters: filters =>
         set(state => ({
@@ -53,6 +55,12 @@ export const useStore = create<State>()(
     }),
     {
       name: 'bitchain-storage',
+      partialize: state => ({
+        theme: state.theme,
+        isNavigationOpen: state.isNavigationOpen,
+        selectedDateRange: state.selectedDateRange,
+        tradeFilters: state.tradeFilters,
+      }),
     },
   ),
 );

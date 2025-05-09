@@ -39,6 +39,7 @@ const data = {
 
 export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
   const { data: session } = useSession();
+
   const email = session?.user?.email;
 
   if (email) {

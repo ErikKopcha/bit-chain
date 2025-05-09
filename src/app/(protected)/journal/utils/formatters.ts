@@ -26,9 +26,7 @@ export const getCategoryColorClass = (
     'bg-purple-100 dark:bg-transparent text-purple-800 dark:text-white border-purple-200 dark:border dark:border-zinc-700';
 
   // Default color for null or undefined categories
-  if (!category) return defaultColor;
-
-  if (id && defaultId) return purpleColor;
+  if (!category || id === defaultId) return defaultColor;
 
   // Set fixed colors for specific categories
   switch (category.toLowerCase()) {

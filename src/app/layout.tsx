@@ -6,6 +6,7 @@ import { QueryProvider } from '@/providers/QueryProvider';
 import { ThemeProvider } from '@/providers/ThemeProvider';
 import { SessionProvider } from 'next-auth/react';
 import { Geist, Geist_Mono } from 'next/font/google';
+import '../styles/custom-scrollbar.css';
 import './globals.css';
 
 const geistSans = Geist({
