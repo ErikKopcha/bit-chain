@@ -29,9 +29,19 @@ export async function GET() {
     const trades = await prisma.trade.findMany({
       where: { userId: user.id },
       orderBy: { date: 'desc' },
+      include: {
+        category: {
+          select: {
+            id: true,
+            name: true,
+          },
+        },
+      },
     });
 
-    return NextResponse.json({ trades });
+    const formattedTrades = trades.map(({ categoryId, ...rest }) => rest);
+
+    return NextResponse.json({ trades: formattedTrades });
   } catch (error) {
     console.error('Error fetching trades:', error);
     return NextResponse.json({ error: 'Failed to fetch trades' }, { status: 500 });
@@ -63,16 +73,109 @@ export async function POST(request: Request) {
     const data = await request.json();
 
     try {
-      const tradeData = createTradeData(data);
+      let categoryId;
+
+      if (data.categoryId) {
+        const category = await prisma.category.findFirst({
+          where: {
+            id: data.categoryId,
+            userId: user.id,
+          },
+        });
+
+        if (!category) {
+          return NextResponse.json(
+            { error: 'Category not found or does not belong to user' },
+            { status: 400 },
+          );
+        }
+
+        categoryId = category.id;
+      } else if (data.categoryName) {
+        const category = await prisma.category.findFirst({
+          where: {
+            name: data.categoryName,
+            userId: user.id,
+          },
+        });
+
+        if (!category) {
+          const defaultCategory = await prisma.category.findFirst({
+            where: {
+              name: user.defaultCategory,
+              userId: user.id,
+            },
+          });
+
+          if (!defaultCategory) {
+            const soloCategory = await prisma.category.findFirst({
+              where: {
+                name: 'solo',
+                userId: user.id,
+              },
+            });
+
+            if (!soloCategory) {
+              return NextResponse.json({ error: 'No valid category found' }, { status: 500 });
+            }
+
+            categoryId = soloCategory.id;
+          } else {
+            categoryId = defaultCategory.id;
+          }
+        } else {
+          categoryId = category.id;
+        }
+      } else {
+        const defaultCategory = await prisma.category.findFirst({
+          where: {
+            name: user.defaultCategory,
+            userId: user.id,
+          },
+        });
+
+        if (!defaultCategory) {
+          const soloCategory = await prisma.category.findFirst({
+            where: {
+              name: 'solo',
+              userId: user.id,
+            },
+          });
+
+          if (!soloCategory) {
+            return NextResponse.json({ error: 'No valid category found' }, { status: 500 });
+          }
+
+          categoryId = soloCategory.id;
+        } else {
+          categoryId = defaultCategory.id;
+        }
+      }
+
+      const { categoryId: cId, categoryName, ...tradeData } = data;
+
+      const parsedTradeData = createTradeData(tradeData);
+      const { category, ...cleanTradeData } = parsedTradeData;
 
       const trade = await prisma.trade.create({
         data: {
           userId: user.id,
-          ...tradeData,
+          categoryId,
+          ...cleanTradeData,
+        },
+        include: {
+          category: {
+            select: {
+              id: true,
+              name: true,
+            },
+          },
         },
       });
 
-      return NextResponse.json({ trade });
+      const { categoryId: createdCategoryId, ...tradeWithoutCategoryId } = trade;
+
+      return NextResponse.json({ trade: tradeWithoutCategoryId });
     } catch (error) {
       console.error('Error in trade creation process:', error);
       if (error instanceof Error) {

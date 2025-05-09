@@ -16,7 +16,7 @@ export function CategoryChart() {
     return [...stats.categoriesData]
       .sort((a, b) => b.trades - a.trades)
       .map(entry => ({
-        name: entry.category,
+        name: typeof entry.category === 'object' ? entry.category.name : String(entry.category),
         value: entry.trades,
       }));
   }, [stats?.categoriesData]);
@@ -53,7 +53,11 @@ export function CategoryChart() {
       footer={
         <div className="text-sm text-muted-foreground">
           Most traded category:{' '}
-          <span className="font-medium">{mostTradedCategory?.category || 'None'}</span>
+          <span className="font-medium">
+            {typeof mostTradedCategory?.category === 'object'
+              ? mostTradedCategory?.category?.name
+              : mostTradedCategory?.category || 'None'}
+          </span>
           {mostTradedCategory && <span> ({mostTradedPercentage}% of trades)</span>}
         </div>
       }

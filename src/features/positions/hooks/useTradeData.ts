@@ -51,7 +51,7 @@ export const useTradeData = (filters: TradeFilters = {}) => {
       }
 
       // Category filter
-      if (filters.categoryFilter && trade.category !== filters.categoryFilter) {
+      if (filters.categoryFilter && trade.category.name !== filters.categoryFilter) {
         return false;
       }
 

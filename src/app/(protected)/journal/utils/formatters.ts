@@ -1,4 +1,4 @@
-import { TRADE_CATEGORIES, TRADE_RESULTS, TRADE_SIDES } from '@/features/positions/types/position';
+import { TRADE_RESULTS, TRADE_SIDES } from '@/features/positions/types/position';
 
 export const formatDate = (date: Date): string => {
   return date.toLocaleDateString('ua-UA', {
@@ -15,20 +15,35 @@ export const formatCurrency = (value: number): string => {
   }).format(value);
 };
 
-export const getCategoryColorClass = (category: string): string => {
-  switch (category) {
-    case TRADE_CATEGORIES.SOLO:
-      return 'bg-purple-100 dark:bg-transparent text-purple-800 dark:text-white border-purple-200 dark:border dark:border-zinc-700';
-    case TRADE_CATEGORIES.RADAR:
-    case TRADE_CATEGORIES.EVEREST:
+export const getCategoryColorClass = (
+  category: string | null | undefined,
+  id: string,
+  defaultId: string,
+): string => {
+  const defaultColor =
+    'bg-gray-100 dark:bg-transparent text-gray-800 dark:text-white border-gray-200 dark:border dark:border-zinc-700';
+  const purpleColor =
+    'bg-purple-100 dark:bg-transparent text-purple-800 dark:text-white border-purple-200 dark:border dark:border-zinc-700';
+
+  // Default color for null or undefined categories
+  if (!category) return defaultColor;
+
+  if (id && defaultId) return purpleColor;
+
+  // Set fixed colors for specific categories
+  switch (category.toLowerCase()) {
+    case 'solo':
+      return purpleColor;
+    case 'radar':
+    case 'everest':
       return 'bg-blue-100 dark:bg-transparent text-blue-800 dark:text-white border-blue-200 dark:border dark:border-zinc-700';
-    case TRADE_CATEGORIES.CRYPTONITE_RADAR:
-    case TRADE_CATEGORIES.CRYPTONITE_EVEREST:
+    case 'cryptonite_radar':
+    case 'cryptonite_everest':
       return 'bg-cyan-100 dark:bg-transparent text-cyan-800 dark:text-white border-cyan-200 dark:border dark:border-zinc-700';
-    case TRADE_CATEGORIES.HUMSTER:
+    case 'humster':
       return 'bg-amber-100 dark:bg-transparent text-amber-800 dark:text-white border-amber-200 dark:border dark:border-zinc-700';
     default:
-      return 'bg-gray-100 dark:bg-transparent text-gray-800 dark:text-white border-gray-200 dark:border dark:border-zinc-700';
+      return defaultColor;
   }
 };
 

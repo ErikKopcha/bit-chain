@@ -19,18 +19,29 @@ interface Trade {
 
 interface TradingStats {
   pnlData: Array<{ date: string; pnl: number }>;
-  categoriesData: Array<{ category: string; trades: number }>;
+  categoriesData: Array<{
+    category: string | { id?: string; name: string };
+    trades: number;
+  }>;
   winLossData: Array<{ type: string; percentage: number }>;
   shortLongData: Array<{ type: string; percentage: number }>;
   currencyData: Array<{ pair: string; percentage: number }>;
 }
 
 function mapPositionToTrade(position: PositionTrade): Trade {
+  // Handle category which can be either a string or an object with name property
+  let categoryName = '';
+  if (typeof position.category === 'object' && position.category !== null) {
+    categoryName = (position.category as { name: string }).name || '';
+  } else if (position.category) {
+    categoryName = String(position.category);
+  }
+
   return {
     id: position.id,
     date: position.date.toISOString(),
     pnl: position.pnl,
-    category: position.category,
+    category: categoryName,
     side: position.side,
     result: position.result,
     symbol: position.symbol,

@@ -19,6 +19,11 @@ export type PrismaPromise<T> = $Public.PrismaPromise<T>
  */
 export type User = $Result.DefaultSelection<Prisma.$UserPayload>
 /**
+ * Model Category
+ * 
+ */
+export type Category = $Result.DefaultSelection<Prisma.$CategoryPayload>
+/**
  * Model Trade
  * 
  */
@@ -204,6 +209,16 @@ export class PrismaClient<
     * ```
     */
   get user(): Prisma.UserDelegate<ExtArgs, ClientOptions>;
+
+  /**
+   * `prisma.category`: Exposes CRUD operations for the **Category** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more Categories
+    * const categories = await prisma.category.findMany()
+    * ```
+    */
+  get category(): Prisma.CategoryDelegate<ExtArgs, ClientOptions>;
 
   /**
    * `prisma.trade`: Exposes CRUD operations for the **Trade** model.
@@ -655,6 +670,7 @@ export namespace Prisma {
 
   export const ModelName: {
     User: 'User',
+    Category: 'Category',
     Trade: 'Trade'
   };
 
@@ -674,7 +690,7 @@ export namespace Prisma {
       omit: GlobalOmitOptions
     }
     meta: {
-      modelProps: "user" | "trade"
+      modelProps: "user" | "category" | "trade"
       txIsolationLevel: Prisma.TransactionIsolationLevel
     }
     model: {
@@ -749,6 +765,80 @@ export namespace Prisma {
           count: {
             args: Prisma.UserCountArgs<ExtArgs>
             result: $Utils.Optional<UserCountAggregateOutputType> | number
+          }
+        }
+      }
+      Category: {
+        payload: Prisma.$CategoryPayload<ExtArgs>
+        fields: Prisma.CategoryFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.CategoryFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$CategoryPayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.CategoryFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$CategoryPayload>
+          }
+          findFirst: {
+            args: Prisma.CategoryFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$CategoryPayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.CategoryFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$CategoryPayload>
+          }
+          findMany: {
+            args: Prisma.CategoryFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$CategoryPayload>[]
+          }
+          create: {
+            args: Prisma.CategoryCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$CategoryPayload>
+          }
+          createMany: {
+            args: Prisma.CategoryCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.CategoryCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$CategoryPayload>[]
+          }
+          delete: {
+            args: Prisma.CategoryDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$CategoryPayload>
+          }
+          update: {
+            args: Prisma.CategoryUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$CategoryPayload>
+          }
+          deleteMany: {
+            args: Prisma.CategoryDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.CategoryUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateManyAndReturn: {
+            args: Prisma.CategoryUpdateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$CategoryPayload>[]
+          }
+          upsert: {
+            args: Prisma.CategoryUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$CategoryPayload>
+          }
+          aggregate: {
+            args: Prisma.CategoryAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateCategory>
+          }
+          groupBy: {
+            args: Prisma.CategoryGroupByArgs<ExtArgs>
+            result: $Utils.Optional<CategoryGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.CategoryCountArgs<ExtArgs>
+            result: $Utils.Optional<CategoryCountAggregateOutputType> | number
           }
         }
       }
@@ -911,6 +1001,7 @@ export namespace Prisma {
   }
   export type GlobalOmitConfig = {
     user?: UserOmit
+    category?: CategoryOmit
     trade?: TradeOmit
   }
 
@@ -1007,10 +1098,12 @@ export namespace Prisma {
 
   export type UserCountOutputType = {
     trades: number
+    categories: number
   }
 
   export type UserCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     trades?: boolean | UserCountOutputTypeCountTradesArgs
+    categories?: boolean | UserCountOutputTypeCountCategoriesArgs
   }
 
   // Custom InputTypes
@@ -1028,6 +1121,44 @@ export namespace Prisma {
    * UserCountOutputType without action
    */
   export type UserCountOutputTypeCountTradesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: TradeWhereInput
+  }
+
+  /**
+   * UserCountOutputType without action
+   */
+  export type UserCountOutputTypeCountCategoriesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: CategoryWhereInput
+  }
+
+
+  /**
+   * Count Type CategoryCountOutputType
+   */
+
+  export type CategoryCountOutputType = {
+    trades: number
+  }
+
+  export type CategoryCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    trades?: boolean | CategoryCountOutputTypeCountTradesArgs
+  }
+
+  // Custom InputTypes
+  /**
+   * CategoryCountOutputType without action
+   */
+  export type CategoryCountOutputTypeDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the CategoryCountOutputType
+     */
+    select?: CategoryCountOutputTypeSelect<ExtArgs> | null
+  }
+
+  /**
+   * CategoryCountOutputType without action
+   */
+  export type CategoryCountOutputTypeCountTradesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     where?: TradeWhereInput
   }
 
@@ -1051,6 +1182,7 @@ export namespace Prisma {
     email: string | null
     password: string | null
     createdAt: Date | null
+    defaultCategory: string | null
   }
 
   export type UserMaxAggregateOutputType = {
@@ -1058,6 +1190,7 @@ export namespace Prisma {
     email: string | null
     password: string | null
     createdAt: Date | null
+    defaultCategory: string | null
   }
 
   export type UserCountAggregateOutputType = {
@@ -1065,6 +1198,7 @@ export namespace Prisma {
     email: number
     password: number
     createdAt: number
+    defaultCategory: number
     _all: number
   }
 
@@ -1074,6 +1208,7 @@ export namespace Prisma {
     email?: true
     password?: true
     createdAt?: true
+    defaultCategory?: true
   }
 
   export type UserMaxAggregateInputType = {
@@ -1081,6 +1216,7 @@ export namespace Prisma {
     email?: true
     password?: true
     createdAt?: true
+    defaultCategory?: true
   }
 
   export type UserCountAggregateInputType = {
@@ -1088,6 +1224,7 @@ export namespace Prisma {
     email?: true
     password?: true
     createdAt?: true
+    defaultCategory?: true
     _all?: true
   }
 
@@ -1168,6 +1305,7 @@ export namespace Prisma {
     email: string
     password: string
     createdAt: Date
+    defaultCategory: string
     _count: UserCountAggregateOutputType | null
     _min: UserMinAggregateOutputType | null
     _max: UserMaxAggregateOutputType | null
@@ -1192,7 +1330,9 @@ export namespace Prisma {
     email?: boolean
     password?: boolean
     createdAt?: boolean
+    defaultCategory?: boolean
     trades?: boolean | User$tradesArgs<ExtArgs>
+    categories?: boolean | User$categoriesArgs<ExtArgs>
     _count?: boolean | UserCountOutputTypeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["user"]>
 
@@ -1201,6 +1341,7 @@ export namespace Prisma {
     email?: boolean
     password?: boolean
     createdAt?: boolean
+    defaultCategory?: boolean
   }, ExtArgs["result"]["user"]>
 
   export type UserSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
@@ -1208,6 +1349,7 @@ export namespace Prisma {
     email?: boolean
     password?: boolean
     createdAt?: boolean
+    defaultCategory?: boolean
   }, ExtArgs["result"]["user"]>
 
   export type UserSelectScalar = {
@@ -1215,11 +1357,13 @@ export namespace Prisma {
     email?: boolean
     password?: boolean
     createdAt?: boolean
+    defaultCategory?: boolean
   }
 
-  export type UserOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "email" | "password" | "createdAt", ExtArgs["result"]["user"]>
+  export type UserOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "email" | "password" | "createdAt" | "defaultCategory", ExtArgs["result"]["user"]>
   export type UserInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     trades?: boolean | User$tradesArgs<ExtArgs>
+    categories?: boolean | User$categoriesArgs<ExtArgs>
     _count?: boolean | UserCountOutputTypeDefaultArgs<ExtArgs>
   }
   export type UserIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {}
@@ -1229,12 +1373,14 @@ export namespace Prisma {
     name: "User"
     objects: {
       trades: Prisma.$TradePayload<ExtArgs>[]
+      categories: Prisma.$CategoryPayload<ExtArgs>[]
     }
     scalars: $Extensions.GetPayloadResult<{
       id: string
       email: string
       password: string
       createdAt: Date
+      defaultCategory: string
     }, ExtArgs["result"]["user"]>
     composites: {}
   }
@@ -1630,6 +1776,7 @@ export namespace Prisma {
   export interface Prisma__UserClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
     readonly [Symbol.toStringTag]: "PrismaPromise"
     trades<T extends User$tradesArgs<ExtArgs> = {}>(args?: Subset<T, User$tradesArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$TradePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    categories<T extends User$categoriesArgs<ExtArgs> = {}>(args?: Subset<T, User$categoriesArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$CategoryPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -1663,6 +1810,7 @@ export namespace Prisma {
     readonly email: FieldRef<"User", 'String'>
     readonly password: FieldRef<"User", 'String'>
     readonly createdAt: FieldRef<"User", 'DateTime'>
+    readonly defaultCategory: FieldRef<"User", 'String'>
   }
     
 
@@ -2075,6 +2223,30 @@ export namespace Prisma {
   }
 
   /**
+   * User.categories
+   */
+  export type User$categoriesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Category
+     */
+    select?: CategorySelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Category
+     */
+    omit?: CategoryOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: CategoryInclude<ExtArgs> | null
+    where?: CategoryWhereInput
+    orderBy?: CategoryOrderByWithRelationInput | CategoryOrderByWithRelationInput[]
+    cursor?: CategoryWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: CategoryScalarFieldEnum | CategoryScalarFieldEnum[]
+  }
+
+  /**
    * User without action
    */
   export type UserDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -2090,6 +2262,1081 @@ export namespace Prisma {
      * Choose, which related nodes to fetch as well
      */
     include?: UserInclude<ExtArgs> | null
+  }
+
+
+  /**
+   * Model Category
+   */
+
+  export type AggregateCategory = {
+    _count: CategoryCountAggregateOutputType | null
+    _min: CategoryMinAggregateOutputType | null
+    _max: CategoryMaxAggregateOutputType | null
+  }
+
+  export type CategoryMinAggregateOutputType = {
+    id: string | null
+    name: string | null
+    userId: string | null
+    createdAt: Date | null
+  }
+
+  export type CategoryMaxAggregateOutputType = {
+    id: string | null
+    name: string | null
+    userId: string | null
+    createdAt: Date | null
+  }
+
+  export type CategoryCountAggregateOutputType = {
+    id: number
+    name: number
+    userId: number
+    createdAt: number
+    _all: number
+  }
+
+
+  export type CategoryMinAggregateInputType = {
+    id?: true
+    name?: true
+    userId?: true
+    createdAt?: true
+  }
+
+  export type CategoryMaxAggregateInputType = {
+    id?: true
+    name?: true
+    userId?: true
+    createdAt?: true
+  }
+
+  export type CategoryCountAggregateInputType = {
+    id?: true
+    name?: true
+    userId?: true
+    createdAt?: true
+    _all?: true
+  }
+
+  export type CategoryAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which Category to aggregate.
+     */
+    where?: CategoryWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of Categories to fetch.
+     */
+    orderBy?: CategoryOrderByWithRelationInput | CategoryOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: CategoryWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` Categories from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` Categories.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned Categories
+    **/
+    _count?: true | CategoryCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: CategoryMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: CategoryMaxAggregateInputType
+  }
+
+  export type GetCategoryAggregateType<T extends CategoryAggregateArgs> = {
+        [P in keyof T & keyof AggregateCategory]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateCategory[P]>
+      : GetScalarType<T[P], AggregateCategory[P]>
+  }
+
+
+
+
+  export type CategoryGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: CategoryWhereInput
+    orderBy?: CategoryOrderByWithAggregationInput | CategoryOrderByWithAggregationInput[]
+    by: CategoryScalarFieldEnum[] | CategoryScalarFieldEnum
+    having?: CategoryScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: CategoryCountAggregateInputType | true
+    _min?: CategoryMinAggregateInputType
+    _max?: CategoryMaxAggregateInputType
+  }
+
+  export type CategoryGroupByOutputType = {
+    id: string
+    name: string
+    userId: string
+    createdAt: Date
+    _count: CategoryCountAggregateOutputType | null
+    _min: CategoryMinAggregateOutputType | null
+    _max: CategoryMaxAggregateOutputType | null
+  }
+
+  type GetCategoryGroupByPayload<T extends CategoryGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<CategoryGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof CategoryGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], CategoryGroupByOutputType[P]>
+            : GetScalarType<T[P], CategoryGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type CategorySelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    name?: boolean
+    userId?: boolean
+    createdAt?: boolean
+    user?: boolean | UserDefaultArgs<ExtArgs>
+    trades?: boolean | Category$tradesArgs<ExtArgs>
+    _count?: boolean | CategoryCountOutputTypeDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["category"]>
+
+  export type CategorySelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    name?: boolean
+    userId?: boolean
+    createdAt?: boolean
+    user?: boolean | UserDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["category"]>
+
+  export type CategorySelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    name?: boolean
+    userId?: boolean
+    createdAt?: boolean
+    user?: boolean | UserDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["category"]>
+
+  export type CategorySelectScalar = {
+    id?: boolean
+    name?: boolean
+    userId?: boolean
+    createdAt?: boolean
+  }
+
+  export type CategoryOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "name" | "userId" | "createdAt", ExtArgs["result"]["category"]>
+  export type CategoryInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    user?: boolean | UserDefaultArgs<ExtArgs>
+    trades?: boolean | Category$tradesArgs<ExtArgs>
+    _count?: boolean | CategoryCountOutputTypeDefaultArgs<ExtArgs>
+  }
+  export type CategoryIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    user?: boolean | UserDefaultArgs<ExtArgs>
+  }
+  export type CategoryIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    user?: boolean | UserDefaultArgs<ExtArgs>
+  }
+
+  export type $CategoryPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "Category"
+    objects: {
+      user: Prisma.$UserPayload<ExtArgs>
+      trades: Prisma.$TradePayload<ExtArgs>[]
+    }
+    scalars: $Extensions.GetPayloadResult<{
+      id: string
+      name: string
+      userId: string
+      createdAt: Date
+    }, ExtArgs["result"]["category"]>
+    composites: {}
+  }
+
+  type CategoryGetPayload<S extends boolean | null | undefined | CategoryDefaultArgs> = $Result.GetResult<Prisma.$CategoryPayload, S>
+
+  type CategoryCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
+    Omit<CategoryFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
+      select?: CategoryCountAggregateInputType | true
+    }
+
+  export interface CategoryDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['Category'], meta: { name: 'Category' } }
+    /**
+     * Find zero or one Category that matches the filter.
+     * @param {CategoryFindUniqueArgs} args - Arguments to find a Category
+     * @example
+     * // Get one Category
+     * const category = await prisma.category.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends CategoryFindUniqueArgs>(args: SelectSubset<T, CategoryFindUniqueArgs<ExtArgs>>): Prisma__CategoryClient<$Result.GetResult<Prisma.$CategoryPayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find one Category that matches the filter or throw an error with `error.code='P2025'`
+     * if no matches were found.
+     * @param {CategoryFindUniqueOrThrowArgs} args - Arguments to find a Category
+     * @example
+     * // Get one Category
+     * const category = await prisma.category.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends CategoryFindUniqueOrThrowArgs>(args: SelectSubset<T, CategoryFindUniqueOrThrowArgs<ExtArgs>>): Prisma__CategoryClient<$Result.GetResult<Prisma.$CategoryPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first Category that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {CategoryFindFirstArgs} args - Arguments to find a Category
+     * @example
+     * // Get one Category
+     * const category = await prisma.category.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends CategoryFindFirstArgs>(args?: SelectSubset<T, CategoryFindFirstArgs<ExtArgs>>): Prisma__CategoryClient<$Result.GetResult<Prisma.$CategoryPayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first Category that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {CategoryFindFirstOrThrowArgs} args - Arguments to find a Category
+     * @example
+     * // Get one Category
+     * const category = await prisma.category.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends CategoryFindFirstOrThrowArgs>(args?: SelectSubset<T, CategoryFindFirstOrThrowArgs<ExtArgs>>): Prisma__CategoryClient<$Result.GetResult<Prisma.$CategoryPayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find zero or more Categories that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {CategoryFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all Categories
+     * const categories = await prisma.category.findMany()
+     * 
+     * // Get first 10 Categories
+     * const categories = await prisma.category.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const categoryWithIdOnly = await prisma.category.findMany({ select: { id: true } })
+     * 
+     */
+    findMany<T extends CategoryFindManyArgs>(args?: SelectSubset<T, CategoryFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$CategoryPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
+
+    /**
+     * Create a Category.
+     * @param {CategoryCreateArgs} args - Arguments to create a Category.
+     * @example
+     * // Create one Category
+     * const Category = await prisma.category.create({
+     *   data: {
+     *     // ... data to create a Category
+     *   }
+     * })
+     * 
+     */
+    create<T extends CategoryCreateArgs>(args: SelectSubset<T, CategoryCreateArgs<ExtArgs>>): Prisma__CategoryClient<$Result.GetResult<Prisma.$CategoryPayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Create many Categories.
+     * @param {CategoryCreateManyArgs} args - Arguments to create many Categories.
+     * @example
+     * // Create many Categories
+     * const category = await prisma.category.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends CategoryCreateManyArgs>(args?: SelectSubset<T, CategoryCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many Categories and returns the data saved in the database.
+     * @param {CategoryCreateManyAndReturnArgs} args - Arguments to create many Categories.
+     * @example
+     * // Create many Categories
+     * const category = await prisma.category.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many Categories and only return the `id`
+     * const categoryWithIdOnly = await prisma.category.createManyAndReturn({
+     *   select: { id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends CategoryCreateManyAndReturnArgs>(args?: SelectSubset<T, CategoryCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$CategoryPayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Delete a Category.
+     * @param {CategoryDeleteArgs} args - Arguments to delete one Category.
+     * @example
+     * // Delete one Category
+     * const Category = await prisma.category.delete({
+     *   where: {
+     *     // ... filter to delete one Category
+     *   }
+     * })
+     * 
+     */
+    delete<T extends CategoryDeleteArgs>(args: SelectSubset<T, CategoryDeleteArgs<ExtArgs>>): Prisma__CategoryClient<$Result.GetResult<Prisma.$CategoryPayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Update one Category.
+     * @param {CategoryUpdateArgs} args - Arguments to update one Category.
+     * @example
+     * // Update one Category
+     * const category = await prisma.category.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends CategoryUpdateArgs>(args: SelectSubset<T, CategoryUpdateArgs<ExtArgs>>): Prisma__CategoryClient<$Result.GetResult<Prisma.$CategoryPayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Delete zero or more Categories.
+     * @param {CategoryDeleteManyArgs} args - Arguments to filter Categories to delete.
+     * @example
+     * // Delete a few Categories
+     * const { count } = await prisma.category.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends CategoryDeleteManyArgs>(args?: SelectSubset<T, CategoryDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more Categories.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {CategoryUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many Categories
+     * const category = await prisma.category.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends CategoryUpdateManyArgs>(args: SelectSubset<T, CategoryUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more Categories and returns the data updated in the database.
+     * @param {CategoryUpdateManyAndReturnArgs} args - Arguments to update many Categories.
+     * @example
+     * // Update many Categories
+     * const category = await prisma.category.updateManyAndReturn({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Update zero or more Categories and only return the `id`
+     * const categoryWithIdOnly = await prisma.category.updateManyAndReturn({
+     *   select: { id: true },
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    updateManyAndReturn<T extends CategoryUpdateManyAndReturnArgs>(args: SelectSubset<T, CategoryUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$CategoryPayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Create or update one Category.
+     * @param {CategoryUpsertArgs} args - Arguments to update or create a Category.
+     * @example
+     * // Update or create a Category
+     * const category = await prisma.category.upsert({
+     *   create: {
+     *     // ... data to create a Category
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the Category we want to update
+     *   }
+     * })
+     */
+    upsert<T extends CategoryUpsertArgs>(args: SelectSubset<T, CategoryUpsertArgs<ExtArgs>>): Prisma__CategoryClient<$Result.GetResult<Prisma.$CategoryPayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+
+    /**
+     * Count the number of Categories.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {CategoryCountArgs} args - Arguments to filter Categories to count.
+     * @example
+     * // Count the number of Categories
+     * const count = await prisma.category.count({
+     *   where: {
+     *     // ... the filter for the Categories we want to count
+     *   }
+     * })
+    **/
+    count<T extends CategoryCountArgs>(
+      args?: Subset<T, CategoryCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], CategoryCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a Category.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {CategoryAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends CategoryAggregateArgs>(args: Subset<T, CategoryAggregateArgs>): Prisma.PrismaPromise<GetCategoryAggregateType<T>>
+
+    /**
+     * Group by Category.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {CategoryGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends CategoryGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: CategoryGroupByArgs['orderBy'] }
+        : { orderBy?: CategoryGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, CategoryGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetCategoryGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the Category model
+   */
+  readonly fields: CategoryFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for Category.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__CategoryClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    user<T extends UserDefaultArgs<ExtArgs> = {}>(args?: Subset<T, UserDefaultArgs<ExtArgs>>): Prisma__UserClient<$Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    trades<T extends Category$tradesArgs<ExtArgs> = {}>(args?: Subset<T, Category$tradesArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$TradePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the Category model
+   */
+  interface CategoryFieldRefs {
+    readonly id: FieldRef<"Category", 'String'>
+    readonly name: FieldRef<"Category", 'String'>
+    readonly userId: FieldRef<"Category", 'String'>
+    readonly createdAt: FieldRef<"Category", 'DateTime'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * Category findUnique
+   */
+  export type CategoryFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Category
+     */
+    select?: CategorySelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Category
+     */
+    omit?: CategoryOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: CategoryInclude<ExtArgs> | null
+    /**
+     * Filter, which Category to fetch.
+     */
+    where: CategoryWhereUniqueInput
+  }
+
+  /**
+   * Category findUniqueOrThrow
+   */
+  export type CategoryFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Category
+     */
+    select?: CategorySelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Category
+     */
+    omit?: CategoryOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: CategoryInclude<ExtArgs> | null
+    /**
+     * Filter, which Category to fetch.
+     */
+    where: CategoryWhereUniqueInput
+  }
+
+  /**
+   * Category findFirst
+   */
+  export type CategoryFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Category
+     */
+    select?: CategorySelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Category
+     */
+    omit?: CategoryOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: CategoryInclude<ExtArgs> | null
+    /**
+     * Filter, which Category to fetch.
+     */
+    where?: CategoryWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of Categories to fetch.
+     */
+    orderBy?: CategoryOrderByWithRelationInput | CategoryOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for Categories.
+     */
+    cursor?: CategoryWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` Categories from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` Categories.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of Categories.
+     */
+    distinct?: CategoryScalarFieldEnum | CategoryScalarFieldEnum[]
+  }
+
+  /**
+   * Category findFirstOrThrow
+   */
+  export type CategoryFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Category
+     */
+    select?: CategorySelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Category
+     */
+    omit?: CategoryOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: CategoryInclude<ExtArgs> | null
+    /**
+     * Filter, which Category to fetch.
+     */
+    where?: CategoryWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of Categories to fetch.
+     */
+    orderBy?: CategoryOrderByWithRelationInput | CategoryOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for Categories.
+     */
+    cursor?: CategoryWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` Categories from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` Categories.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of Categories.
+     */
+    distinct?: CategoryScalarFieldEnum | CategoryScalarFieldEnum[]
+  }
+
+  /**
+   * Category findMany
+   */
+  export type CategoryFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Category
+     */
+    select?: CategorySelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Category
+     */
+    omit?: CategoryOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: CategoryInclude<ExtArgs> | null
+    /**
+     * Filter, which Categories to fetch.
+     */
+    where?: CategoryWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of Categories to fetch.
+     */
+    orderBy?: CategoryOrderByWithRelationInput | CategoryOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing Categories.
+     */
+    cursor?: CategoryWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` Categories from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` Categories.
+     */
+    skip?: number
+    distinct?: CategoryScalarFieldEnum | CategoryScalarFieldEnum[]
+  }
+
+  /**
+   * Category create
+   */
+  export type CategoryCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Category
+     */
+    select?: CategorySelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Category
+     */
+    omit?: CategoryOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: CategoryInclude<ExtArgs> | null
+    /**
+     * The data needed to create a Category.
+     */
+    data: XOR<CategoryCreateInput, CategoryUncheckedCreateInput>
+  }
+
+  /**
+   * Category createMany
+   */
+  export type CategoryCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many Categories.
+     */
+    data: CategoryCreateManyInput | CategoryCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * Category createManyAndReturn
+   */
+  export type CategoryCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Category
+     */
+    select?: CategorySelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the Category
+     */
+    omit?: CategoryOmit<ExtArgs> | null
+    /**
+     * The data used to create many Categories.
+     */
+    data: CategoryCreateManyInput | CategoryCreateManyInput[]
+    skipDuplicates?: boolean
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: CategoryIncludeCreateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * Category update
+   */
+  export type CategoryUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Category
+     */
+    select?: CategorySelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Category
+     */
+    omit?: CategoryOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: CategoryInclude<ExtArgs> | null
+    /**
+     * The data needed to update a Category.
+     */
+    data: XOR<CategoryUpdateInput, CategoryUncheckedUpdateInput>
+    /**
+     * Choose, which Category to update.
+     */
+    where: CategoryWhereUniqueInput
+  }
+
+  /**
+   * Category updateMany
+   */
+  export type CategoryUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update Categories.
+     */
+    data: XOR<CategoryUpdateManyMutationInput, CategoryUncheckedUpdateManyInput>
+    /**
+     * Filter which Categories to update
+     */
+    where?: CategoryWhereInput
+    /**
+     * Limit how many Categories to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * Category updateManyAndReturn
+   */
+  export type CategoryUpdateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Category
+     */
+    select?: CategorySelectUpdateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the Category
+     */
+    omit?: CategoryOmit<ExtArgs> | null
+    /**
+     * The data used to update Categories.
+     */
+    data: XOR<CategoryUpdateManyMutationInput, CategoryUncheckedUpdateManyInput>
+    /**
+     * Filter which Categories to update
+     */
+    where?: CategoryWhereInput
+    /**
+     * Limit how many Categories to update.
+     */
+    limit?: number
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: CategoryIncludeUpdateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * Category upsert
+   */
+  export type CategoryUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Category
+     */
+    select?: CategorySelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Category
+     */
+    omit?: CategoryOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: CategoryInclude<ExtArgs> | null
+    /**
+     * The filter to search for the Category to update in case it exists.
+     */
+    where: CategoryWhereUniqueInput
+    /**
+     * In case the Category found by the `where` argument doesn't exist, create a new Category with this data.
+     */
+    create: XOR<CategoryCreateInput, CategoryUncheckedCreateInput>
+    /**
+     * In case the Category was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<CategoryUpdateInput, CategoryUncheckedUpdateInput>
+  }
+
+  /**
+   * Category delete
+   */
+  export type CategoryDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Category
+     */
+    select?: CategorySelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Category
+     */
+    omit?: CategoryOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: CategoryInclude<ExtArgs> | null
+    /**
+     * Filter which Category to delete.
+     */
+    where: CategoryWhereUniqueInput
+  }
+
+  /**
+   * Category deleteMany
+   */
+  export type CategoryDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which Categories to delete
+     */
+    where?: CategoryWhereInput
+    /**
+     * Limit how many Categories to delete.
+     */
+    limit?: number
+  }
+
+  /**
+   * Category.trades
+   */
+  export type Category$tradesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Trade
+     */
+    select?: TradeSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Trade
+     */
+    omit?: TradeOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: TradeInclude<ExtArgs> | null
+    where?: TradeWhereInput
+    orderBy?: TradeOrderByWithRelationInput | TradeOrderByWithRelationInput[]
+    cursor?: TradeWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: TradeScalarFieldEnum | TradeScalarFieldEnum[]
+  }
+
+  /**
+   * Category without action
+   */
+  export type CategoryDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Category
+     */
+    select?: CategorySelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Category
+     */
+    omit?: CategoryOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: CategoryInclude<ExtArgs> | null
   }
 
 
@@ -2134,6 +3381,7 @@ export namespace Prisma {
   export type TradeMinAggregateOutputType = {
     id: string | null
     userId: string | null
+    categoryId: string | null
     date: Date | null
     symbol: string | null
     side: $Enums.TradeSide | null
@@ -2148,7 +3396,6 @@ export namespace Prisma {
     leverage: number | null
     investment: number | null
     createdAt: Date | null
-    category: $Enums.TradeCategory | null
     deposit: number | null
     isDemo: boolean | null
     comment: string | null
@@ -2157,6 +3404,7 @@ export namespace Prisma {
   export type TradeMaxAggregateOutputType = {
     id: string | null
     userId: string | null
+    categoryId: string | null
     date: Date | null
     symbol: string | null
     side: $Enums.TradeSide | null
@@ -2171,7 +3419,6 @@ export namespace Prisma {
     leverage: number | null
     investment: number | null
     createdAt: Date | null
-    category: $Enums.TradeCategory | null
     deposit: number | null
     isDemo: boolean | null
     comment: string | null
@@ -2180,6 +3427,7 @@ export namespace Prisma {
   export type TradeCountAggregateOutputType = {
     id: number
     userId: number
+    categoryId: number
     date: number
     symbol: number
     side: number
@@ -2194,7 +3442,6 @@ export namespace Prisma {
     leverage: number
     investment: number
     createdAt: number
-    category: number
     deposit: number
     isDemo: number
     comment: number
@@ -2231,6 +3478,7 @@ export namespace Prisma {
   export type TradeMinAggregateInputType = {
     id?: true
     userId?: true
+    categoryId?: true
     date?: true
     symbol?: true
     side?: true
@@ -2245,7 +3493,6 @@ export namespace Prisma {
     leverage?: true
     investment?: true
     createdAt?: true
-    category?: true
     deposit?: true
     isDemo?: true
     comment?: true
@@ -2254,6 +3501,7 @@ export namespace Prisma {
   export type TradeMaxAggregateInputType = {
     id?: true
     userId?: true
+    categoryId?: true
     date?: true
     symbol?: true
     side?: true
@@ -2268,7 +3516,6 @@ export namespace Prisma {
     leverage?: true
     investment?: true
     createdAt?: true
-    category?: true
     deposit?: true
     isDemo?: true
     comment?: true
@@ -2277,6 +3524,7 @@ export namespace Prisma {
   export type TradeCountAggregateInputType = {
     id?: true
     userId?: true
+    categoryId?: true
     date?: true
     symbol?: true
     side?: true
@@ -2291,7 +3539,6 @@ export namespace Prisma {
     leverage?: true
     investment?: true
     createdAt?: true
-    category?: true
     deposit?: true
     isDemo?: true
     comment?: true
@@ -2387,6 +3634,7 @@ export namespace Prisma {
   export type TradeGroupByOutputType = {
     id: string
     userId: string
+    categoryId: string
     date: Date
     symbol: string
     side: $Enums.TradeSide
@@ -2401,7 +3649,6 @@ export namespace Prisma {
     leverage: number | null
     investment: number | null
     createdAt: Date
-    category: $Enums.TradeCategory
     deposit: number
     isDemo: boolean
     comment: string | null
@@ -2429,6 +3676,7 @@ export namespace Prisma {
   export type TradeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     id?: boolean
     userId?: boolean
+    categoryId?: boolean
     date?: boolean
     symbol?: boolean
     side?: boolean
@@ -2443,16 +3691,17 @@ export namespace Prisma {
     leverage?: boolean
     investment?: boolean
     createdAt?: boolean
-    category?: boolean
     deposit?: boolean
     isDemo?: boolean
     comment?: boolean
     user?: boolean | UserDefaultArgs<ExtArgs>
+    category?: boolean | CategoryDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["trade"]>
 
   export type TradeSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     id?: boolean
     userId?: boolean
+    categoryId?: boolean
     date?: boolean
     symbol?: boolean
     side?: boolean
@@ -2467,16 +3716,17 @@ export namespace Prisma {
     leverage?: boolean
     investment?: boolean
     createdAt?: boolean
-    category?: boolean
     deposit?: boolean
     isDemo?: boolean
     comment?: boolean
     user?: boolean | UserDefaultArgs<ExtArgs>
+    category?: boolean | CategoryDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["trade"]>
 
   export type TradeSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     id?: boolean
     userId?: boolean
+    categoryId?: boolean
     date?: boolean
     symbol?: boolean
     side?: boolean
@@ -2491,16 +3741,17 @@ export namespace Prisma {
     leverage?: boolean
     investment?: boolean
     createdAt?: boolean
-    category?: boolean
     deposit?: boolean
     isDemo?: boolean
     comment?: boolean
     user?: boolean | UserDefaultArgs<ExtArgs>
+    category?: boolean | CategoryDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["trade"]>
 
   export type TradeSelectScalar = {
     id?: boolean
     userId?: boolean
+    categoryId?: boolean
     date?: boolean
     symbol?: boolean
     side?: boolean
@@ -2515,31 +3766,35 @@ export namespace Prisma {
     leverage?: boolean
     investment?: boolean
     createdAt?: boolean
-    category?: boolean
     deposit?: boolean
     isDemo?: boolean
     comment?: boolean
   }
 
-  export type TradeOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "userId" | "date" | "symbol" | "side" | "entryPrice" | "positionSize" | "stopLoss" | "exitPrice" | "commission" | "riskPercent" | "pnl" | "result" | "leverage" | "investment" | "createdAt" | "category" | "deposit" | "isDemo" | "comment", ExtArgs["result"]["trade"]>
+  export type TradeOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "userId" | "categoryId" | "date" | "symbol" | "side" | "entryPrice" | "positionSize" | "stopLoss" | "exitPrice" | "commission" | "riskPercent" | "pnl" | "result" | "leverage" | "investment" | "createdAt" | "deposit" | "isDemo" | "comment", ExtArgs["result"]["trade"]>
   export type TradeInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     user?: boolean | UserDefaultArgs<ExtArgs>
+    category?: boolean | CategoryDefaultArgs<ExtArgs>
   }
   export type TradeIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     user?: boolean | UserDefaultArgs<ExtArgs>
+    category?: boolean | CategoryDefaultArgs<ExtArgs>
   }
   export type TradeIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     user?: boolean | UserDefaultArgs<ExtArgs>
+    category?: boolean | CategoryDefaultArgs<ExtArgs>
   }
 
   export type $TradePayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     name: "Trade"
     objects: {
       user: Prisma.$UserPayload<ExtArgs>
+      category: Prisma.$CategoryPayload<ExtArgs>
     }
     scalars: $Extensions.GetPayloadResult<{
       id: string
       userId: string
+      categoryId: string
       date: Date
       symbol: string
       side: $Enums.TradeSide
@@ -2554,7 +3809,6 @@ export namespace Prisma {
       leverage: number | null
       investment: number | null
       createdAt: Date
-      category: $Enums.TradeCategory
       deposit: number
       isDemo: boolean
       comment: string | null
@@ -2953,6 +4207,7 @@ export namespace Prisma {
   export interface Prisma__TradeClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
     readonly [Symbol.toStringTag]: "PrismaPromise"
     user<T extends UserDefaultArgs<ExtArgs> = {}>(args?: Subset<T, UserDefaultArgs<ExtArgs>>): Prisma__UserClient<$Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    category<T extends CategoryDefaultArgs<ExtArgs> = {}>(args?: Subset<T, CategoryDefaultArgs<ExtArgs>>): Prisma__CategoryClient<$Result.GetResult<Prisma.$CategoryPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -2984,6 +4239,7 @@ export namespace Prisma {
   interface TradeFieldRefs {
     readonly id: FieldRef<"Trade", 'String'>
     readonly userId: FieldRef<"Trade", 'String'>
+    readonly categoryId: FieldRef<"Trade", 'String'>
     readonly date: FieldRef<"Trade", 'DateTime'>
     readonly symbol: FieldRef<"Trade", 'String'>
     readonly side: FieldRef<"Trade", 'TradeSide'>
@@ -2998,7 +4254,6 @@ export namespace Prisma {
     readonly leverage: FieldRef<"Trade", 'Float'>
     readonly investment: FieldRef<"Trade", 'Float'>
     readonly createdAt: FieldRef<"Trade", 'DateTime'>
-    readonly category: FieldRef<"Trade", 'TradeCategory'>
     readonly deposit: FieldRef<"Trade", 'Float'>
     readonly isDemo: FieldRef<"Trade", 'Boolean'>
     readonly comment: FieldRef<"Trade", 'String'>
@@ -3434,15 +4689,27 @@ export namespace Prisma {
     id: 'id',
     email: 'email',
     password: 'password',
-    createdAt: 'createdAt'
+    createdAt: 'createdAt',
+    defaultCategory: 'defaultCategory'
   };
 
   export type UserScalarFieldEnum = (typeof UserScalarFieldEnum)[keyof typeof UserScalarFieldEnum]
 
 
+  export const CategoryScalarFieldEnum: {
+    id: 'id',
+    name: 'name',
+    userId: 'userId',
+    createdAt: 'createdAt'
+  };
+
+  export type CategoryScalarFieldEnum = (typeof CategoryScalarFieldEnum)[keyof typeof CategoryScalarFieldEnum]
+
+
   export const TradeScalarFieldEnum: {
     id: 'id',
     userId: 'userId',
+    categoryId: 'categoryId',
     date: 'date',
     symbol: 'symbol',
     side: 'side',
@@ -3457,7 +4724,6 @@ export namespace Prisma {
     leverage: 'leverage',
     investment: 'investment',
     createdAt: 'createdAt',
-    category: 'category',
     deposit: 'deposit',
     isDemo: 'isDemo',
     comment: 'comment'
@@ -3566,20 +4832,6 @@ export namespace Prisma {
 
 
   /**
-   * Reference to a field of type 'TradeCategory'
-   */
-  export type EnumTradeCategoryFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'TradeCategory'>
-    
-
-
-  /**
-   * Reference to a field of type 'TradeCategory[]'
-   */
-  export type ListEnumTradeCategoryFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'TradeCategory[]'>
-    
-
-
-  /**
    * Reference to a field of type 'Boolean'
    */
   export type BooleanFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Boolean'>
@@ -3611,7 +4863,9 @@ export namespace Prisma {
     email?: StringFilter<"User"> | string
     password?: StringFilter<"User"> | string
     createdAt?: DateTimeFilter<"User"> | Date | string
+    defaultCategory?: StringFilter<"User"> | string
     trades?: TradeListRelationFilter
+    categories?: CategoryListRelationFilter
   }
 
   export type UserOrderByWithRelationInput = {
@@ -3619,7 +4873,9 @@ export namespace Prisma {
     email?: SortOrder
     password?: SortOrder
     createdAt?: SortOrder
+    defaultCategory?: SortOrder
     trades?: TradeOrderByRelationAggregateInput
+    categories?: CategoryOrderByRelationAggregateInput
   }
 
   export type UserWhereUniqueInput = Prisma.AtLeast<{
@@ -3630,7 +4886,9 @@ export namespace Prisma {
     NOT?: UserWhereInput | UserWhereInput[]
     password?: StringFilter<"User"> | string
     createdAt?: DateTimeFilter<"User"> | Date | string
+    defaultCategory?: StringFilter<"User"> | string
     trades?: TradeListRelationFilter
+    categories?: CategoryListRelationFilter
   }, "id" | "email">
 
   export type UserOrderByWithAggregationInput = {
@@ -3638,6 +4896,7 @@ export namespace Prisma {
     email?: SortOrder
     password?: SortOrder
     createdAt?: SortOrder
+    defaultCategory?: SortOrder
     _count?: UserCountOrderByAggregateInput
     _max?: UserMaxOrderByAggregateInput
     _min?: UserMinOrderByAggregateInput
@@ -3651,6 +4910,61 @@ export namespace Prisma {
     email?: StringWithAggregatesFilter<"User"> | string
     password?: StringWithAggregatesFilter<"User"> | string
     createdAt?: DateTimeWithAggregatesFilter<"User"> | Date | string
+    defaultCategory?: StringWithAggregatesFilter<"User"> | string
+  }
+
+  export type CategoryWhereInput = {
+    AND?: CategoryWhereInput | CategoryWhereInput[]
+    OR?: CategoryWhereInput[]
+    NOT?: CategoryWhereInput | CategoryWhereInput[]
+    id?: StringFilter<"Category"> | string
+    name?: StringFilter<"Category"> | string
+    userId?: StringFilter<"Category"> | string
+    createdAt?: DateTimeFilter<"Category"> | Date | string
+    user?: XOR<UserScalarRelationFilter, UserWhereInput>
+    trades?: TradeListRelationFilter
+  }
+
+  export type CategoryOrderByWithRelationInput = {
+    id?: SortOrder
+    name?: SortOrder
+    userId?: SortOrder
+    createdAt?: SortOrder
+    user?: UserOrderByWithRelationInput
+    trades?: TradeOrderByRelationAggregateInput
+  }
+
+  export type CategoryWhereUniqueInput = Prisma.AtLeast<{
+    id?: string
+    userId_name?: CategoryUserIdNameCompoundUniqueInput
+    AND?: CategoryWhereInput | CategoryWhereInput[]
+    OR?: CategoryWhereInput[]
+    NOT?: CategoryWhereInput | CategoryWhereInput[]
+    name?: StringFilter<"Category"> | string
+    userId?: StringFilter<"Category"> | string
+    createdAt?: DateTimeFilter<"Category"> | Date | string
+    user?: XOR<UserScalarRelationFilter, UserWhereInput>
+    trades?: TradeListRelationFilter
+  }, "id" | "userId_name">
+
+  export type CategoryOrderByWithAggregationInput = {
+    id?: SortOrder
+    name?: SortOrder
+    userId?: SortOrder
+    createdAt?: SortOrder
+    _count?: CategoryCountOrderByAggregateInput
+    _max?: CategoryMaxOrderByAggregateInput
+    _min?: CategoryMinOrderByAggregateInput
+  }
+
+  export type CategoryScalarWhereWithAggregatesInput = {
+    AND?: CategoryScalarWhereWithAggregatesInput | CategoryScalarWhereWithAggregatesInput[]
+    OR?: CategoryScalarWhereWithAggregatesInput[]
+    NOT?: CategoryScalarWhereWithAggregatesInput | CategoryScalarWhereWithAggregatesInput[]
+    id?: StringWithAggregatesFilter<"Category"> | string
+    name?: StringWithAggregatesFilter<"Category"> | string
+    userId?: StringWithAggregatesFilter<"Category"> | string
+    createdAt?: DateTimeWithAggregatesFilter<"Category"> | Date | string
   }
 
   export type TradeWhereInput = {
@@ -3659,6 +4973,7 @@ export namespace Prisma {
     NOT?: TradeWhereInput | TradeWhereInput[]
     id?: StringFilter<"Trade"> | string
     userId?: StringFilter<"Trade"> | string
+    categoryId?: StringFilter<"Trade"> | string
     date?: DateTimeFilter<"Trade"> | Date | string
     symbol?: StringFilter<"Trade"> | string
     side?: EnumTradeSideFilter<"Trade"> | $Enums.TradeSide
@@ -3673,16 +4988,17 @@ export namespace Prisma {
     leverage?: FloatNullableFilter<"Trade"> | number | null
     investment?: FloatNullableFilter<"Trade"> | number | null
     createdAt?: DateTimeFilter<"Trade"> | Date | string
-    category?: EnumTradeCategoryFilter<"Trade"> | $Enums.TradeCategory
     deposit?: FloatFilter<"Trade"> | number
     isDemo?: BoolFilter<"Trade"> | boolean
     comment?: StringNullableFilter<"Trade"> | string | null
     user?: XOR<UserScalarRelationFilter, UserWhereInput>
+    category?: XOR<CategoryScalarRelationFilter, CategoryWhereInput>
   }
 
   export type TradeOrderByWithRelationInput = {
     id?: SortOrder
     userId?: SortOrder
+    categoryId?: SortOrder
     date?: SortOrder
     symbol?: SortOrder
     side?: SortOrder
@@ -3697,11 +5013,11 @@ export namespace Prisma {
     leverage?: SortOrderInput | SortOrder
     investment?: SortOrderInput | SortOrder
     createdAt?: SortOrder
-    category?: SortOrder
     deposit?: SortOrder
     isDemo?: SortOrder
     comment?: SortOrderInput | SortOrder
     user?: UserOrderByWithRelationInput
+    category?: CategoryOrderByWithRelationInput
   }
 
   export type TradeWhereUniqueInput = Prisma.AtLeast<{
@@ -3710,6 +5026,7 @@ export namespace Prisma {
     OR?: TradeWhereInput[]
     NOT?: TradeWhereInput | TradeWhereInput[]
     userId?: StringFilter<"Trade"> | string
+    categoryId?: StringFilter<"Trade"> | string
     date?: DateTimeFilter<"Trade"> | Date | string
     symbol?: StringFilter<"Trade"> | string
     side?: EnumTradeSideFilter<"Trade"> | $Enums.TradeSide
@@ -3724,16 +5041,17 @@ export namespace Prisma {
     leverage?: FloatNullableFilter<"Trade"> | number | null
     investment?: FloatNullableFilter<"Trade"> | number | null
     createdAt?: DateTimeFilter<"Trade"> | Date | string
-    category?: EnumTradeCategoryFilter<"Trade"> | $Enums.TradeCategory
     deposit?: FloatFilter<"Trade"> | number
     isDemo?: BoolFilter<"Trade"> | boolean
     comment?: StringNullableFilter<"Trade"> | string | null
     user?: XOR<UserScalarRelationFilter, UserWhereInput>
+    category?: XOR<CategoryScalarRelationFilter, CategoryWhereInput>
   }, "id">
 
   export type TradeOrderByWithAggregationInput = {
     id?: SortOrder
     userId?: SortOrder
+    categoryId?: SortOrder
     date?: SortOrder
     symbol?: SortOrder
     side?: SortOrder
@@ -3748,7 +5066,6 @@ export namespace Prisma {
     leverage?: SortOrderInput | SortOrder
     investment?: SortOrderInput | SortOrder
     createdAt?: SortOrder
-    category?: SortOrder
     deposit?: SortOrder
     isDemo?: SortOrder
     comment?: SortOrderInput | SortOrder
@@ -3765,6 +5082,7 @@ export namespace Prisma {
     NOT?: TradeScalarWhereWithAggregatesInput | TradeScalarWhereWithAggregatesInput[]
     id?: StringWithAggregatesFilter<"Trade"> | string
     userId?: StringWithAggregatesFilter<"Trade"> | string
+    categoryId?: StringWithAggregatesFilter<"Trade"> | string
     date?: DateTimeWithAggregatesFilter<"Trade"> | Date | string
     symbol?: StringWithAggregatesFilter<"Trade"> | string
     side?: EnumTradeSideWithAggregatesFilter<"Trade"> | $Enums.TradeSide
@@ -3779,7 +5097,6 @@ export namespace Prisma {
     leverage?: FloatNullableWithAggregatesFilter<"Trade"> | number | null
     investment?: FloatNullableWithAggregatesFilter<"Trade"> | number | null
     createdAt?: DateTimeWithAggregatesFilter<"Trade"> | Date | string
-    category?: EnumTradeCategoryWithAggregatesFilter<"Trade"> | $Enums.TradeCategory
     deposit?: FloatWithAggregatesFilter<"Trade"> | number
     isDemo?: BoolWithAggregatesFilter<"Trade"> | boolean
     comment?: StringNullableWithAggregatesFilter<"Trade"> | string | null
@@ -3790,7 +5107,9 @@ export namespace Prisma {
     email: string
     password: string
     createdAt?: Date | string
+    defaultCategory?: string
     trades?: TradeCreateNestedManyWithoutUserInput
+    categories?: CategoryCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateInput = {
@@ -3798,7 +5117,9 @@ export namespace Prisma {
     email: string
     password: string
     createdAt?: Date | string
+    defaultCategory?: string
     trades?: TradeUncheckedCreateNestedManyWithoutUserInput
+    categories?: CategoryUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserUpdateInput = {
@@ -3806,7 +5127,9 @@ export namespace Prisma {
     email?: StringFieldUpdateOperationsInput | string
     password?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    defaultCategory?: StringFieldUpdateOperationsInput | string
     trades?: TradeUpdateManyWithoutUserNestedInput
+    categories?: CategoryUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateInput = {
@@ -3814,7 +5137,9 @@ export namespace Prisma {
     email?: StringFieldUpdateOperationsInput | string
     password?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    defaultCategory?: StringFieldUpdateOperationsInput | string
     trades?: TradeUncheckedUpdateManyWithoutUserNestedInput
+    categories?: CategoryUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type UserCreateManyInput = {
@@ -3822,6 +5147,7 @@ export namespace Prisma {
     email: string
     password: string
     createdAt?: Date | string
+    defaultCategory?: string
   }
 
   export type UserUpdateManyMutationInput = {
@@ -3829,12 +5155,66 @@ export namespace Prisma {
     email?: StringFieldUpdateOperationsInput | string
     password?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    defaultCategory?: StringFieldUpdateOperationsInput | string
   }
 
   export type UserUncheckedUpdateManyInput = {
     id?: StringFieldUpdateOperationsInput | string
     email?: StringFieldUpdateOperationsInput | string
     password?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    defaultCategory?: StringFieldUpdateOperationsInput | string
+  }
+
+  export type CategoryCreateInput = {
+    id?: string
+    name: string
+    createdAt?: Date | string
+    user: UserCreateNestedOneWithoutCategoriesInput
+    trades?: TradeCreateNestedManyWithoutCategoryInput
+  }
+
+  export type CategoryUncheckedCreateInput = {
+    id?: string
+    name: string
+    userId: string
+    createdAt?: Date | string
+    trades?: TradeUncheckedCreateNestedManyWithoutCategoryInput
+  }
+
+  export type CategoryUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    user?: UserUpdateOneRequiredWithoutCategoriesNestedInput
+    trades?: TradeUpdateManyWithoutCategoryNestedInput
+  }
+
+  export type CategoryUncheckedUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    userId?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    trades?: TradeUncheckedUpdateManyWithoutCategoryNestedInput
+  }
+
+  export type CategoryCreateManyInput = {
+    id?: string
+    name: string
+    userId: string
+    createdAt?: Date | string
+  }
+
+  export type CategoryUpdateManyMutationInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type CategoryUncheckedUpdateManyInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    userId?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
@@ -3854,16 +5234,17 @@ export namespace Prisma {
     leverage?: number | null
     investment?: number | null
     createdAt?: Date | string
-    category: $Enums.TradeCategory
     deposit: number
     isDemo?: boolean
     comment?: string | null
     user: UserCreateNestedOneWithoutTradesInput
+    category: CategoryCreateNestedOneWithoutTradesInput
   }
 
   export type TradeUncheckedCreateInput = {
     id?: string
     userId: string
+    categoryId: string
     date?: Date | string
     symbol: string
     side: $Enums.TradeSide
@@ -3878,7 +5259,6 @@ export namespace Prisma {
     leverage?: number | null
     investment?: number | null
     createdAt?: Date | string
-    category: $Enums.TradeCategory
     deposit: number
     isDemo?: boolean
     comment?: string | null
@@ -3900,16 +5280,17 @@ export namespace Prisma {
     leverage?: NullableFloatFieldUpdateOperationsInput | number | null
     investment?: NullableFloatFieldUpdateOperationsInput | number | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    category?: EnumTradeCategoryFieldUpdateOperationsInput | $Enums.TradeCategory
     deposit?: FloatFieldUpdateOperationsInput | number
     isDemo?: BoolFieldUpdateOperationsInput | boolean
     comment?: NullableStringFieldUpdateOperationsInput | string | null
     user?: UserUpdateOneRequiredWithoutTradesNestedInput
+    category?: CategoryUpdateOneRequiredWithoutTradesNestedInput
   }
 
   export type TradeUncheckedUpdateInput = {
     id?: StringFieldUpdateOperationsInput | string
     userId?: StringFieldUpdateOperationsInput | string
+    categoryId?: StringFieldUpdateOperationsInput | string
     date?: DateTimeFieldUpdateOperationsInput | Date | string
     symbol?: StringFieldUpdateOperationsInput | string
     side?: EnumTradeSideFieldUpdateOperationsInput | $Enums.TradeSide
@@ -3924,7 +5305,6 @@ export namespace Prisma {
     leverage?: NullableFloatFieldUpdateOperationsInput | number | null
     investment?: NullableFloatFieldUpdateOperationsInput | number | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    category?: EnumTradeCategoryFieldUpdateOperationsInput | $Enums.TradeCategory
     deposit?: FloatFieldUpdateOperationsInput | number
     isDemo?: BoolFieldUpdateOperationsInput | boolean
     comment?: NullableStringFieldUpdateOperationsInput | string | null
@@ -3933,6 +5313,7 @@ export namespace Prisma {
   export type TradeCreateManyInput = {
     id?: string
     userId: string
+    categoryId: string
     date?: Date | string
     symbol: string
     side: $Enums.TradeSide
@@ -3947,7 +5328,6 @@ export namespace Prisma {
     leverage?: number | null
     investment?: number | null
     createdAt?: Date | string
-    category: $Enums.TradeCategory
     deposit: number
     isDemo?: boolean
     comment?: string | null
@@ -3969,7 +5349,6 @@ export namespace Prisma {
     leverage?: NullableFloatFieldUpdateOperationsInput | number | null
     investment?: NullableFloatFieldUpdateOperationsInput | number | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    category?: EnumTradeCategoryFieldUpdateOperationsInput | $Enums.TradeCategory
     deposit?: FloatFieldUpdateOperationsInput | number
     isDemo?: BoolFieldUpdateOperationsInput | boolean
     comment?: NullableStringFieldUpdateOperationsInput | string | null
@@ -3978,6 +5357,7 @@ export namespace Prisma {
   export type TradeUncheckedUpdateManyInput = {
     id?: StringFieldUpdateOperationsInput | string
     userId?: StringFieldUpdateOperationsInput | string
+    categoryId?: StringFieldUpdateOperationsInput | string
     date?: DateTimeFieldUpdateOperationsInput | Date | string
     symbol?: StringFieldUpdateOperationsInput | string
     side?: EnumTradeSideFieldUpdateOperationsInput | $Enums.TradeSide
@@ -3992,7 +5372,6 @@ export namespace Prisma {
     leverage?: NullableFloatFieldUpdateOperationsInput | number | null
     investment?: NullableFloatFieldUpdateOperationsInput | number | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    category?: EnumTradeCategoryFieldUpdateOperationsInput | $Enums.TradeCategory
     deposit?: FloatFieldUpdateOperationsInput | number
     isDemo?: BoolFieldUpdateOperationsInput | boolean
     comment?: NullableStringFieldUpdateOperationsInput | string | null
@@ -4030,7 +5409,17 @@ export namespace Prisma {
     none?: TradeWhereInput
   }
 
+  export type CategoryListRelationFilter = {
+    every?: CategoryWhereInput
+    some?: CategoryWhereInput
+    none?: CategoryWhereInput
+  }
+
   export type TradeOrderByRelationAggregateInput = {
+    _count?: SortOrder
+  }
+
+  export type CategoryOrderByRelationAggregateInput = {
     _count?: SortOrder
   }
 
@@ -4039,6 +5428,7 @@ export namespace Prisma {
     email?: SortOrder
     password?: SortOrder
     createdAt?: SortOrder
+    defaultCategory?: SortOrder
   }
 
   export type UserMaxOrderByAggregateInput = {
@@ -4046,6 +5436,7 @@ export namespace Prisma {
     email?: SortOrder
     password?: SortOrder
     createdAt?: SortOrder
+    defaultCategory?: SortOrder
   }
 
   export type UserMinOrderByAggregateInput = {
@@ -4053,6 +5444,7 @@ export namespace Prisma {
     email?: SortOrder
     password?: SortOrder
     createdAt?: SortOrder
+    defaultCategory?: SortOrder
   }
 
   export type StringWithAggregatesFilter<$PrismaModel = never> = {
@@ -4085,6 +5477,37 @@ export namespace Prisma {
     _count?: NestedIntFilter<$PrismaModel>
     _min?: NestedDateTimeFilter<$PrismaModel>
     _max?: NestedDateTimeFilter<$PrismaModel>
+  }
+
+  export type UserScalarRelationFilter = {
+    is?: UserWhereInput
+    isNot?: UserWhereInput
+  }
+
+  export type CategoryUserIdNameCompoundUniqueInput = {
+    userId: string
+    name: string
+  }
+
+  export type CategoryCountOrderByAggregateInput = {
+    id?: SortOrder
+    name?: SortOrder
+    userId?: SortOrder
+    createdAt?: SortOrder
+  }
+
+  export type CategoryMaxOrderByAggregateInput = {
+    id?: SortOrder
+    name?: SortOrder
+    userId?: SortOrder
+    createdAt?: SortOrder
+  }
+
+  export type CategoryMinOrderByAggregateInput = {
+    id?: SortOrder
+    name?: SortOrder
+    userId?: SortOrder
+    createdAt?: SortOrder
   }
 
   export type EnumTradeSideFilter<$PrismaModel = never> = {
@@ -4123,13 +5546,6 @@ export namespace Prisma {
     not?: NestedFloatNullableFilter<$PrismaModel> | number | null
   }
 
-  export type EnumTradeCategoryFilter<$PrismaModel = never> = {
-    equals?: $Enums.TradeCategory | EnumTradeCategoryFieldRefInput<$PrismaModel>
-    in?: $Enums.TradeCategory[] | ListEnumTradeCategoryFieldRefInput<$PrismaModel>
-    notIn?: $Enums.TradeCategory[] | ListEnumTradeCategoryFieldRefInput<$PrismaModel>
-    not?: NestedEnumTradeCategoryFilter<$PrismaModel> | $Enums.TradeCategory
-  }
-
   export type BoolFilter<$PrismaModel = never> = {
     equals?: boolean | BooleanFieldRefInput<$PrismaModel>
     not?: NestedBoolFilter<$PrismaModel> | boolean
@@ -4150,9 +5566,9 @@ export namespace Prisma {
     not?: NestedStringNullableFilter<$PrismaModel> | string | null
   }
 
-  export type UserScalarRelationFilter = {
-    is?: UserWhereInput
-    isNot?: UserWhereInput
+  export type CategoryScalarRelationFilter = {
+    is?: CategoryWhereInput
+    isNot?: CategoryWhereInput
   }
 
   export type SortOrderInput = {
@@ -4163,6 +5579,7 @@ export namespace Prisma {
   export type TradeCountOrderByAggregateInput = {
     id?: SortOrder
     userId?: SortOrder
+    categoryId?: SortOrder
     date?: SortOrder
     symbol?: SortOrder
     side?: SortOrder
@@ -4177,7 +5594,6 @@ export namespace Prisma {
     leverage?: SortOrder
     investment?: SortOrder
     createdAt?: SortOrder
-    category?: SortOrder
     deposit?: SortOrder
     isDemo?: SortOrder
     comment?: SortOrder
@@ -4199,6 +5615,7 @@ export namespace Prisma {
   export type TradeMaxOrderByAggregateInput = {
     id?: SortOrder
     userId?: SortOrder
+    categoryId?: SortOrder
     date?: SortOrder
     symbol?: SortOrder
     side?: SortOrder
@@ -4213,7 +5630,6 @@ export namespace Prisma {
     leverage?: SortOrder
     investment?: SortOrder
     createdAt?: SortOrder
-    category?: SortOrder
     deposit?: SortOrder
     isDemo?: SortOrder
     comment?: SortOrder
@@ -4222,6 +5638,7 @@ export namespace Prisma {
   export type TradeMinOrderByAggregateInput = {
     id?: SortOrder
     userId?: SortOrder
+    categoryId?: SortOrder
     date?: SortOrder
     symbol?: SortOrder
     side?: SortOrder
@@ -4236,7 +5653,6 @@ export namespace Prisma {
     leverage?: SortOrder
     investment?: SortOrder
     createdAt?: SortOrder
-    category?: SortOrder
     deposit?: SortOrder
     isDemo?: SortOrder
     comment?: SortOrder
@@ -4307,16 +5723,6 @@ export namespace Prisma {
     _max?: NestedFloatNullableFilter<$PrismaModel>
   }
 
-  export type EnumTradeCategoryWithAggregatesFilter<$PrismaModel = never> = {
-    equals?: $Enums.TradeCategory | EnumTradeCategoryFieldRefInput<$PrismaModel>
-    in?: $Enums.TradeCategory[] | ListEnumTradeCategoryFieldRefInput<$PrismaModel>
-    notIn?: $Enums.TradeCategory[] | ListEnumTradeCategoryFieldRefInput<$PrismaModel>
-    not?: NestedEnumTradeCategoryWithAggregatesFilter<$PrismaModel> | $Enums.TradeCategory
-    _count?: NestedIntFilter<$PrismaModel>
-    _min?: NestedEnumTradeCategoryFilter<$PrismaModel>
-    _max?: NestedEnumTradeCategoryFilter<$PrismaModel>
-  }
-
   export type BoolWithAggregatesFilter<$PrismaModel = never> = {
     equals?: boolean | BooleanFieldRefInput<$PrismaModel>
     not?: NestedBoolWithAggregatesFilter<$PrismaModel> | boolean
@@ -4350,11 +5756,25 @@ export namespace Prisma {
     connect?: TradeWhereUniqueInput | TradeWhereUniqueInput[]
   }
 
+  export type CategoryCreateNestedManyWithoutUserInput = {
+    create?: XOR<CategoryCreateWithoutUserInput, CategoryUncheckedCreateWithoutUserInput> | CategoryCreateWithoutUserInput[] | CategoryUncheckedCreateWithoutUserInput[]
+    connectOrCreate?: CategoryCreateOrConnectWithoutUserInput | CategoryCreateOrConnectWithoutUserInput[]
+    createMany?: CategoryCreateManyUserInputEnvelope
+    connect?: CategoryWhereUniqueInput | CategoryWhereUniqueInput[]
+  }
+
   export type TradeUncheckedCreateNestedManyWithoutUserInput = {
     create?: XOR<TradeCreateWithoutUserInput, TradeUncheckedCreateWithoutUserInput> | TradeCreateWithoutUserInput[] | TradeUncheckedCreateWithoutUserInput[]
     connectOrCreate?: TradeCreateOrConnectWithoutUserInput | TradeCreateOrConnectWithoutUserInput[]
     createMany?: TradeCreateManyUserInputEnvelope
     connect?: TradeWhereUniqueInput | TradeWhereUniqueInput[]
+  }
+
+  export type CategoryUncheckedCreateNestedManyWithoutUserInput = {
+    create?: XOR<CategoryCreateWithoutUserInput, CategoryUncheckedCreateWithoutUserInput> | CategoryCreateWithoutUserInput[] | CategoryUncheckedCreateWithoutUserInput[]
+    connectOrCreate?: CategoryCreateOrConnectWithoutUserInput | CategoryCreateOrConnectWithoutUserInput[]
+    createMany?: CategoryCreateManyUserInputEnvelope
+    connect?: CategoryWhereUniqueInput | CategoryWhereUniqueInput[]
   }
 
   export type StringFieldUpdateOperationsInput = {
@@ -4379,6 +5799,20 @@ export namespace Prisma {
     deleteMany?: TradeScalarWhereInput | TradeScalarWhereInput[]
   }
 
+  export type CategoryUpdateManyWithoutUserNestedInput = {
+    create?: XOR<CategoryCreateWithoutUserInput, CategoryUncheckedCreateWithoutUserInput> | CategoryCreateWithoutUserInput[] | CategoryUncheckedCreateWithoutUserInput[]
+    connectOrCreate?: CategoryCreateOrConnectWithoutUserInput | CategoryCreateOrConnectWithoutUserInput[]
+    upsert?: CategoryUpsertWithWhereUniqueWithoutUserInput | CategoryUpsertWithWhereUniqueWithoutUserInput[]
+    createMany?: CategoryCreateManyUserInputEnvelope
+    set?: CategoryWhereUniqueInput | CategoryWhereUniqueInput[]
+    disconnect?: CategoryWhereUniqueInput | CategoryWhereUniqueInput[]
+    delete?: CategoryWhereUniqueInput | CategoryWhereUniqueInput[]
+    connect?: CategoryWhereUniqueInput | CategoryWhereUniqueInput[]
+    update?: CategoryUpdateWithWhereUniqueWithoutUserInput | CategoryUpdateWithWhereUniqueWithoutUserInput[]
+    updateMany?: CategoryUpdateManyWithWhereWithoutUserInput | CategoryUpdateManyWithWhereWithoutUserInput[]
+    deleteMany?: CategoryScalarWhereInput | CategoryScalarWhereInput[]
+  }
+
   export type TradeUncheckedUpdateManyWithoutUserNestedInput = {
     create?: XOR<TradeCreateWithoutUserInput, TradeUncheckedCreateWithoutUserInput> | TradeCreateWithoutUserInput[] | TradeUncheckedCreateWithoutUserInput[]
     connectOrCreate?: TradeCreateOrConnectWithoutUserInput | TradeCreateOrConnectWithoutUserInput[]
@@ -4393,10 +5827,86 @@ export namespace Prisma {
     deleteMany?: TradeScalarWhereInput | TradeScalarWhereInput[]
   }
 
+  export type CategoryUncheckedUpdateManyWithoutUserNestedInput = {
+    create?: XOR<CategoryCreateWithoutUserInput, CategoryUncheckedCreateWithoutUserInput> | CategoryCreateWithoutUserInput[] | CategoryUncheckedCreateWithoutUserInput[]
+    connectOrCreate?: CategoryCreateOrConnectWithoutUserInput | CategoryCreateOrConnectWithoutUserInput[]
+    upsert?: CategoryUpsertWithWhereUniqueWithoutUserInput | CategoryUpsertWithWhereUniqueWithoutUserInput[]
+    createMany?: CategoryCreateManyUserInputEnvelope
+    set?: CategoryWhereUniqueInput | CategoryWhereUniqueInput[]
+    disconnect?: CategoryWhereUniqueInput | CategoryWhereUniqueInput[]
+    delete?: CategoryWhereUniqueInput | CategoryWhereUniqueInput[]
+    connect?: CategoryWhereUniqueInput | CategoryWhereUniqueInput[]
+    update?: CategoryUpdateWithWhereUniqueWithoutUserInput | CategoryUpdateWithWhereUniqueWithoutUserInput[]
+    updateMany?: CategoryUpdateManyWithWhereWithoutUserInput | CategoryUpdateManyWithWhereWithoutUserInput[]
+    deleteMany?: CategoryScalarWhereInput | CategoryScalarWhereInput[]
+  }
+
+  export type UserCreateNestedOneWithoutCategoriesInput = {
+    create?: XOR<UserCreateWithoutCategoriesInput, UserUncheckedCreateWithoutCategoriesInput>
+    connectOrCreate?: UserCreateOrConnectWithoutCategoriesInput
+    connect?: UserWhereUniqueInput
+  }
+
+  export type TradeCreateNestedManyWithoutCategoryInput = {
+    create?: XOR<TradeCreateWithoutCategoryInput, TradeUncheckedCreateWithoutCategoryInput> | TradeCreateWithoutCategoryInput[] | TradeUncheckedCreateWithoutCategoryInput[]
+    connectOrCreate?: TradeCreateOrConnectWithoutCategoryInput | TradeCreateOrConnectWithoutCategoryInput[]
+    createMany?: TradeCreateManyCategoryInputEnvelope
+    connect?: TradeWhereUniqueInput | TradeWhereUniqueInput[]
+  }
+
+  export type TradeUncheckedCreateNestedManyWithoutCategoryInput = {
+    create?: XOR<TradeCreateWithoutCategoryInput, TradeUncheckedCreateWithoutCategoryInput> | TradeCreateWithoutCategoryInput[] | TradeUncheckedCreateWithoutCategoryInput[]
+    connectOrCreate?: TradeCreateOrConnectWithoutCategoryInput | TradeCreateOrConnectWithoutCategoryInput[]
+    createMany?: TradeCreateManyCategoryInputEnvelope
+    connect?: TradeWhereUniqueInput | TradeWhereUniqueInput[]
+  }
+
+  export type UserUpdateOneRequiredWithoutCategoriesNestedInput = {
+    create?: XOR<UserCreateWithoutCategoriesInput, UserUncheckedCreateWithoutCategoriesInput>
+    connectOrCreate?: UserCreateOrConnectWithoutCategoriesInput
+    upsert?: UserUpsertWithoutCategoriesInput
+    connect?: UserWhereUniqueInput
+    update?: XOR<XOR<UserUpdateToOneWithWhereWithoutCategoriesInput, UserUpdateWithoutCategoriesInput>, UserUncheckedUpdateWithoutCategoriesInput>
+  }
+
+  export type TradeUpdateManyWithoutCategoryNestedInput = {
+    create?: XOR<TradeCreateWithoutCategoryInput, TradeUncheckedCreateWithoutCategoryInput> | TradeCreateWithoutCategoryInput[] | TradeUncheckedCreateWithoutCategoryInput[]
+    connectOrCreate?: TradeCreateOrConnectWithoutCategoryInput | TradeCreateOrConnectWithoutCategoryInput[]
+    upsert?: TradeUpsertWithWhereUniqueWithoutCategoryInput | TradeUpsertWithWhereUniqueWithoutCategoryInput[]
+    createMany?: TradeCreateManyCategoryInputEnvelope
+    set?: TradeWhereUniqueInput | TradeWhereUniqueInput[]
+    disconnect?: TradeWhereUniqueInput | TradeWhereUniqueInput[]
+    delete?: TradeWhereUniqueInput | TradeWhereUniqueInput[]
+    connect?: TradeWhereUniqueInput | TradeWhereUniqueInput[]
+    update?: TradeUpdateWithWhereUniqueWithoutCategoryInput | TradeUpdateWithWhereUniqueWithoutCategoryInput[]
+    updateMany?: TradeUpdateManyWithWhereWithoutCategoryInput | TradeUpdateManyWithWhereWithoutCategoryInput[]
+    deleteMany?: TradeScalarWhereInput | TradeScalarWhereInput[]
+  }
+
+  export type TradeUncheckedUpdateManyWithoutCategoryNestedInput = {
+    create?: XOR<TradeCreateWithoutCategoryInput, TradeUncheckedCreateWithoutCategoryInput> | TradeCreateWithoutCategoryInput[] | TradeUncheckedCreateWithoutCategoryInput[]
+    connectOrCreate?: TradeCreateOrConnectWithoutCategoryInput | TradeCreateOrConnectWithoutCategoryInput[]
+    upsert?: TradeUpsertWithWhereUniqueWithoutCategoryInput | TradeUpsertWithWhereUniqueWithoutCategoryInput[]
+    createMany?: TradeCreateManyCategoryInputEnvelope
+    set?: TradeWhereUniqueInput | TradeWhereUniqueInput[]
+    disconnect?: TradeWhereUniqueInput | TradeWhereUniqueInput[]
+    delete?: TradeWhereUniqueInput | TradeWhereUniqueInput[]
+    connect?: TradeWhereUniqueInput | TradeWhereUniqueInput[]
+    update?: TradeUpdateWithWhereUniqueWithoutCategoryInput | TradeUpdateWithWhereUniqueWithoutCategoryInput[]
+    updateMany?: TradeUpdateManyWithWhereWithoutCategoryInput | TradeUpdateManyWithWhereWithoutCategoryInput[]
+    deleteMany?: TradeScalarWhereInput | TradeScalarWhereInput[]
+  }
+
   export type UserCreateNestedOneWithoutTradesInput = {
     create?: XOR<UserCreateWithoutTradesInput, UserUncheckedCreateWithoutTradesInput>
     connectOrCreate?: UserCreateOrConnectWithoutTradesInput
     connect?: UserWhereUniqueInput
+  }
+
+  export type CategoryCreateNestedOneWithoutTradesInput = {
+    create?: XOR<CategoryCreateWithoutTradesInput, CategoryUncheckedCreateWithoutTradesInput>
+    connectOrCreate?: CategoryCreateOrConnectWithoutTradesInput
+    connect?: CategoryWhereUniqueInput
   }
 
   export type EnumTradeSideFieldUpdateOperationsInput = {
@@ -4423,10 +5933,6 @@ export namespace Prisma {
     divide?: number
   }
 
-  export type EnumTradeCategoryFieldUpdateOperationsInput = {
-    set?: $Enums.TradeCategory
-  }
-
   export type BoolFieldUpdateOperationsInput = {
     set?: boolean
   }
@@ -4441,6 +5947,14 @@ export namespace Prisma {
     upsert?: UserUpsertWithoutTradesInput
     connect?: UserWhereUniqueInput
     update?: XOR<XOR<UserUpdateToOneWithWhereWithoutTradesInput, UserUpdateWithoutTradesInput>, UserUncheckedUpdateWithoutTradesInput>
+  }
+
+  export type CategoryUpdateOneRequiredWithoutTradesNestedInput = {
+    create?: XOR<CategoryCreateWithoutTradesInput, CategoryUncheckedCreateWithoutTradesInput>
+    connectOrCreate?: CategoryCreateOrConnectWithoutTradesInput
+    upsert?: CategoryUpsertWithoutTradesInput
+    connect?: CategoryWhereUniqueInput
+    update?: XOR<XOR<CategoryUpdateToOneWithWhereWithoutTradesInput, CategoryUpdateWithoutTradesInput>, CategoryUncheckedUpdateWithoutTradesInput>
   }
 
   export type NestedStringFilter<$PrismaModel = never> = {
@@ -4546,13 +6060,6 @@ export namespace Prisma {
     not?: NestedFloatNullableFilter<$PrismaModel> | number | null
   }
 
-  export type NestedEnumTradeCategoryFilter<$PrismaModel = never> = {
-    equals?: $Enums.TradeCategory | EnumTradeCategoryFieldRefInput<$PrismaModel>
-    in?: $Enums.TradeCategory[] | ListEnumTradeCategoryFieldRefInput<$PrismaModel>
-    notIn?: $Enums.TradeCategory[] | ListEnumTradeCategoryFieldRefInput<$PrismaModel>
-    not?: NestedEnumTradeCategoryFilter<$PrismaModel> | $Enums.TradeCategory
-  }
-
   export type NestedBoolFilter<$PrismaModel = never> = {
     equals?: boolean | BooleanFieldRefInput<$PrismaModel>
     not?: NestedBoolFilter<$PrismaModel> | boolean
@@ -4635,16 +6142,6 @@ export namespace Prisma {
     not?: NestedIntNullableFilter<$PrismaModel> | number | null
   }
 
-  export type NestedEnumTradeCategoryWithAggregatesFilter<$PrismaModel = never> = {
-    equals?: $Enums.TradeCategory | EnumTradeCategoryFieldRefInput<$PrismaModel>
-    in?: $Enums.TradeCategory[] | ListEnumTradeCategoryFieldRefInput<$PrismaModel>
-    notIn?: $Enums.TradeCategory[] | ListEnumTradeCategoryFieldRefInput<$PrismaModel>
-    not?: NestedEnumTradeCategoryWithAggregatesFilter<$PrismaModel> | $Enums.TradeCategory
-    _count?: NestedIntFilter<$PrismaModel>
-    _min?: NestedEnumTradeCategoryFilter<$PrismaModel>
-    _max?: NestedEnumTradeCategoryFilter<$PrismaModel>
-  }
-
   export type NestedBoolWithAggregatesFilter<$PrismaModel = never> = {
     equals?: boolean | BooleanFieldRefInput<$PrismaModel>
     not?: NestedBoolWithAggregatesFilter<$PrismaModel> | boolean
@@ -4686,14 +6183,15 @@ export namespace Prisma {
     leverage?: number | null
     investment?: number | null
     createdAt?: Date | string
-    category: $Enums.TradeCategory
     deposit: number
     isDemo?: boolean
     comment?: string | null
+    category: CategoryCreateNestedOneWithoutTradesInput
   }
 
   export type TradeUncheckedCreateWithoutUserInput = {
     id?: string
+    categoryId: string
     date?: Date | string
     symbol: string
     side: $Enums.TradeSide
@@ -4708,7 +6206,6 @@ export namespace Prisma {
     leverage?: number | null
     investment?: number | null
     createdAt?: Date | string
-    category: $Enums.TradeCategory
     deposit: number
     isDemo?: boolean
     comment?: string | null
@@ -4721,6 +6218,30 @@ export namespace Prisma {
 
   export type TradeCreateManyUserInputEnvelope = {
     data: TradeCreateManyUserInput | TradeCreateManyUserInput[]
+    skipDuplicates?: boolean
+  }
+
+  export type CategoryCreateWithoutUserInput = {
+    id?: string
+    name: string
+    createdAt?: Date | string
+    trades?: TradeCreateNestedManyWithoutCategoryInput
+  }
+
+  export type CategoryUncheckedCreateWithoutUserInput = {
+    id?: string
+    name: string
+    createdAt?: Date | string
+    trades?: TradeUncheckedCreateNestedManyWithoutCategoryInput
+  }
+
+  export type CategoryCreateOrConnectWithoutUserInput = {
+    where: CategoryWhereUniqueInput
+    create: XOR<CategoryCreateWithoutUserInput, CategoryUncheckedCreateWithoutUserInput>
+  }
+
+  export type CategoryCreateManyUserInputEnvelope = {
+    data: CategoryCreateManyUserInput | CategoryCreateManyUserInput[]
     skipDuplicates?: boolean
   }
 
@@ -4746,6 +6267,7 @@ export namespace Prisma {
     NOT?: TradeScalarWhereInput | TradeScalarWhereInput[]
     id?: StringFilter<"Trade"> | string
     userId?: StringFilter<"Trade"> | string
+    categoryId?: StringFilter<"Trade"> | string
     date?: DateTimeFilter<"Trade"> | Date | string
     symbol?: StringFilter<"Trade"> | string
     side?: EnumTradeSideFilter<"Trade"> | $Enums.TradeSide
@@ -4760,10 +6282,157 @@ export namespace Prisma {
     leverage?: FloatNullableFilter<"Trade"> | number | null
     investment?: FloatNullableFilter<"Trade"> | number | null
     createdAt?: DateTimeFilter<"Trade"> | Date | string
-    category?: EnumTradeCategoryFilter<"Trade"> | $Enums.TradeCategory
     deposit?: FloatFilter<"Trade"> | number
     isDemo?: BoolFilter<"Trade"> | boolean
     comment?: StringNullableFilter<"Trade"> | string | null
+  }
+
+  export type CategoryUpsertWithWhereUniqueWithoutUserInput = {
+    where: CategoryWhereUniqueInput
+    update: XOR<CategoryUpdateWithoutUserInput, CategoryUncheckedUpdateWithoutUserInput>
+    create: XOR<CategoryCreateWithoutUserInput, CategoryUncheckedCreateWithoutUserInput>
+  }
+
+  export type CategoryUpdateWithWhereUniqueWithoutUserInput = {
+    where: CategoryWhereUniqueInput
+    data: XOR<CategoryUpdateWithoutUserInput, CategoryUncheckedUpdateWithoutUserInput>
+  }
+
+  export type CategoryUpdateManyWithWhereWithoutUserInput = {
+    where: CategoryScalarWhereInput
+    data: XOR<CategoryUpdateManyMutationInput, CategoryUncheckedUpdateManyWithoutUserInput>
+  }
+
+  export type CategoryScalarWhereInput = {
+    AND?: CategoryScalarWhereInput | CategoryScalarWhereInput[]
+    OR?: CategoryScalarWhereInput[]
+    NOT?: CategoryScalarWhereInput | CategoryScalarWhereInput[]
+    id?: StringFilter<"Category"> | string
+    name?: StringFilter<"Category"> | string
+    userId?: StringFilter<"Category"> | string
+    createdAt?: DateTimeFilter<"Category"> | Date | string
+  }
+
+  export type UserCreateWithoutCategoriesInput = {
+    id?: string
+    email: string
+    password: string
+    createdAt?: Date | string
+    defaultCategory?: string
+    trades?: TradeCreateNestedManyWithoutUserInput
+  }
+
+  export type UserUncheckedCreateWithoutCategoriesInput = {
+    id?: string
+    email: string
+    password: string
+    createdAt?: Date | string
+    defaultCategory?: string
+    trades?: TradeUncheckedCreateNestedManyWithoutUserInput
+  }
+
+  export type UserCreateOrConnectWithoutCategoriesInput = {
+    where: UserWhereUniqueInput
+    create: XOR<UserCreateWithoutCategoriesInput, UserUncheckedCreateWithoutCategoriesInput>
+  }
+
+  export type TradeCreateWithoutCategoryInput = {
+    id?: string
+    date?: Date | string
+    symbol: string
+    side: $Enums.TradeSide
+    entryPrice: number
+    positionSize: number
+    stopLoss: number
+    exitPrice: number
+    commission: number
+    riskPercent: number
+    pnl: number
+    result: $Enums.TradeResult
+    leverage?: number | null
+    investment?: number | null
+    createdAt?: Date | string
+    deposit: number
+    isDemo?: boolean
+    comment?: string | null
+    user: UserCreateNestedOneWithoutTradesInput
+  }
+
+  export type TradeUncheckedCreateWithoutCategoryInput = {
+    id?: string
+    userId: string
+    date?: Date | string
+    symbol: string
+    side: $Enums.TradeSide
+    entryPrice: number
+    positionSize: number
+    stopLoss: number
+    exitPrice: number
+    commission: number
+    riskPercent: number
+    pnl: number
+    result: $Enums.TradeResult
+    leverage?: number | null
+    investment?: number | null
+    createdAt?: Date | string
+    deposit: number
+    isDemo?: boolean
+    comment?: string | null
+  }
+
+  export type TradeCreateOrConnectWithoutCategoryInput = {
+    where: TradeWhereUniqueInput
+    create: XOR<TradeCreateWithoutCategoryInput, TradeUncheckedCreateWithoutCategoryInput>
+  }
+
+  export type TradeCreateManyCategoryInputEnvelope = {
+    data: TradeCreateManyCategoryInput | TradeCreateManyCategoryInput[]
+    skipDuplicates?: boolean
+  }
+
+  export type UserUpsertWithoutCategoriesInput = {
+    update: XOR<UserUpdateWithoutCategoriesInput, UserUncheckedUpdateWithoutCategoriesInput>
+    create: XOR<UserCreateWithoutCategoriesInput, UserUncheckedCreateWithoutCategoriesInput>
+    where?: UserWhereInput
+  }
+
+  export type UserUpdateToOneWithWhereWithoutCategoriesInput = {
+    where?: UserWhereInput
+    data: XOR<UserUpdateWithoutCategoriesInput, UserUncheckedUpdateWithoutCategoriesInput>
+  }
+
+  export type UserUpdateWithoutCategoriesInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    email?: StringFieldUpdateOperationsInput | string
+    password?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    defaultCategory?: StringFieldUpdateOperationsInput | string
+    trades?: TradeUpdateManyWithoutUserNestedInput
+  }
+
+  export type UserUncheckedUpdateWithoutCategoriesInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    email?: StringFieldUpdateOperationsInput | string
+    password?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    defaultCategory?: StringFieldUpdateOperationsInput | string
+    trades?: TradeUncheckedUpdateManyWithoutUserNestedInput
+  }
+
+  export type TradeUpsertWithWhereUniqueWithoutCategoryInput = {
+    where: TradeWhereUniqueInput
+    update: XOR<TradeUpdateWithoutCategoryInput, TradeUncheckedUpdateWithoutCategoryInput>
+    create: XOR<TradeCreateWithoutCategoryInput, TradeUncheckedCreateWithoutCategoryInput>
+  }
+
+  export type TradeUpdateWithWhereUniqueWithoutCategoryInput = {
+    where: TradeWhereUniqueInput
+    data: XOR<TradeUpdateWithoutCategoryInput, TradeUncheckedUpdateWithoutCategoryInput>
+  }
+
+  export type TradeUpdateManyWithWhereWithoutCategoryInput = {
+    where: TradeScalarWhereInput
+    data: XOR<TradeUpdateManyMutationInput, TradeUncheckedUpdateManyWithoutCategoryInput>
   }
 
   export type UserCreateWithoutTradesInput = {
@@ -4771,6 +6440,8 @@ export namespace Prisma {
     email: string
     password: string
     createdAt?: Date | string
+    defaultCategory?: string
+    categories?: CategoryCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutTradesInput = {
@@ -4778,11 +6449,32 @@ export namespace Prisma {
     email: string
     password: string
     createdAt?: Date | string
+    defaultCategory?: string
+    categories?: CategoryUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutTradesInput = {
     where: UserWhereUniqueInput
     create: XOR<UserCreateWithoutTradesInput, UserUncheckedCreateWithoutTradesInput>
+  }
+
+  export type CategoryCreateWithoutTradesInput = {
+    id?: string
+    name: string
+    createdAt?: Date | string
+    user: UserCreateNestedOneWithoutCategoriesInput
+  }
+
+  export type CategoryUncheckedCreateWithoutTradesInput = {
+    id?: string
+    name: string
+    userId: string
+    createdAt?: Date | string
+  }
+
+  export type CategoryCreateOrConnectWithoutTradesInput = {
+    where: CategoryWhereUniqueInput
+    create: XOR<CategoryCreateWithoutTradesInput, CategoryUncheckedCreateWithoutTradesInput>
   }
 
   export type UserUpsertWithoutTradesInput = {
@@ -4801,6 +6493,8 @@ export namespace Prisma {
     email?: StringFieldUpdateOperationsInput | string
     password?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    defaultCategory?: StringFieldUpdateOperationsInput | string
+    categories?: CategoryUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutTradesInput = {
@@ -4808,10 +6502,38 @@ export namespace Prisma {
     email?: StringFieldUpdateOperationsInput | string
     password?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    defaultCategory?: StringFieldUpdateOperationsInput | string
+    categories?: CategoryUncheckedUpdateManyWithoutUserNestedInput
+  }
+
+  export type CategoryUpsertWithoutTradesInput = {
+    update: XOR<CategoryUpdateWithoutTradesInput, CategoryUncheckedUpdateWithoutTradesInput>
+    create: XOR<CategoryCreateWithoutTradesInput, CategoryUncheckedCreateWithoutTradesInput>
+    where?: CategoryWhereInput
+  }
+
+  export type CategoryUpdateToOneWithWhereWithoutTradesInput = {
+    where?: CategoryWhereInput
+    data: XOR<CategoryUpdateWithoutTradesInput, CategoryUncheckedUpdateWithoutTradesInput>
+  }
+
+  export type CategoryUpdateWithoutTradesInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    user?: UserUpdateOneRequiredWithoutCategoriesNestedInput
+  }
+
+  export type CategoryUncheckedUpdateWithoutTradesInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    userId?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
   export type TradeCreateManyUserInput = {
     id?: string
+    categoryId: string
     date?: Date | string
     symbol: string
     side: $Enums.TradeSide
@@ -4826,10 +6548,15 @@ export namespace Prisma {
     leverage?: number | null
     investment?: number | null
     createdAt?: Date | string
-    category: $Enums.TradeCategory
     deposit: number
     isDemo?: boolean
     comment?: string | null
+  }
+
+  export type CategoryCreateManyUserInput = {
+    id?: string
+    name: string
+    createdAt?: Date | string
   }
 
   export type TradeUpdateWithoutUserInput = {
@@ -4848,14 +6575,15 @@ export namespace Prisma {
     leverage?: NullableFloatFieldUpdateOperationsInput | number | null
     investment?: NullableFloatFieldUpdateOperationsInput | number | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    category?: EnumTradeCategoryFieldUpdateOperationsInput | $Enums.TradeCategory
     deposit?: FloatFieldUpdateOperationsInput | number
     isDemo?: BoolFieldUpdateOperationsInput | boolean
     comment?: NullableStringFieldUpdateOperationsInput | string | null
+    category?: CategoryUpdateOneRequiredWithoutTradesNestedInput
   }
 
   export type TradeUncheckedUpdateWithoutUserInput = {
     id?: StringFieldUpdateOperationsInput | string
+    categoryId?: StringFieldUpdateOperationsInput | string
     date?: DateTimeFieldUpdateOperationsInput | Date | string
     symbol?: StringFieldUpdateOperationsInput | string
     side?: EnumTradeSideFieldUpdateOperationsInput | $Enums.TradeSide
@@ -4870,7 +6598,6 @@ export namespace Prisma {
     leverage?: NullableFloatFieldUpdateOperationsInput | number | null
     investment?: NullableFloatFieldUpdateOperationsInput | number | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    category?: EnumTradeCategoryFieldUpdateOperationsInput | $Enums.TradeCategory
     deposit?: FloatFieldUpdateOperationsInput | number
     isDemo?: BoolFieldUpdateOperationsInput | boolean
     comment?: NullableStringFieldUpdateOperationsInput | string | null
@@ -4878,6 +6605,7 @@ export namespace Prisma {
 
   export type TradeUncheckedUpdateManyWithoutUserInput = {
     id?: StringFieldUpdateOperationsInput | string
+    categoryId?: StringFieldUpdateOperationsInput | string
     date?: DateTimeFieldUpdateOperationsInput | Date | string
     symbol?: StringFieldUpdateOperationsInput | string
     side?: EnumTradeSideFieldUpdateOperationsInput | $Enums.TradeSide
@@ -4892,7 +6620,114 @@ export namespace Prisma {
     leverage?: NullableFloatFieldUpdateOperationsInput | number | null
     investment?: NullableFloatFieldUpdateOperationsInput | number | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    category?: EnumTradeCategoryFieldUpdateOperationsInput | $Enums.TradeCategory
+    deposit?: FloatFieldUpdateOperationsInput | number
+    isDemo?: BoolFieldUpdateOperationsInput | boolean
+    comment?: NullableStringFieldUpdateOperationsInput | string | null
+  }
+
+  export type CategoryUpdateWithoutUserInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    trades?: TradeUpdateManyWithoutCategoryNestedInput
+  }
+
+  export type CategoryUncheckedUpdateWithoutUserInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    trades?: TradeUncheckedUpdateManyWithoutCategoryNestedInput
+  }
+
+  export type CategoryUncheckedUpdateManyWithoutUserInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type TradeCreateManyCategoryInput = {
+    id?: string
+    userId: string
+    date?: Date | string
+    symbol: string
+    side: $Enums.TradeSide
+    entryPrice: number
+    positionSize: number
+    stopLoss: number
+    exitPrice: number
+    commission: number
+    riskPercent: number
+    pnl: number
+    result: $Enums.TradeResult
+    leverage?: number | null
+    investment?: number | null
+    createdAt?: Date | string
+    deposit: number
+    isDemo?: boolean
+    comment?: string | null
+  }
+
+  export type TradeUpdateWithoutCategoryInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    date?: DateTimeFieldUpdateOperationsInput | Date | string
+    symbol?: StringFieldUpdateOperationsInput | string
+    side?: EnumTradeSideFieldUpdateOperationsInput | $Enums.TradeSide
+    entryPrice?: FloatFieldUpdateOperationsInput | number
+    positionSize?: FloatFieldUpdateOperationsInput | number
+    stopLoss?: FloatFieldUpdateOperationsInput | number
+    exitPrice?: FloatFieldUpdateOperationsInput | number
+    commission?: FloatFieldUpdateOperationsInput | number
+    riskPercent?: FloatFieldUpdateOperationsInput | number
+    pnl?: FloatFieldUpdateOperationsInput | number
+    result?: EnumTradeResultFieldUpdateOperationsInput | $Enums.TradeResult
+    leverage?: NullableFloatFieldUpdateOperationsInput | number | null
+    investment?: NullableFloatFieldUpdateOperationsInput | number | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    deposit?: FloatFieldUpdateOperationsInput | number
+    isDemo?: BoolFieldUpdateOperationsInput | boolean
+    comment?: NullableStringFieldUpdateOperationsInput | string | null
+    user?: UserUpdateOneRequiredWithoutTradesNestedInput
+  }
+
+  export type TradeUncheckedUpdateWithoutCategoryInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    userId?: StringFieldUpdateOperationsInput | string
+    date?: DateTimeFieldUpdateOperationsInput | Date | string
+    symbol?: StringFieldUpdateOperationsInput | string
+    side?: EnumTradeSideFieldUpdateOperationsInput | $Enums.TradeSide
+    entryPrice?: FloatFieldUpdateOperationsInput | number
+    positionSize?: FloatFieldUpdateOperationsInput | number
+    stopLoss?: FloatFieldUpdateOperationsInput | number
+    exitPrice?: FloatFieldUpdateOperationsInput | number
+    commission?: FloatFieldUpdateOperationsInput | number
+    riskPercent?: FloatFieldUpdateOperationsInput | number
+    pnl?: FloatFieldUpdateOperationsInput | number
+    result?: EnumTradeResultFieldUpdateOperationsInput | $Enums.TradeResult
+    leverage?: NullableFloatFieldUpdateOperationsInput | number | null
+    investment?: NullableFloatFieldUpdateOperationsInput | number | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    deposit?: FloatFieldUpdateOperationsInput | number
+    isDemo?: BoolFieldUpdateOperationsInput | boolean
+    comment?: NullableStringFieldUpdateOperationsInput | string | null
+  }
+
+  export type TradeUncheckedUpdateManyWithoutCategoryInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    userId?: StringFieldUpdateOperationsInput | string
+    date?: DateTimeFieldUpdateOperationsInput | Date | string
+    symbol?: StringFieldUpdateOperationsInput | string
+    side?: EnumTradeSideFieldUpdateOperationsInput | $Enums.TradeSide
+    entryPrice?: FloatFieldUpdateOperationsInput | number
+    positionSize?: FloatFieldUpdateOperationsInput | number
+    stopLoss?: FloatFieldUpdateOperationsInput | number
+    exitPrice?: FloatFieldUpdateOperationsInput | number
+    commission?: FloatFieldUpdateOperationsInput | number
+    riskPercent?: FloatFieldUpdateOperationsInput | number
+    pnl?: FloatFieldUpdateOperationsInput | number
+    result?: EnumTradeResultFieldUpdateOperationsInput | $Enums.TradeResult
+    leverage?: NullableFloatFieldUpdateOperationsInput | number | null
+    investment?: NullableFloatFieldUpdateOperationsInput | number | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     deposit?: FloatFieldUpdateOperationsInput | number
     isDemo?: BoolFieldUpdateOperationsInput | boolean
     comment?: NullableStringFieldUpdateOperationsInput | string | null

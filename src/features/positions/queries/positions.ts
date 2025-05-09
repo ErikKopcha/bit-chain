@@ -8,7 +8,7 @@ import {
 } from '../api/positions';
 import { Trade } from '../types/position';
 
-const QUERY_KEY = ['positions'] as const;
+export const POSITIONS_KEY = ['positions'] as const;
 
 const showToast = (
   toast: ReturnType<typeof useToast>['toast'],
@@ -25,7 +25,7 @@ const showToast = (
 
 export const usePositions = () => {
   return useQuery({
-    queryKey: QUERY_KEY,
+    queryKey: POSITIONS_KEY,
     queryFn: getPositionsByUserId,
     staleTime: 1000 * 60 * 5, // 5 minutes
     gcTime: 1000 * 60 * 30, // 30 minutes
@@ -39,7 +39,7 @@ export const useCreatePosition = () => {
   return useMutation({
     mutationFn: createPosition,
     onSuccess: data => {
-      queryClient.setQueryData<Trade[]>(QUERY_KEY, old => [data, ...(old || [])]);
+      queryClient.setQueryData<Trade[]>(POSITIONS_KEY, old => [data, ...(old || [])]);
       showToast(toast, 'Position created', 'Your position has been created successfully.');
       return data;
     },
@@ -57,7 +57,7 @@ export const useUpdatePosition = () => {
     mutationFn: ({ id, ...data }: Trade) => updatePosition(id, data),
     onSuccess: data => {
       queryClient.setQueryData<Trade[]>(
-        QUERY_KEY,
+        POSITIONS_KEY,
         old => old?.map(trade => (trade.id === data.id ? data : trade)) || [],
       );
       showToast(toast, 'Position updated', 'Your position has been updated successfully.');
@@ -77,7 +77,7 @@ export const useDeletePosition = () => {
     mutationFn: ({ id }: Pick<Trade, 'id'>) => deletePosition(id),
     onSuccess: (_, { id }) => {
       queryClient.setQueryData<Trade[]>(
-        QUERY_KEY,
+        POSITIONS_KEY,
         old => old?.filter(trade => trade.id !== id) || [],
       );
       showToast(toast, 'Position deleted', 'Your position has been deleted successfully.');

@@ -12,28 +12,11 @@ export enum TRADE_RESULTS {
   PENDING = 'PENDING',
 }
 
-export enum TRADE_CATEGORIES {
-  SOLO = 'solo',
-  RADAR = 'radar',
-  EVEREST = 'everest',
-  CRYPTONITE_RADAR = 'cryptonite_radar',
-  CRYPTONITE_EVEREST = 'cryptonite_everest',
-  HUMSTER = 'humster',
-}
-
 export const TRADE_SIDES_LIST: TRADE_SIDES[] = [TRADE_SIDES.LONG, TRADE_SIDES.SHORT];
 export const TRADE_RESULTS_LIST: TRADE_RESULTS[] = [
   TRADE_RESULTS.WIN,
   TRADE_RESULTS.LOSS,
   TRADE_RESULTS.PENDING,
-];
-export const TRADE_CATEGORIES_LIST: TRADE_CATEGORIES[] = [
-  TRADE_CATEGORIES.SOLO,
-  TRADE_CATEGORIES.RADAR,
-  TRADE_CATEGORIES.EVEREST,
-  TRADE_CATEGORIES.CRYPTONITE_RADAR,
-  TRADE_CATEGORIES.CRYPTONITE_EVEREST,
-  TRADE_CATEGORIES.HUMSTER,
 ];
 
 export interface Trade {
@@ -51,10 +34,15 @@ export interface Trade {
   result: TRADE_RESULTS;
   leverage: number;
   investment: number;
-  category: TRADE_CATEGORIES;
+  category: Category;
   deposit: number;
   comment?: string;
 }
+
+export type Category = {
+  id: string;
+  name: string;
+};
 
 export interface ColumnDef<T> {
   key: string;
@@ -72,7 +60,7 @@ export type PositionFormValues = {
   stopLoss?: number;
   exitPrice?: number;
   commission?: number;
-  category: TRADE_CATEGORIES;
+  category: Category;
   deposit: number;
   leverage?: number;
   comment?: string;
@@ -99,7 +87,13 @@ export const positionSchema = z.object({
     val => (!val ? undefined : Number(val ?? 0)),
     z.number().min(0, 'Commission must be positive').optional(),
   ),
-  category: z.nativeEnum(TRADE_CATEGORIES),
+  category: z.union([
+    z.object({
+      id: z.string(),
+      name: z.string().min(1, 'Category name is required'),
+    }),
+    z.string().min(1, 'Category is required'),
+  ]),
   deposit: z.preprocess(val => Number(val ?? 0), z.number().positive('Deposit must be positive')),
   leverage: z.preprocess(
     val => (!val ? undefined : Number(val ?? 0)),

@@ -11,11 +11,11 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { Loader2 } from 'lucide-react';
 import { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
+import { useDefaultCategory } from '../queries/categories';
 import {
   PositionFormValues,
   positionSchema,
   Trade,
-  TRADE_CATEGORIES,
   TRADE_RESULTS,
   TRADE_SIDES,
 } from '../types/position';
@@ -31,6 +31,8 @@ interface PositionModalProps {
 export function PositionModal({ position, onSave, onDelete, children }: PositionModalProps) {
   const [isOpen, setIsOpen] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
+
+  const { data: defaultCategory } = useDefaultCategory();
 
   const form = useForm<PositionFormValues>({
     resolver: zodResolver(positionSchema),
@@ -53,7 +55,7 @@ export function PositionModal({ position, onSave, onDelete, children }: Position
           date: new Date(),
           symbol: '',
           side: TRADE_SIDES.LONG,
-          category: TRADE_CATEGORIES.SOLO,
+          category: defaultCategory || { id: '', name: 'solo' },
           leverage: 1,
           comment: '',
         },
@@ -62,9 +64,18 @@ export function PositionModal({ position, onSave, onDelete, children }: Position
   const handleSubmit = async (values: PositionFormValues) => {
     try {
       setIsLoading(true);
+
+      // Ensure category is properly handled
+      const categoryValue = values.category;
+      const category =
+        typeof categoryValue === 'object' && categoryValue !== null
+          ? categoryValue
+          : { id: '', name: categoryValue as string };
+
       await onSave({
         ...position,
         ...values,
+        category,
         stopLoss: values.stopLoss || 0,
         exitPrice: values.exitPrice || 0,
         commission: values.commission || 0,
@@ -115,10 +126,17 @@ export function PositionModal({ position, onSave, onDelete, children }: Position
         leverage: position.leverage || 1,
         comment: position.comment,
       });
-    } else {
-      form.reset();
+    } else if (isOpen) {
+      form.reset({
+        date: new Date(),
+        symbol: '',
+        side: TRADE_SIDES.LONG,
+        category: defaultCategory || { id: '', name: 'solo' },
+        leverage: 1,
+        comment: '',
+      });
     }
-  }, [isOpen, position, form]);
+  }, [isOpen, position, form, defaultCategory]);
 
   return (
     <Dialog open={isOpen} onOpenChange={setIsOpen}>

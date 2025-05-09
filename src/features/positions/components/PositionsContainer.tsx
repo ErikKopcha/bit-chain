@@ -2,13 +2,14 @@
 
 import { usePagination } from '@/app/(protected)/journal/hooks/usePagination';
 import { Button } from '@/components/ui/button';
-import { PlusIcon } from 'lucide-react';
+import { PlusIcon, TagIcon } from 'lucide-react';
 import { useSearchParams } from 'next/navigation';
 import { useState } from 'react';
 import { useDeleteDialog } from '../hooks/useDeleteDialog';
 import { useTradeData } from '../hooks/useTradeData';
 import { useTradeFilters } from '../hooks/useTradeFilters';
 import { Trade } from '../types/position';
+import { CategoryModal } from './CategoryModal';
 import { DeletePositionDialog } from './DeletePositionDialog';
 import { PositionFilters } from './PositionFilters';
 import { PositionModal } from './PositionModal';
@@ -92,12 +93,20 @@ export default function PositionsContainer() {
       <div className="flex flex-col gap-2">
         <div className="flex justify-between items-center">
           <p className="text-muted-foreground">Manage and analyze your trading history</p>
-          <PositionModal onSave={handleCreatePosition}>
-            <Button>
-              <PlusIcon className="mr-2 h-4 w-4" />
-              Add Position
-            </Button>
-          </PositionModal>
+          <div className="flex gap-2">
+            <CategoryModal>
+              <Button variant="outline">
+                <TagIcon className="h-4 w-4" />
+                Manage Categories
+              </Button>
+            </CategoryModal>
+            <PositionModal onSave={handleCreatePosition}>
+              <Button>
+                <PlusIcon className="h-4 w-4" />
+                Add Position
+              </Button>
+            </PositionModal>
+          </div>
         </div>
       </div>
 

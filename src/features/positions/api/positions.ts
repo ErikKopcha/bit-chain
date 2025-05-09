@@ -1,5 +1,5 @@
 import axiosInstance from '@/lib/axios';
-import { Trade, TRADE_CATEGORIES, TRADE_RESULTS, TRADE_SIDES } from '../types/position';
+import { Category, Trade, TRADE_RESULTS, TRADE_SIDES } from '../types/position';
 
 function mapTradeToPosition(trade: Record<string, unknown>): Trade {
   return {
@@ -13,7 +13,7 @@ function mapTradeToPosition(trade: Record<string, unknown>): Trade {
     commission: (trade.commission as number) || 0,
     positionSize: (trade.positionSize as number) || 0,
     leverage: trade.leverage as number,
-    category: trade.category as TRADE_CATEGORIES,
+    category: trade.category as Category,
     pnl: (trade.pnl as number) || 0,
     result: trade.result as TRADE_RESULTS,
     deposit: (trade.deposit as number) || 0,
@@ -29,12 +29,26 @@ export async function getPositionsByUserId(): Promise<Trade[]> {
 }
 
 export async function createPosition(data: Omit<Trade, 'id'>): Promise<Trade> {
-  const { data: response } = await axiosInstance.post('/trades', data);
+  const { category, ...restData } = data;
+  const apiData = {
+    ...restData,
+    categoryName: typeof category === 'object' && category !== null ? category.name : 'solo',
+  };
+
+  const { data: response } = await axiosInstance.post('/trades', apiData);
   return mapTradeToPosition(response.trade);
 }
 
 export async function updatePosition(id: string, data: Partial<Trade>): Promise<Trade> {
-  const { data: response } = await axiosInstance.put(`/trades/${id}`, data);
+  const { category, ...restData } = data;
+  const apiData = category
+    ? {
+        ...restData,
+        categoryName: typeof category === 'object' && category !== null ? category.name : 'solo',
+      }
+    : restData;
+
+  const { data: response } = await axiosInstance.put(`/trades/${id}`, apiData);
   return mapTradeToPosition(response.trade);
 }
 

@@ -23,14 +23,100 @@ export async function PUT(request: NextRequest, context: unknown) {
     if (!user) return NextResponse.json({ error: 'User not found' }, { status: 404 });
 
     const data = await request.json();
-    const tradeData = createTradeData(data);
+
+    let categoryId;
+
+    if (data.categoryId) {
+      const category = await prisma.category.findFirst({
+        where: {
+          id: data.categoryId,
+          userId: user.id,
+        },
+      });
+
+      if (!category) {
+        return NextResponse.json(
+          { error: 'Category not found or does not belong to user' },
+          { status: 400 },
+        );
+      }
+
+      categoryId = category.id;
+    } else if (data.categoryName) {
+      const category = await prisma.category.findFirst({
+        where: {
+          name: data.categoryName,
+          userId: user.id,
+        },
+      });
+
+      if (!category) {
+        const defaultCategory = await prisma.category.findFirst({
+          where: {
+            name: user.defaultCategory,
+            userId: user.id,
+          },
+        });
+
+        if (!defaultCategory) {
+          const soloCategory = await prisma.category.findFirst({
+            where: {
+              name: 'solo',
+              userId: user.id,
+            },
+          });
+
+          if (!soloCategory) {
+            return NextResponse.json({ error: 'No valid category found' }, { status: 500 });
+          }
+
+          categoryId = soloCategory.id;
+        } else {
+          categoryId = defaultCategory.id;
+        }
+      } else {
+        categoryId = category.id;
+      }
+    }
+
+    const { categoryId: _, categoryName, ...tradeData } = data;
+
+    const parsedTradeData = createTradeData(tradeData);
+    const { category, ...cleanTradeData } = parsedTradeData;
+
+    const existingTrade = await prisma.trade.findUnique({
+      where: { id: (context as Context).params.id },
+    });
+
+    if (!existingTrade) {
+      return NextResponse.json({ error: 'Trade not found' }, { status: 404 });
+    }
+
+    if (existingTrade.userId !== user.id) {
+      return NextResponse.json({ error: 'Unauthorized to update this trade' }, { status: 401 });
+    }
+
+    const updateData = {
+      ...cleanTradeData,
+      ...(categoryId ? { categoryId } : {}),
+    };
 
     const trade = await prisma.trade.update({
       where: { id: (context as Context).params.id },
-      data: { userId: user.id, ...tradeData },
+      data: updateData,
+      include: {
+        category: {
+          select: {
+            id: true,
+            name: true,
+          },
+        },
+      },
     });
 
-    return NextResponse.json({ trade });
+    const { categoryId: updatedCategoryId, ...tradeWithoutCategoryId } = trade;
+
+    return NextResponse.json({ trade: tradeWithoutCategoryId });
   } catch (error) {
     console.error('Error updating trade:', error);
     return NextResponse.json({ error: 'Failed to update trade' }, { status: 500 });

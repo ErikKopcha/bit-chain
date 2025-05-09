@@ -8,9 +8,11 @@ import {
   SelectValue,
 } from '@/components/ui/select';
 import { Textarea } from '@/components/ui/textarea';
+import { Loader2 } from 'lucide-react';
 import { useEffect, useState } from 'react';
 import { UseFormReturn } from 'react-hook-form';
-import { PositionFormValues, TRADE_CATEGORIES_LIST, TRADE_SIDES_LIST } from '../types/position';
+import { useCategories } from '../queries/categories';
+import { PositionFormValues, TRADE_SIDES_LIST } from '../types/position';
 import { parseFormattedNumber } from '../utils/calculations';
 import { HelpTooltip } from './HelpTooltip';
 
@@ -58,6 +60,9 @@ export function PositionFormFields({ form }: PositionFormFieldsProps) {
   // Track the raw text input values before parsing to numbers
   const [rawInputs, setRawInputs] = useState<Record<string, string>>({});
   const [_, setIsFocused] = useState<Record<string, boolean>>({});
+
+  // Отримуємо категорії з API
+  const { data: categories, isLoading: isCategoriesLoading } = useCategories();
 
   // Set initial raw values when form values change
   useEffect(() => {
@@ -372,26 +377,56 @@ export function PositionFormFields({ form }: PositionFormFieldsProps) {
       <FormField
         control={form.control}
         name="category"
-        render={({ field }) => (
-          <FormItem>
-            <FormLabel>Category</FormLabel>
-            <Select onValueChange={field.onChange} defaultValue={field.value}>
-              <FormControl>
-                <SelectTrigger className="w-full">
-                  <SelectValue />
-                </SelectTrigger>
-              </FormControl>
-              <SelectContent>
-                {TRADE_CATEGORIES_LIST.map(category => (
-                  <SelectItem key={category} value={category}>
-                    {category.toLowerCase()}
-                  </SelectItem>
-                ))}
-              </SelectContent>
-            </Select>
-            <FormMessage />
-          </FormItem>
-        )}
+        render={({ field }) => {
+          // Handle category which can be either a string or an object with name property
+          const categoryValue =
+            typeof field.value === 'object' && field.value !== null
+              ? (field.value as { name: string }).name
+              : field.value;
+
+          return (
+            <FormItem>
+              <FormLabel>Category</FormLabel>
+              <Select
+                onValueChange={value => {
+                  // Find the selected category to get its ID
+                  const selectedCategory = categories?.find(cat => cat.name === value);
+                  if (selectedCategory) {
+                    // Pass the full category object with ID
+                    field.onChange(selectedCategory);
+                  } else {
+                    // If not found, just pass the name
+                    field.onChange(value);
+                  }
+                }}
+                defaultValue={categoryValue}
+              >
+                <FormControl>
+                  <SelectTrigger className="w-full">
+                    <SelectValue />
+                  </SelectTrigger>
+                </FormControl>
+                <SelectContent>
+                  {isCategoriesLoading ? (
+                    <div className="flex items-center justify-center py-2">
+                      <Loader2 className="h-4 w-4 animate-spin mr-2" />
+                      <span>Loading categories...</span>
+                    </div>
+                  ) : categories?.length ? (
+                    categories.map(category => (
+                      <SelectItem key={category.id} value={category.name}>
+                        {category.name}
+                      </SelectItem>
+                    ))
+                  ) : (
+                    <SelectItem value="solo">solo</SelectItem>
+                  )}
+                </SelectContent>
+              </Select>
+              <FormMessage />
+            </FormItem>
+          );
+        }}
       />
 
       <FormField

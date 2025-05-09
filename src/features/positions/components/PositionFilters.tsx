@@ -8,9 +8,10 @@ import {
   SelectValue,
 } from '@/components/ui/select';
 import { ResetFiltersButton } from '@/features/positions/components/ResetFiltersButton';
-import { RefreshCw } from 'lucide-react';
+import { Loader2, RefreshCw } from 'lucide-react';
 import { DateRange } from 'react-day-picker';
-import { TRADE_CATEGORIES_LIST, TRADE_RESULTS_LIST, TRADE_SIDES_LIST } from '../types/position';
+import { useCategories } from '../queries/categories';
+import { TRADE_RESULTS_LIST, TRADE_SIDES_LIST } from '../types/position';
 
 interface PositionFiltersProps {
   dateRange: DateRange | undefined;
@@ -39,6 +40,9 @@ export function PositionFilters({
   onRefetch,
   isFetching = false,
 }: PositionFiltersProps) {
+  // Отримуємо категорії з API
+  const { data: categories, isLoading: isCategoriesLoading } = useCategories();
+
   return (
     <div className="flex items-center justify-between w-full gap-4">
       <div className="flex flex-wrap gap-4 w-full md:w-auto">
@@ -75,11 +79,18 @@ export function PositionFilters({
             </SelectTrigger>
             <SelectContent>
               <SelectItem value="all">All categories</SelectItem>
-              {TRADE_CATEGORIES_LIST.map(category => (
-                <SelectItem key={category} value={category}>
-                  {category.toLowerCase().replace('_', ' ')}
-                </SelectItem>
-              ))}
+              {isCategoriesLoading ? (
+                <div className="flex items-center justify-center py-2">
+                  <Loader2 className="h-4 w-4 animate-spin mr-2" />
+                  <span>Loading...</span>
+                </div>
+              ) : (
+                categories?.map(category => (
+                  <SelectItem key={category.id} value={category.name}>
+                    {category.name}
+                  </SelectItem>
+                ))
+              )}
             </SelectContent>
           </Select>
         </div>

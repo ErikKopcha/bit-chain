@@ -1,4 +1,4 @@
-import { TRADE_CATEGORIES, TRADE_SIDES } from './types/position';
+import { TRADE_SIDES } from './types/position';
 
 export interface PositionFormValues {
   date: string;
@@ -10,6 +10,6 @@ export interface PositionFormValues {
   commission?: number;
   positionSize: number;
   leverage?: number;
-  category?: TRADE_CATEGORIES;
+  category?: string;
   deposit?: number;
 }

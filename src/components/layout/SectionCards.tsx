@@ -48,9 +48,15 @@ export function SectionCards() {
   }
 
   const mostTradedCategory = stats.categoriesData[0]?.category || 'N/A';
-  const formattedCategory = mostTradedCategory
+  // Handle both string and object format safely
+  const categoryName =
+    typeof mostTradedCategory === 'object' && mostTradedCategory !== null
+      ? mostTradedCategory.name || 'N/A'
+      : mostTradedCategory;
+
+  const formattedCategory = categoryName
     .split('_')
-    .map(word => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase())
+    .map((word: string) => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase())
     .join(' ');
 
   const cards = [

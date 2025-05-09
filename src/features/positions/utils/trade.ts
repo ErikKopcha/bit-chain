@@ -1,4 +1,4 @@
-import { Trade, TRADE_CATEGORIES, TRADE_RESULTS, TRADE_SIDES } from '../types/position';
+import { Category, Trade, TRADE_RESULTS, TRADE_SIDES } from '../types/position';
 import { calculateInvestment, calculatePnl, calculateRiskPercent } from './calculations';
 
 interface CreateTradeData {
@@ -12,7 +12,7 @@ interface CreateTradeData {
   exitPrice?: number;
   commission?: number;
   leverage?: number;
-  category?: string;
+  category?: Category;
   comment?: string;
 }
 
@@ -28,7 +28,7 @@ export function createTradeData(data: CreateTradeData): Omit<Trade, 'id'> {
     exitPrice = 0,
     commission = 0,
     leverage = 0,
-    category = TRADE_CATEGORIES.SOLO,
+    category = { id: '', name: 'solo' },
     comment = '',
   } = data;
 
@@ -36,12 +36,6 @@ export function createTradeData(data: CreateTradeData): Omit<Trade, 'id'> {
   const validSide = side.toUpperCase() as TRADE_SIDES;
   if (!Object.values(TRADE_SIDES).includes(validSide)) {
     throw new Error(`Invalid side: ${side}`);
-  }
-
-  // Validate and convert category
-  const validCategory = category.toLowerCase() as TRADE_CATEGORIES;
-  if (!Object.values(TRADE_CATEGORIES).includes(validCategory)) {
-    throw new Error(`Invalid category: ${category}`);
   }
 
   const calculatedPnl = calculatePnl({
@@ -63,7 +57,7 @@ export function createTradeData(data: CreateTradeData): Omit<Trade, 'id'> {
     exitPrice,
     commission,
     leverage,
-    category: validCategory,
+    category,
     comment: comment ?? '',
     investment: calculateInvestment({
       entryPrice,

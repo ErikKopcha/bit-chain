@@ -121,12 +121,21 @@ exports.Prisma.UserScalarFieldEnum = {
   id: 'id',
   email: 'email',
   password: 'password',
+  createdAt: 'createdAt',
+  defaultCategory: 'defaultCategory'
+};
+
+exports.Prisma.CategoryScalarFieldEnum = {
+  id: 'id',
+  name: 'name',
+  userId: 'userId',
   createdAt: 'createdAt'
 };
 
 exports.Prisma.TradeScalarFieldEnum = {
   id: 'id',
   userId: 'userId',
+  categoryId: 'categoryId',
   date: 'date',
   symbol: 'symbol',
   side: 'side',
@@ -141,7 +150,6 @@ exports.Prisma.TradeScalarFieldEnum = {
   leverage: 'leverage',
   investment: 'investment',
   createdAt: 'createdAt',
-  category: 'category',
   deposit: 'deposit',
   isDemo: 'isDemo',
   comment: 'comment'
@@ -172,17 +180,9 @@ exports.TradeResult = exports.$Enums.TradeResult = {
   PENDING: 'PENDING'
 };
 
-exports.TradeCategory = exports.$Enums.TradeCategory = {
-  solo: 'solo',
-  radar: 'radar',
-  everest: 'everest',
-  cryptonite_radar: 'cryptonite_radar',
-  cryptonite_everest: 'cryptonite_everest',
-  humster: 'humster'
-};
-
 exports.Prisma.ModelName = {
   User: 'User',
+  Category: 'Category',
   Trade: 'Trade'
 };
 

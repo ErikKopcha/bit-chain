@@ -15,18 +15,33 @@ datasource db {
 }
 
 model User {
+  id              String     @id @default(cuid())
+  email           String     @unique
+  password        String
+  createdAt       DateTime   @default(now())
+  defaultCategory String     @default("solo") // Reference to the default category name
+  trades          Trade[]
+  categories      Category[] // User's categories
+}
+
+model Category {
   id        String   @id @default(cuid())
-  email     String   @unique
-  password  String
-  createdAt DateTime @default(now())
+  name      String
+  userId    String
+  user      User     @relation(fields: [userId], references: [id])
   trades    Trade[]
+  createdAt DateTime @default(now())
+
+  @@unique([userId, name]) // Ensure category names are unique per user
 }
 
 model Trade {
-  id           String        @id @default(cuid())
+  id           String      @id @default(cuid())
   userId       String
-  user         User          @relation(fields: [userId], references: [id])
-  date         DateTime      @default(now())
+  user         User        @relation(fields: [userId], references: [id])
+  categoryId   String
+  category     Category    @relation(fields: [categoryId], references: [id])
+  date         DateTime    @default(now())
   symbol       String
   side         TradeSide
   entryPrice   Float
@@ -39,10 +54,9 @@ model Trade {
   result       TradeResult
   leverage     Float?
   investment   Float?
-  createdAt    DateTime      @default(now())
-  category     TradeCategory
+  createdAt    DateTime    @default(now())
   deposit      Float
-  isDemo       Boolean       @default(false)
+  isDemo       Boolean     @default(false)
   comment      String?
 }
 

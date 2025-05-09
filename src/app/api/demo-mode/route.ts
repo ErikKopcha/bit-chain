@@ -1,5 +1,5 @@
 import { authOptions } from '@/features/auth/libs/auth';
-import { TRADE_CATEGORIES, TRADE_SIDES } from '@/features/positions/types/position';
+import { TRADE_SIDES } from '@/features/positions/types/position';
 import { createTradeData } from '@/features/positions/utils/trade';
 import { prisma } from '@/lib/prisma';
 import { getServerSession } from 'next-auth';
@@ -9,11 +9,41 @@ const DEMO_TRADES_COUNT = 100;
 
 async function generateDemoTrades(userId: string) {
   try {
-    const categories = Object.values(TRADE_CATEGORIES);
     const symbols = ['BTC', 'ETH', 'SOL', 'BNB', 'XRP'];
     const sides = Object.values(TRADE_SIDES);
 
-    const trades = Array.from({ length: DEMO_TRADES_COUNT }, (_, index) => {
+    // Get user's categories
+    const categories = await prisma.category.findMany({
+      where: { userId },
+      select: { id: true, name: true },
+    });
+
+    // If no categories, create a solo category
+    if (categories.length === 0) {
+      try {
+        const soloCategory = await prisma.category.create({
+          data: {
+            name: 'solo',
+            userId,
+          },
+        });
+        categories.push(soloCategory);
+      } catch (error) {
+        throw new Error(
+          `Failed to create default category: ${error instanceof Error ? error.message : 'Unknown error'}`,
+        );
+      }
+    }
+
+    // Still make sure we have at least one category
+    if (categories.length === 0) {
+      throw new Error('No categories found for user and failed to create a default one');
+    }
+
+    // Generate the trade data
+    const generatedTrades = [];
+
+    for (let i = 0; i < DEMO_TRADES_COUNT; i++) {
       try {
         const isWin = Math.random() > 0.5;
         const entryPrice = Math.random() * 1000 + 100;
@@ -23,9 +53,20 @@ async function generateDemoTrades(userId: string) {
         const positionSize = Math.random() * 10 + 1;
         const leverage = Math.floor(Math.random() * 5) + 1;
 
-        const symbol = symbols[Math.floor(Math.random() * symbols.length)] as string;
-        const side = sides[Math.floor(Math.random() * sides.length)] as string;
-        const category = categories[Math.floor(Math.random() * categories.length)] as string;
+        const symbol = symbols[Math.floor(Math.random() * symbols.length)] || 'BTC';
+        const side = sides[Math.floor(Math.random() * sides.length)] || TRADE_SIDES.LONG;
+
+        // Safely get a category - use index 0 as fallback
+        let selectedCategory = categories[0]; // Default to first category
+        if (categories.length > 1) {
+          const randomIndex = Math.floor(Math.random() * categories.length);
+          selectedCategory = categories[randomIndex] || selectedCategory;
+        }
+
+        if (!selectedCategory || !selectedCategory.id) {
+          console.error('Invalid category selected, skipping trade creation');
+          continue;
+        }
 
         const tradeData = createTradeData({
           date: new Date(Date.now() - Math.random() * 30 * 24 * 60 * 60 * 1000).toISOString(),
@@ -38,22 +79,29 @@ async function generateDemoTrades(userId: string) {
           positionSize,
           exitPrice,
           leverage,
-          category,
         });
 
-        return {
-          ...tradeData,
+        // Remove category from tradeData if present
+        const { category: _, ...cleanTradeData } = tradeData;
+
+        generatedTrades.push({
+          ...cleanTradeData,
           userId,
+          categoryId: selectedCategory.id,
           isDemo: true,
-        };
+        });
       } catch (error) {
-        console.error(`Error creating trade ${index}:`, error);
-        throw error;
+        console.error(`Error creating trade ${i}:`, error);
+        // Continue with other trades instead of failing completely
       }
-    });
+    }
+
+    if (generatedTrades.length === 0) {
+      throw new Error('Failed to generate any valid trades');
+    }
 
     const result = await prisma.trade.createMany({
-      data: trades,
+      data: generatedTrades,
     });
 
     return result;
