@@ -9,12 +9,11 @@ import { useEffect } from 'react';
 export function useSidebarSync(isOpen: boolean, setOpen: (open: boolean) => void) {
   const { isNavigationOpen, setNavigationOpen } = useStore();
 
-  // Sync from store to component on initial load
   useEffect(() => {
     if (isOpen !== isNavigationOpen) {
       setOpen(isNavigationOpen);
     }
-  }, [isOpen, isNavigationOpen, setOpen]);
+  }, []);
 
   // Update store when component state changes
   useEffect(() => {
