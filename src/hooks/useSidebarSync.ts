@@ -14,7 +14,7 @@ export function useSidebarSync(isOpen: boolean, setOpen: (open: boolean) => void
     if (isOpen !== isNavigationOpen) {
       setOpen(isNavigationOpen);
     }
-  }, []);
+  }, [isOpen, isNavigationOpen, setOpen]);
 
   // Update store when component state changes
   useEffect(() => {
