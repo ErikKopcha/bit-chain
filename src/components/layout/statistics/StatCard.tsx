@@ -26,18 +26,18 @@ export function StatCard({ title, value, trend, footer }: StatCardProps) {
 
   return (
     <Card className="@container/card">
-      <CardHeader className="relative">
-        <CardDescription className="truncate">{title}</CardDescription>
-        <CardTitle className="@[250px]/card:text-3xl text-2xl font-semibold tabular-nums truncate">
-          {value}
-        </CardTitle>
-        <div className="absolute right-4 top-0">
+      <CardHeader>
+        <div className=" flex items-center justify-between">
+          <CardDescription className="truncate">{title}</CardDescription>
           <Badge variant="outline" className={`flex gap-1 rounded-lg text-xs ${trendColor}`}>
             <TrendIcon className="size-3" />
             {Number(trend.value) > 0 ? '+' : ''}
             {trend.value}%
           </Badge>
         </div>
+        <CardTitle className="@[250px]/card:text-3xl text-2xl font-semibold tabular-nums truncate">
+          {value}
+        </CardTitle>
       </CardHeader>
       <CardFooter className="flex-col items-start gap-1 text-sm">
         <div className="line-clamp-1 flex gap-2 font-medium">

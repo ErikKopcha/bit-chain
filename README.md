@@ -10,6 +10,7 @@ Built with **Next.js**, **TypeScript**, **Prisma**, and **NextAuth**, deployed o
 - Dashboard with basic analytics
 - Trades table with filtering and sorting
 - Responsive UI using [Shadcn UI](https://ui.shadcn.com)
+- Real-time cryptocurrency data and news
 
 ## Tech Stack
 
@@ -18,6 +19,9 @@ Built with **Next.js**, **TypeScript**, **Prisma**, and **NextAuth**, deployed o
 - **Auth**: NextAuth.js
 - **Database**: PostgreSQL (via Prisma ORM)
 - **Deployment**: Vercel + GitHub CI/CD
+- **APIs**: 
+  - CoinGecko API (cryptocurrency data)
+  - CryptoPanic API (cryptocurrency news)
 
 ## Getting Started
 
@@ -38,9 +42,15 @@ npm install
 
 ```env
 # .env.local
+# Database
 DATABASE_URL=postgres://...
+
+# Authentication
 NEXTAUTH_SECRET=your_secret
 NEXTAUTH_URL=http://localhost:3000
+
+# APIs
+CRYPTOPANIC_API_KEY=your_cryptopanic_api_key  # Get from https://cryptopanic.com/developers/api/
 ```
 
 ### 4. Set up DB and generate client
@@ -55,6 +65,18 @@ npx prisma generate
 ```bash
 npm run dev
 ```
+
+## API Keys
+
+### CryptoPanic API
+- Get your API key from [CryptoPanic Developers](https://cryptopanic.com/developers/api/)
+- Used for fetching cryptocurrency news
+- Free tier available with rate limits
+
+### CoinGecko API
+- No API key required
+- Used for fetching cryptocurrency market data
+- Free tier available with rate limits
 
 ## Deployment
 

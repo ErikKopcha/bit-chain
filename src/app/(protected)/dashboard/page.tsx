@@ -1,8 +1,9 @@
+import { CryptoNewsSection } from '@/features/crypto/components/CryptoNewsSection';
 import { CategoryChart } from '@/components/layout/charts/CategoryChart';
 import { ChartAreaInteractive } from '@/components/layout/charts/ChartAreaInteractive';
 import { ChartLoader } from '@/components/layout/charts/ChartLoader';
 import { CurrencyDistributionChart } from '@/components/layout/charts/CurrencyDistributionChart';
-import { SectionCards } from '@/components/layout/SectionCards';
+import { SectionCards } from '@/components/layout/statistics/SectionCards';
 import { Metadata } from 'next';
 
 export const metadata: Metadata = {
@@ -14,6 +15,9 @@ export default function Dashboard() {
   return (
     <div className="flex flex-col gap-4 py-4 md:gap-6 md:py-6">
       <SectionCards />
+
+      {/* Crypto & News Section */}
+      <CryptoNewsSection />
 
       {/* PnL Growth Chart */}
       <div className="px-4 lg:px-6">

@@ -1,9 +1,9 @@
 'use client';
 
 import { formatCurrency } from '@/app/(protected)/journal/utils/formatters';
+import { StatCardSkeleton } from '@/components/layout/statistics/StatCardSkeleton';
 import { useTradingStats } from '@/hooks/useTradingStats';
 import { StatCard } from './StatCard';
-import { StatCardSkeleton } from './StatCardSkeleton';
 
 export function SectionCards() {
   const { stats, isLoading } = useTradingStats();
