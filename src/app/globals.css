@@ -192,3 +192,15 @@ button {
 .animate-smooth-spin {
   animation: smooth-spin 1.2s cubic-bezier(0.4, 0.15, 0.6, 0.85) infinite;
 }
+
+.gap-0 {
+  gap: 0 !important;
+}
+
+.h-32px {
+  height: 32px !important;
+}
+
+.min-h-32px {
+  min-height: 32px !important;
+}

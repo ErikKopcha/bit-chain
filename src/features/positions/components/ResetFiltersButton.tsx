@@ -17,7 +17,7 @@ export function ResetFiltersButton() {
       variant="outline"
       size="sm"
       onClick={resetTradeFilters}
-      className="gap-2 min-h-36px"
+      className="gap-2 min-h-32px"
       disabled={!hasActiveFilters}
     >
       <XCircle className="h-4 w-4" />

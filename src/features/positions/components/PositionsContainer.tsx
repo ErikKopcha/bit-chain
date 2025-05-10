@@ -91,9 +91,11 @@ export default function PositionsContainer() {
   return (
     <div className="flex flex-col gap-4 md:gap-6 px-4 lg:px-6">
       <div className="flex flex-col gap-2">
-        <div className="flex justify-between items-center">
-          <p className="text-muted-foreground">Manage and analyze your trading history</p>
-          <div className="flex gap-2">
+        <div className="flex justify-between items-center flex-col sm:flex-row gap-2 sm:gap-0">
+          <p className="text-muted-foreground mb-2 sm:mb-0">
+            Manage and analyze your trading history
+          </p>
+          <div className="flex flex-col sm:flex-row gap-2 w-full sm:w-auto">
             <CategoryModal>
               <Button variant="outline">
                 <TagIcon className="h-4 w-4" />
